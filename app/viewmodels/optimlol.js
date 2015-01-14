@@ -5,7 +5,7 @@
 
 		var lineDelimiters = [
 			":",
-			" has joined the room"
+			" joined the room"
 		];
 
 		var Summoner = function(name) {
@@ -13,7 +13,8 @@
 				summonerName: ko.observable(""),
 				summonerId: null,
 				placeholder: name,
-				verified: ko.observable(null)
+				verified: ko.observable(null),
+				veryifying: false
 			};
 
 			summoner.summonerName.subscribe(function(data) {
@@ -23,6 +24,7 @@
 					var queriedValue = summoner.summonerName().replace(/ /g, '').toLowerCase();
 					_findSummoner(data)
 						.then(function(result) {
+							summoner.veryifying = false;
 							if (result[queriedValue].name.toLowerCase() === summoner.summonerName().toLowerCase()) {
 								summoner.verified(true);
 								summoner.summonerId = result[queriedValue].id;
@@ -32,6 +34,7 @@
 							}
 						})
 						.fail(function() {
+							summoner.veryifying = false;
 							summoner.verified(false);
 							summoner.summonerId = null;
 						});
@@ -83,7 +86,8 @@
 
 			potentialSummoners.forEach(function(potentialSummoner) {
 				for(var x = 0; x < self.summoners.length; ++x) {
-					if (self.summoners[x].verified() === false || self.summoners[x].verified() === null) {
+					if (self.summoners[x].veryifying === false) {
+						self.summoners[x].veryifying = true;
 						self.summoners[x].summonerName(potentialSummoner);
 						break;
 					}
