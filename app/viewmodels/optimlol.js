@@ -70,7 +70,6 @@
 				return summoner !== "";
 			});
 
-			console.log(alreadyEnteredSummoners);
 			lines.forEach(function(line) {
 				lineDelimiters.forEach(function(delimeter) {
 					if (line.indexOf(delimeter) !== -1) {
@@ -82,12 +81,9 @@
 				});
 			});
 
-			console.log("potentialSummoners", potentialSummoners);
 			potentialSummoners.forEach(function(potentialSummoner) {
 				for(var x = 0; x < self.summoners.length; ++x) {
-					console.log(self.summoners[x].verified());
 					if (self.summoners[x].verified() === false || self.summoners[x].verified() === null) {
-						console.log("OH YEAY");
 						self.summoners[x].summonerName(potentialSummoner);
 						break;
 					}

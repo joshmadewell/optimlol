@@ -8,7 +8,7 @@
         },
         activate: function () {
             router.map([
-                { route: '', title:'Welcome', moduleId: 'viewmodels/optimlol', nav: true }
+                { route: '', title:'', moduleId: 'viewmodels/optimlol', nav: true }
             ]).buildNavigationModel();
             
             return router.activate();

@@ -7,13 +7,11 @@ define(['plugins/http', 'durandal/system', 'settings'], function (http, system, 
 		self.makeRequest = function(region, route, data) {
 			var promise = system.defer();
 			var url = apiUrl + '/' + region + '/' + apiVersion + '/' + route + '/' + data + '?api_key=' + settings.apiKey;
-			console.log(url);
 			http.get(url)
 				.then(function(response) {
 					promise.resolve(response);
 				})
 				.fail(function(error) {
-					console.log("failed!!!! first point");
 					promise.reject(error);
 				})
 

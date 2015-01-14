@@ -15,7 +15,6 @@ define(['durandal/system', 'common/http'], function (system, Api) {
 					promise.resolve(result);
 				})
 				.fail(function(error) {
-					console.log("FAOSD FAILED");
 					promise.reject(error);
 				});
 
