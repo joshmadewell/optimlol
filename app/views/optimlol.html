@@ -4,12 +4,12 @@
         <span>Enter the Summoner Names of everyone in champion select:</span>
 
         <div data-bind="foreach: summoners">
-        	<input class="default" data-bind="value: value, attr: {placeholder: placeholder}, css : {success: verified() === true, failure: verified() === false}">
+        	<input class="default" data-bind="value: summonerName, attr: {placeholder: placeholder}, css : {success: verified() === true, failure: verified() === false}">
         </div>
 
         <span>Or enter your chat logs below and we'll try to do the work for you!</span><br>
         <textarea class="chatlog" data-bind="value: chatText"></textarea><br>
 
-        <button data-bind="click: findPlayers">Find Players!</button>
+        <button data-bind="click: parseChatForPlayers">Find Players!</button>
     </div>
 </div>

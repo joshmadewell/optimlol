@@ -10,29 +10,30 @@
 
 		var Summoner = function(name) {
 			var summoner = {
-				value: ko.observable(""),
+				summonerName: ko.observable(""),
+				summonerId: null,
 				placeholder: name,
 				verified: ko.observable(null)
 			};
 
-			summoner.value.subscribe(function(data) {
+			summoner.summonerName.subscribe(function(data) {
 				if (data === "" || data === null || data === undefined) {
 					return;
 				} else {
-					var queriedValue = summoner.value().replace(/ /g, '').toLowerCase();
+					var queriedValue = summoner.summonerName().replace(/ /g, '').toLowerCase();
 					_findSummoner(data)
 						.then(function(result) {
-							console.log(result, queriedValue);
-							if (result[queriedValue].name.toLowerCase() === summoner.value().toLowerCase()) {
+							if (result[queriedValue].name.toLowerCase() === summoner.summonerName().toLowerCase()) {
 								summoner.verified(true);
+								summoner.summonerId = result[queriedValue].id;
 							} else {
 								summoner.verified(false);
+								summoner.summonerId = null;
 							}
-
-							console.log(self.summoners);
 						})
 						.fail(function() {
 							summoner.verified(false);
+							summoner.summonerId = null;
 						});
 				}
 			});
@@ -56,23 +57,42 @@
 		self.summoners = [];
 		self.chatText = ko.observable("");
 
-		self.findPlayers = function(players) {
-			var potentialPlayers = [];
+		self.parseChatForPlayers = function(players) {
+			var potentialSummoners = [];
 			var chatText = self.chatText();
 			var lines = chatText.split('\n');
 
+			var alreadyEnteredSummoners = self.summoners.map(function(summoner) {
+				return summoner.summonerName();
+			});
+
+			alreadyEnteredSummoners = alreadyEnteredSummoners.filter(function(summoner) {
+				return summoner !== "";
+			});
+
+			console.log(alreadyEnteredSummoners);
 			lines.forEach(function(line) {
 				lineDelimiters.forEach(function(delimeter) {
 					if (line.indexOf(delimeter) !== -1) {
 						var playerName = line.split(delimeter)[0];
-						if (potentialPlayers.indexOf(playerName) === -1) {
-							potentialPlayers.push(playerName);
+						if (potentialSummoners.indexOf(playerName) === -1 && alreadyEnteredSummoners.indexOf(playerName) === -1) {
+							potentialSummoners.push(playerName);
 						} 
 					}
 				});
 			});
 
-			console.log(potentialPlayers);
+			console.log("potentialSummoners", potentialSummoners);
+			potentialSummoners.forEach(function(potentialSummoner) {
+				for(var x = 0; x < self.summoners.length; ++x) {
+					console.log(self.summoners[x].verified());
+					if (self.summoners[x].verified() === false || self.summoners[x].verified() === null) {
+						console.log("OH YEAY");
+						self.summoners[x].summonerName(potentialSummoner);
+						break;
+					}
+				}
+			});
 		}
 
 		self.activate = function() {
