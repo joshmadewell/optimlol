@@ -1,13 +1,12 @@
-define(['plugins/http', 'durandal/system'], function (http, system) {
+define(['plugins/http', 'durandal/system', 'settings'], function (http, system, settings) {
 	return function() {
 		var self = this;
-		var apiKey = "?api_key=21479026-9dec-4bb3-922d-7e5ea2dcc600";
 		var apiUrl = "https://na.api.pvp.net/api/lol";
 		var apiVersion = "v1.4";
 
 		self.makeRequest = function(region, route, data) {
 			var promise = system.defer();
-			var url = apiUrl + '/' + region + '/' + apiVersion + '/' + route + '/' + data + apiKey;
+			var url = apiUrl + '/' + region + '/' + apiVersion + '/' + route + '/' + data + '?api_key=' + settings.apiKey;
 			console.log(url);
 			http.get(url)
 				.then(function(response) {
