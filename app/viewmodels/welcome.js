@@ -3,11 +3,16 @@
 		var self = this;
 		var summonersDataProvider = new SummonersDataProvider();
 
+		var lineDelimiters = [
+			":",
+			" has joined the room"
+		];
+
 		var Summoner = function(name) {
 			var summoner = {
 				value: ko.observable(""),
 				placeholder: name,
-				verified: ko.observable(false)
+				verified: ko.observable(null)
 			};
 
 			summoner.value.subscribe(function(data) {
@@ -27,7 +32,6 @@
 							console.log(self.summoners);
 						})
 						.fail(function() {
-							console.log
 							summoner.verified(false);
 						});
 				}
@@ -38,21 +42,37 @@
 
 		var _findSummoner = function(summoner) {
 			var promise = durandal.defer();
-            summonersDataProvider.getSummonersByName(summoner)
-            	.then(function(result) {
-            		promise.resolve(result);
-            	})
-            	.fail(function(error) {
-            		promise.reject(error);
-            	})
+			summonersDataProvider.getSummonersByName(summoner)
+				.then(function(result) {
+					promise.resolve(result);
+				})
+				.fail(function(error) {
+					promise.reject(error);
+				})
 
-           	return promise;
+			return promise;
 		};
 
 		self.summoners = [];
+		self.chatText = ko.observable("");
 
 		self.findPlayers = function(players) {
-            
+			var potentialPlayers = [];
+			var chatText = self.chatText();
+			var lines = chatText.split('\n');
+
+			lines.forEach(function(line) {
+				lineDelimiters.forEach(function(delimeter) {
+					if (line.indexOf(delimeter) !== -1) {
+						var playerName = line.split(delimeter)[0];
+						if (potentialPlayers.indexOf(playerName) === -1) {
+							potentialPlayers.push(playerName);
+						} 
+					}
+				});
+			});
+
+			console.log(potentialPlayers);
 		}
 
 		self.activate = function() {

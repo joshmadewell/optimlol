@@ -11,9 +11,11 @@
 .search input.success {
     border-color: lightgreen;
 }
-
 .search input.failure {
     border-color: red;
+}
+.search input.default {
+    border-color: none;
 }
 
 .search textarea {
