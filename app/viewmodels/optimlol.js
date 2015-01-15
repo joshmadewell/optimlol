@@ -8,6 +8,12 @@
 		var NUMBER_OF_SUMMONERS = 5;
 		var LOL_KING_URL = "http://www.lolking.net/summoner/na/summoner_id";
 		var NA_OP_GG_URL = "http://na.op.gg/summoner/userName=summoner_name";
+		var STATUS = {
+			UNSET: "unset",
+			VALID: "valid",
+			INVALID: "invalid",
+			VERIFYING: "verifying"
+		}
 		var summonersDataProvider = new SummonersDataProvider();
 
 		var lineDelimiters = [
@@ -16,19 +22,17 @@
 		];
 
 		var _onSummonerNameEntered = function(summonerName) {
-			console.log(summonerName);
 			var summoner = this;
 			if (summonerName === "" || summonerName === null || summonerName === undefined) {
 				_summonerVerificationFailed(summoner);
 			} else {
-				summoner.isVerifying(true);
+				summoner.status(STATUS.VERIFYING);
 				var queriedValue = summoner.summonerName().replace(/ /g, '').toLowerCase();
 				_findSummoner(summonerName)
 					.then(function(result) {
-						summoner.isVerifying(false);
 						if (result[queriedValue].name.toLowerCase() === summoner.summonerName().toLowerCase()) {
 							summoner.summonerId(result[queriedValue].id);
-							summoner.isVerified(true);
+							summoner.status(STATUS.VALID);
 						} else {
 							_summonerVerificationFailed(summoner);
 						}
@@ -41,15 +45,12 @@
 
 		var _summonerVerificationFailed = function(summoner) {
 			summoner.summonerId(null);
-			summoner.isVerifying(false);
 
 			if (summoner.summonerName() === "" || summoner.summonerName() === null || summoner.summonerName() === undefined) {
-				summoner.isVerified(null);
+				summoner.status(STATUS.UNSET);
 			} else {
-				summoner.isVerified(false);
+				summoner.status(STATUS.INVALID);
 			}
-
-			console.log(summoner);
 		};
 
 		var _onSummonerIdUpdated = function(summonerId) {
@@ -77,12 +78,12 @@
 			return promise;
 		};
 
-		var _onSummonerVerificationUpdated = function() {
-			self.verifiedSummoners.removeAll();
+		var _onSummonerStatusUpdated = function() {
+			self.validSummoners.removeAll();
 
 			self.summonerInputs.forEach(function(summoner) {
-				if (summoner.isVerified() === true) {
-					self.verifiedSummoners.push(summoner);
+				if (summoner.status() === STATUS.VALID) {
+					self.validSummoners.push(summoner);
 				}
 			});
 		};
@@ -112,9 +113,10 @@
 			});
 
 			potentialSummoners.forEach(function(potentialSummoner) {
+				console.log(potentialSummoner);
 				for(var x = 0; x < self.summonerInputs.length; ++x) {
 					var currentSummoner = self.summonerInputs[x];
-					if (currentSummoner.isVerifying() === false && currentSummoner.isVerified() === false) {
+					if (currentSummoner.status === STATUS.INVALID) {
 						currentSummoner.summonerName(potentialSummoner);
 						break;
 					}
@@ -123,7 +125,7 @@
 		}
 
 		self.summonerInputs = [];
-		self.verifiedSummoners = ko.observableArray([]);
+		self.validSummoners = ko.observableArray([]);
 		self.chatText = ko.observable("");
 
 		self.activate = function() {
@@ -132,7 +134,7 @@
 				summoner.placeholder = "Summoner " + (x + 1);
 				summoner.summonerName.subscribe(_onSummonerNameEntered, summoner);
 				summoner.summonerId.subscribe(_onSummonerIdUpdated, summoner);
-				summoner.isVerified.subscribe(_onSummonerVerificationUpdated);
+				summoner.status.subscribe(_onSummonerStatusUpdated);
 				self.summonerInputs.push(summoner);
 			}
 		};
