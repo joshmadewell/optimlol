@@ -4,7 +4,7 @@ define(['knockout'], function (ko) {
 			summonerName: ko.observable(""),
 			summonerId: ko.observable(null),
 			placeholder: "",
-			status: ko.observable("unset");
+			status: ko.observable("unset"),
 			lolKingUrl: ko.observable(""),
 			naOpGgUrl: ko.observable("")
 		}

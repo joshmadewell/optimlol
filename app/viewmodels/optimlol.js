@@ -116,7 +116,8 @@
 				console.log(potentialSummoner);
 				for(var x = 0; x < self.summonerInputs.length; ++x) {
 					var currentSummoner = self.summonerInputs[x];
-					if (currentSummoner.status === STATUS.INVALID) {
+					console.log(currentSummoner.status())
+					if (currentSummoner.status() === STATUS.INVALID || currentSummoner.status() === STATUS.UNSET) {
 						currentSummoner.summonerName(potentialSummoner);
 						break;
 					}
