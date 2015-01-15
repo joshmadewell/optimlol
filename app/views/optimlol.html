@@ -1,15 +1,19 @@
 ﻿<div>
     <div class="search"> 
         <h2>Welcome to OptimLoL</h2>
-        <span>Enter the Summoner Names of everyone in champion select:</span>
+        <div>Enter the Summoner Names of everyone in champion select:</div>
 
-        <div data-bind="foreach: summoners">
-        	<input class="default" data-bind="value: summonerName, attr: {placeholder: placeholder}, css : {success: verified() === true, failure: verified() === false}">
+        <div class="summoner-list">
+            <div data-bind="foreach: summoners">
+            	<input maxlength="16" class="default" data-bind="value: summonerName, attr: {placeholder: placeholder}, css : {success: verified() === true, failure: verified() === false}">
+            </div>
+
+            <button>Optimize Us!</button>
         </div>
 
-        <span>Or enter your chat logs below and we'll try to do the work for you!</span><br>
+        <div>Or enter your chat logs below and we'll try to do the work for you!</div><br>
         <textarea class="chatlog" data-bind="value: chatText"></textarea><br>
 
-        <button data-bind="click: parseChatForPlayers">Find Players!</button>
+        <button data-bind="click: parseChatForPlayers">Parse Chat Log</button>
     </div>
 </div>

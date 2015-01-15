@@ -1,0 +1,24 @@
+.search {
+    text-align: center;
+
+    div {
+        .summmoner-list {
+            display: inline-flex;
+        }
+    }
+
+    input {
+        border-color: none;
+        .success {
+            border-color: lightgreen;
+        }
+        .failure {
+            border-color: red;
+        }
+    }
+
+    textarea {
+        height: 100px;
+        width: 30%;
+    }
+}

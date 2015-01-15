@@ -1,6 +1,11 @@
-﻿define(['plugins/http', 'durandal/system', 'knockout', 'dataProviders/summonersDataProvider'], function (http, durandal, ko, SummonersDataProvider) {
+﻿define(['durandal/system', 
+	'knockout', 
+	'dataProviders/summonersDataProvider',
+	'presentationObjects/summonerPresentationObject'], 
+	function (durandal, ko, SummonersDataProvider, SummonerPresentationObject) {
 	return function() {
 		var self = this;
+		var NUMBER_OF_SUMMONERS = 5;
 		var summonersDataProvider = new SummonersDataProvider();
 
 		var lineDelimiters = [
@@ -8,40 +13,28 @@
 			" joined the room"
 		];
 
-		var Summoner = function(name) {
-			var summoner = {
-				summonerName: ko.observable(""),
-				summonerId: null,
-				placeholder: name,
-				verified: ko.observable(null),
-				veryifying: false
-			};
-
-			summoner.summonerName.subscribe(function(data) {
-				if (data === "" || data === null || data === undefined) {
+		var _onSummonerNameEntered = function(data) {
+			if (data === "" || data === null || data === undefined) {
 					return;
-				} else {
-					var queriedValue = summoner.summonerName().replace(/ /g, '').toLowerCase();
-					_findSummoner(data)
-						.then(function(result) {
-							summoner.veryifying = false;
-							if (result[queriedValue].name.toLowerCase() === summoner.summonerName().toLowerCase()) {
-								summoner.verified(true);
-								summoner.summonerId = result[queriedValue].id;
-							} else {
-								summoner.verified(false);
-								summoner.summonerId = null;
-							}
-						})
-						.fail(function() {
-							summoner.veryifying = false;
+			} else {
+				var queriedValue = summoner.summonerName().replace(/ /g, '').toLowerCase();
+				_findSummoner(data)
+					.then(function(result) {
+						summoner.veryifying = false;
+						if (result[queriedValue].name.toLowerCase() === summoner.summonerName().toLowerCase()) {
+							summoner.verified(true);
+							summoner.summonerId = result[queriedValue].id;
+						} else {
 							summoner.verified(false);
 							summoner.summonerId = null;
-						});
-				}
-			});
-
-			return summoner;
+						}
+					})
+					.fail(function() {
+						summoner.veryifying = false;
+						summoner.verified(false);
+						summoner.summonerId = null;
+					});
+			}
 		}
 
 		var _findSummoner = function(summoner) {
@@ -57,10 +50,7 @@
 			return promise;
 		};
 
-		self.summoners = [];
-		self.chatText = ko.observable("");
-
-		self.parseChatForPlayers = function(players) {
+		var _parseChatForPlayers = function(players) {
 			var potentialSummoners = [];
 			var chatText = self.chatText();
 			var lines = chatText.split('\n');
@@ -95,9 +85,15 @@
 			});
 		}
 
+		self.summoners = ko.observableArray([]);
+		self.chatText = ko.observable("");
+
 		self.activate = function() {
-			for(var x = 0; x < 5; ++x) {
-				this.summoners.push(new Summoner('Summoner ' + (x + 1)));
+			for(var x = 0; x < NUMBER_OF_SUMMONERS; ++x) {
+				var summoner = new SummonerPresentationObject();
+				summoner.placeholder = "Summoner " + (x + 1);
+//				summoner.summonerName.subscribe(_onSummonerNameEntered);
+				self.summoners.push(summoner);
 			}
 		};
 	}
