@@ -16,10 +16,10 @@
 		];
 
 		var _onSummonerNameEntered = function(summonerName) {
+			console.log(summonerName);
 			var summoner = this;
 			if (summonerName === "" || summonerName === null || summonerName === undefined) {
-					summoner.isVerified(null);
-					return;
+				_summonerVerificationFailed(summoner);
 			} else {
 				summoner.isVerifying(true);
 				var queriedValue = summoner.summonerName().replace(/ /g, '').toLowerCase();
@@ -27,8 +27,8 @@
 					.then(function(result) {
 						summoner.isVerifying(false);
 						if (result[queriedValue].name.toLowerCase() === summoner.summonerName().toLowerCase()) {
-							summoner.isVerified(true);
 							summoner.summonerId(result[queriedValue].id);
+							summoner.isVerified(true);
 						} else {
 							_summonerVerificationFailed(summoner);
 						}
@@ -39,15 +39,28 @@
 			}
 		}
 
-		var _onSummonerVerified = function(summonerId) {
+		var _summonerVerificationFailed = function(summoner) {
+			summoner.summonerId(null);
+			summoner.isVerifying(false);
+
+			if (summoner.summonerName() === "" || summoner.summonerName() === null || summoner.summonerName() === undefined) {
+				summoner.isVerified(null);
+			} else {
+				summoner.isVerified(false);
+			}
+
+			console.log(summoner);
+		};
+
+		var _onSummonerIdUpdated = function(summonerId) {
 			var summoner = this;
-			if (summonerName === "" || summonerName === null || summonerName === undefined) {
-				summoner.lolKingUrl = "";
-				summoner.naOpGgUrl = "";
+			if (summonerId === "" || summonerId === null || summonerId === undefined) {
+				summoner.lolKingUrl("");
+				summoner.naOpGgUrl("");
 				return;
 			} else {
-				summoner.lolKingUrl = LOL_KING_URL.replace('summoner_id', summonerId);
-				summoner.naOpGgUrl = NA_OP_GG_URL.replace('summoner_name', this.summonerName());
+				summoner.lolKingUrl(LOL_KING_URL.replace('summoner_id', summonerId));
+				summoner.naOpGgUrl(NA_OP_GG_URL.replace('summoner_name', this.summonerName()));
 			}
 		};
 
@@ -62,6 +75,16 @@
 				})
 
 			return promise;
+		};
+
+		var _onSummonerVerificationUpdated = function() {
+			self.verifiedSummoners.removeAll();
+
+			self.summonerInputs.forEach(function(summoner) {
+				if (summoner.isVerified() === true) {
+					self.verifiedSummoners.push(summoner);
+				}
+			});
 		};
 
 		self.parseChatForPlayers  = function() {
@@ -90,8 +113,9 @@
 
 			potentialSummoners.forEach(function(potentialSummoner) {
 				for(var x = 0; x < self.summonerInputs.length; ++x) {
-					if (self.summonerInputs[x].isVerifying() === false) {
-						self.summonerInputs[x].summonerName(potentialSummoner);
+					var currentSummoner = self.summonerInputs[x];
+					if (currentSummoner.isVerifying() === false && currentSummoner.isVerified() === false) {
+						currentSummoner.summonerName(potentialSummoner);
 						break;
 					}
 				}
@@ -99,6 +123,7 @@
 		}
 
 		self.summonerInputs = [];
+		self.verifiedSummoners = ko.observableArray([]);
 		self.chatText = ko.observable("");
 
 		self.activate = function() {
@@ -106,7 +131,8 @@
 				var summoner = new SummonerPresentationObject();
 				summoner.placeholder = "Summoner " + (x + 1);
 				summoner.summonerName.subscribe(_onSummonerNameEntered, summoner);
-				summoner.summonerId(_onSummonerVerified, summoner);
+				summoner.summonerId.subscribe(_onSummonerIdUpdated, summoner);
+				summoner.isVerified.subscribe(_onSummonerVerificationUpdated);
 				self.summonerInputs.push(summoner);
 			}
 		};

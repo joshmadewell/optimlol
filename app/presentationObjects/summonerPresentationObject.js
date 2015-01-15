@@ -2,13 +2,12 @@ define(['knockout'], function (ko) {
 	return function() {
 		return {
 			summonerName: ko.observable(""),
-			summonerId: null,
+			summonerId: ko.observable(null),
 			placeholder: "",
 			isVerified: ko.observable(null),
 			isVerifying: ko.observable(false),
-			lolKingUrl: "",
-			lolNexusUrl: "",
-			naOpGgUrl: ""
+			lolKingUrl: ko.observable(""),
+			naOpGgUrl: ko.observable("")
 		}
 	}
 })

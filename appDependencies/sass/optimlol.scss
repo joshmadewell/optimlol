@@ -1,19 +1,17 @@
 .search {
     text-align: center;
 
-    .summoner-list {
-        display: inline-flex; 
-
+    .summoner-inputs {
         .summoner-input-valid {
             border-color: lightgreen;
         }
         .summoner-input-invalid {
             border-color: red;
         }
+    }
 
-        .optimize-button {
-            margin-left: 5px;
-        }
+    .summoner-info {
+        list-style-type: none;
     }
 
     textarea {
