@@ -21,6 +21,9 @@ gulp.task('app', function(cb) {
 		gulp.src('./appDependencies/lib/**/*')
 			.pipe(gulp.dest('./build/lib')),
 
+		gulp.src('./appDependencies/img/**/*')
+			.pipe(gulp.dest('./build/img')),
+
 		gulp.src('index.html')
 			.pipe(gulp.dest('./build'))
 	).on('end', cb);

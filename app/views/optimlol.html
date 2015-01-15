@@ -7,13 +7,22 @@
             <input class='summoner-input' data-bind="value: summonerName, attr: {placeholder: placeholder}, css : {'summoner-input-valid': status() === 'valid', 'summoner-input-invalid': status() === 'invalid', 'summoner-input': status() === 'unset'}">
         </div>
 
-        <ul class="summoner-info" data-bind="foreach: validSummoners">
-            <li>
-                <label data-bind="text: summonerName"/>
-                <a data-bind="attr: {href: lolKingUrl}">LolKing</a>
-                <a data-bind="attr: {href: naOpGgUrl}">na.op.gg</a>
-            </li>
-        </ul>
+        <table class="summoner-list">
+            <thead>
+                <th>Name</th>
+                <th>Last Played</th>
+                <th>Most Played</th>
+                <th>LolKing</th>
+                <th>op.gg</th>
+            </thead>
+            <tbody class="summoner-info" data-bind="foreach: validSummoners">
+                <tr>
+                    <label data-bind="text: summonerName"/>
+                    <img src="/img/lolking.png"/> <a data-bind="attr: {href: lolKingUrl}">LolKing</a>
+                    <img src="/img/naopgg.png"/> <a data-bind="attr: {href: naOpGgUrl}">na.op.gg</a>
+                </tr>
+            </tbody>
+        </table>
 
         <div>Or enter your chat logs below and we'll try to do the work for you!</div><br>
         <textarea class="chatlog" data-bind="value: chatText"></textarea><br>
