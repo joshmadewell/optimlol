@@ -52,7 +52,10 @@ gulp.task('watch', function() {
 });
 
 // Default Task
-gulp.task('build', []);
+gulp.task('build', function() {
+	runSequence('clean', ['app', 'sass']);
+});
+
 gulp.task('default', function() {
 	runSequence('clean', ['app', 'sass', 'watch', 'webserver']);
 });
