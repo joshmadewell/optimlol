@@ -6,6 +6,8 @@
 	return function() {
 		var self = this;
 		var NUMBER_OF_SUMMONERS = 5;
+		var LOL_KING_URL = "http://www.lolking.net/summoner/na/summoner_id";
+		var NA_OP_GG_URL = "http://na.op.gg/summoner/userName=summoner_name";
 		var summonersDataProvider = new SummonersDataProvider();
 
 		var lineDelimiters = [
@@ -13,29 +15,41 @@
 			" joined the room"
 		];
 
-		var _onSummonerNameEntered = function(data) {
-			if (data === "" || data === null || data === undefined) {
+		var _onSummonerNameEntered = function(summonerName) {
+			var summoner = this;
+			if (summonerName === "" || summonerName === null || summonerName === undefined) {
+					summoner.isVerified(null);
 					return;
 			} else {
+				summoner.isVerifying(true);
 				var queriedValue = summoner.summonerName().replace(/ /g, '').toLowerCase();
-				_findSummoner(data)
+				_findSummoner(summonerName)
 					.then(function(result) {
-						summoner.veryifying = false;
+						summoner.isVerifying(false);
 						if (result[queriedValue].name.toLowerCase() === summoner.summonerName().toLowerCase()) {
-							summoner.verified(true);
-							summoner.summonerId = result[queriedValue].id;
+							summoner.isVerified(true);
+							summoner.summonerId(result[queriedValue].id);
 						} else {
-							summoner.verified(false);
-							summoner.summonerId = null;
+							_summonerVerificationFailed(summoner);
 						}
 					})
 					.fail(function() {
-						summoner.veryifying = false;
-						summoner.verified(false);
-						summoner.summonerId = null;
+						_summonerVerificationFailed(summoner);
 					});
 			}
 		}
+
+		var _onSummonerVerified = function(summonerId) {
+			var summoner = this;
+			if (summonerName === "" || summonerName === null || summonerName === undefined) {
+				summoner.lolKingUrl = "";
+				summoner.naOpGgUrl = "";
+				return;
+			} else {
+				summoner.lolKingUrl = LOL_KING_URL.replace('summoner_id', summonerId);
+				summoner.naOpGgUrl = NA_OP_GG_URL.replace('summoner_name', this.summonerName());
+			}
+		};
 
 		var _findSummoner = function(summoner) {
 			var promise = durandal.defer();
@@ -50,13 +64,13 @@
 			return promise;
 		};
 
-		var _parseChatForPlayers = function(players) {
+		self.parseChatForPlayers  = function() {
 			var potentialSummoners = [];
 			var chatText = self.chatText();
 			var lines = chatText.split('\n');
 
-			var alreadyEnteredSummoners = self.summoners.map(function(summoner) {
-				return summoner.summonerName();
+			var alreadyEnteredSummoners = self.summonerInputs.map(function(summoner) {
+				return summoner.summonerName()
 			});
 
 			alreadyEnteredSummoners = alreadyEnteredSummoners.filter(function(summoner) {
@@ -75,25 +89,25 @@
 			});
 
 			potentialSummoners.forEach(function(potentialSummoner) {
-				for(var x = 0; x < self.summoners.length; ++x) {
-					if (self.summoners[x].veryifying === false) {
-						self.summoners[x].veryifying = true;
-						self.summoners[x].summonerName(potentialSummoner);
+				for(var x = 0; x < self.summonerInputs.length; ++x) {
+					if (self.summonerInputs[x].isVerifying() === false) {
+						self.summonerInputs[x].summonerName(potentialSummoner);
 						break;
 					}
 				}
 			});
 		}
 
-		self.summoners = ko.observableArray([]);
+		self.summonerInputs = [];
 		self.chatText = ko.observable("");
 
 		self.activate = function() {
-			for(var x = 0; x < NUMBER_OF_SUMMONERS; ++x) {
+			for(var x = 0; x < 5; ++x) {
 				var summoner = new SummonerPresentationObject();
 				summoner.placeholder = "Summoner " + (x + 1);
-//				summoner.summonerName.subscribe(_onSummonerNameEntered);
-				self.summoners.push(summoner);
+				summoner.summonerName.subscribe(_onSummonerNameEntered, summoner);
+				summoner.summonerId(_onSummonerVerified, summoner);
+				self.summonerInputs.push(summoner);
 			}
 		};
 	}

@@ -1,19 +1,18 @@
 .search {
     text-align: center;
 
-    div {
-        .summmoner-list {
-            display: inline-flex;
-        }
-    }
+    .summoner-list {
+        display: inline-flex; 
 
-    input {
-        border-color: none;
-        .success {
+        .summoner-input-valid {
             border-color: lightgreen;
         }
-        .failure {
+        .summoner-input-invalid {
             border-color: red;
+        }
+
+        .optimize-button {
+            margin-left: 5px;
         }
     }
 

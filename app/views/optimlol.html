@@ -4,11 +4,11 @@
         <div>Enter the Summoner Names of everyone in champion select:</div>
 
         <div class="summoner-list">
-            <div data-bind="foreach: summoners">
-            	<input maxlength="16" class="default" data-bind="value: summonerName, attr: {placeholder: placeholder}, css : {success: verified() === true, failure: verified() === false}">
+            <div data-bind="foreach: summonerInputs">
+                <input class='summoner-input' data-bind="value: summonerName, attr: {placeholder: placeholder}, css : {'summoner-input-valid': isVerified() === true, 'summoner-input-invalid': isVerified() === false, 'summoner-input': isVerified() === null}">
             </div>
 
-            <button>Optimize Us!</button>
+            <button class="optimize-button">Optimize!</button>
         </div>
 
         <div>Or enter your chat logs below and we'll try to do the work for you!</div><br>
