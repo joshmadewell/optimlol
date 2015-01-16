@@ -28,7 +28,7 @@
 			} else {
 				summoner.status(STATUS.VALIDATING);
 				var queriedValue = summoner.summonerName().replace(/ /g, '').toLowerCase();
-				_findSummoner(summonerName)
+				_getSummonerData(summonerName)
 					.then(function(result) {
 						if (result[queriedValue].name.toLowerCase() === summoner.summonerName().toLowerCase()) {
 							summoner.summonerId(result[queriedValue].id);
@@ -65,9 +65,10 @@
 			}
 		};
 
-		var _findSummoner = function(summoner) {
+		var _getSummonerData = function(summoner) {
+			var region = self.selectedRegion();
 			var promise = durandal.defer();
-			summonersDataProvider.getSummonersByName(summoner)
+			summonersDataProvider.getSummonerData(region, summoner)
 				.then(function(result) {
 					promise.resolve(result);
 				})
@@ -126,6 +127,7 @@
 		}
 
 		self.summonerInputs = [];
+		self.selectedRegion = ko.observable("na");
 		self.validSummoners = ko.observableArray([]);
 		self.chatText = ko.observable("");
 

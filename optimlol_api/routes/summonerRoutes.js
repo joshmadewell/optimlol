@@ -4,13 +4,16 @@ var SummonerController = require('../controllers/summonerController');
 var summonerController = new SummonerController();
 
 module.exports = function(router) {
-	router.get('/summoner/by-name/:summonerName', function(req, res) {
-		summonerController.verifySummoner(req.params.summonerName)
+	router.get(':region/summoner/by-name/:summonerName', function(req, res) {
+		var region = req.params.region;
+		var summonerName = req.params.summonerName;
+		var result = {
+			status: 'failed',
+			summonerData: null
+		}
+
+		summonerController.verifySummoner(region, summonerName)
 			.then(function(verified) {
-				var result = {
-					status: 'failed',
-					summonerData: null
-				}
 				if (verified) {
 					summonerController.generateOptimlolProperties()
 						.then(function(optimlolResponse) {
@@ -23,6 +26,9 @@ module.exports = function(router) {
 				} else {
 					res.send(result);
 				}
+			})
+			.fail(function() {
+				res.send(result);
 			})
 	});
 }

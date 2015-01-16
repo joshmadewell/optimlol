@@ -1,16 +1,11 @@
-define(['durandal/system', 'common/http'], function (system, Api) {
+define(['durandal/system', 'common/optimlolApi'], function (system, OptimlolApi) {
 	return function() {
 		var self = this;
-		var api = new Api();
+		var optimlolApi = new OptimlolApi();
 
-		self.getSummonersByName = function(names) {
+		self.getSummonerData = function(region, name) {
 			var promise = system.defer();
-
-			if (typeof(names) === "string") {
-				names = [names];
-			}
-
-			var test = api.makeRequest('na', 'summoner/by-name', names.join(', '))
+			optimlolApi.makeRequest(region, 'summoner/by-name/' + name)
 				.then(function(result) {
 					promise.resolve(result);
 				})

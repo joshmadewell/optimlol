@@ -1,13 +1,11 @@
 define(['plugins/http', 'durandal/system', 'settings'], function (http, system, settings) {
 	return function() {
 		var self = this;
-		var apiUrl = "https://na.api.pvp.net/api/lol";
-		var apiVersion = "v1.4";
 
-		self.makeRequest = function(region, route, data) {
+		self.makeRequest = function(region, path) {
+			var url = settings.optimlolUrl + "/" + region + "/" + path; 
 			var promise = system.defer();
-			var url = apiUrl + '/' + region + '/' + apiVersion + '/' + route + '/' + data + '?api_key=' + settings.apiKey;
-			http.get(url)
+			http.get(url + route)
 				.then(function(response) {
 					promise.resolve(response);
 				})
