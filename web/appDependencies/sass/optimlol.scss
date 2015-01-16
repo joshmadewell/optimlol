@@ -38,10 +38,10 @@
 
         tbody {
             tr {
+                &:nth-child(2n) {
+                    background-color: $lightgray;
+                }
                 border-bottom: 1px solid $darkgray;
-            }
-            tr:nth-child(2n) {
-                background-color: $lightgray;
             }
 
             td {
