@@ -4,7 +4,18 @@
         <div>Enter the Summoner Names of everyone in champion select:</div>
 
         <div class="summoner-inputs" data-bind="foreach: summonerInputs">
-            <input class='summoner-input' data-bind="value: summonerName, attr: {placeholder: placeholder}, css : {'summoner-input-valid': status() === 'valid', 'summoner-input-invalid': status() === 'invalid', 'summoner-input': status() === 'unset'}">
+            <span>
+                <input class='summoner-input' data-bind="value: summonerName, 
+                                                        attr: {
+                                                            placeholder: placeholder
+                                                        }, 
+                                                        css : {
+                                                            'summoner-input-valid': status() === 'valid', 
+                                                            'summoner-input-invalid': status() === 'invalid', 
+                                                            'summoner-input': status() === 'unset'
+                                                        }">
+                <i data-bind="visible: status() === 'validating'" class="fa fa-spinner fa-spin"></i>
+            </span>
         </div>
 
         <!-- ko if: validSummoners().length > 0 -->

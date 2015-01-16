@@ -12,7 +12,7 @@
 			UNSET: "unset",
 			VALID: "valid",
 			INVALID: "invalid",
-			VERIFYING: "verifying"
+			VALIDATING: "validating"
 		}
 		var summonersDataProvider = new SummonersDataProvider();
 
@@ -26,7 +26,7 @@
 			if (summonerName === "" || summonerName === null || summonerName === undefined) {
 				_summonerVerificationFailed(summoner);
 			} else {
-				summoner.status(STATUS.VERIFYING);
+				summoner.status(STATUS.VALIDATING);
 				var queriedValue = summoner.summonerName().replace(/ /g, '').toLowerCase();
 				_findSummoner(summonerName)
 					.then(function(result) {
