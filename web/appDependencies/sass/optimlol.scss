@@ -38,22 +38,16 @@
 
         tbody {
             tr {
+                border-bottom: 1px solid $darkgray;
+
                 &:nth-child(2n) {
                     background-color: $lightgray;
                 }
-                border-bottom: 1px solid $darkgray;
             }
 
             td {
                 text-align: left;
                 padding: 6px;
-                &:first-child {
-                    border-left: 1px solid $darkgray;
-                }
-
-                &:last-child {
-                    border-right: 1px solid $darkgray;
-                }
 
                 .image-group {
                     .icon {
@@ -63,6 +57,14 @@
                     .link {
                         margin-left: 4px;
                     }
+                }
+
+                &:first-child {
+                    border-left: 1px solid $darkgray;
+                }
+
+                &:last-child {
+                    border-right: 1px solid $darkgray;
                 }
             }
         }
