@@ -7,24 +7,24 @@
             <input class='summoner-input' data-bind="value: summonerName, attr: {placeholder: placeholder}, css : {'summoner-input-valid': status() === 'valid', 'summoner-input-invalid': status() === 'invalid', 'summoner-input': status() === 'unset'}">
         </div>
 
+        <!-- ko if: validSummoners().length > 0 -->
         <table class="summoner-table">
             <thead>
                 <th class="name">Name</th>
                 <th class="last-played">Last Played</th>
                 <th class="most-played">Most Played</th>
                 <th class="lolking">LolKing</th>
-                <th class="lolking">op.gg</th>
+                <th class="naopgg">op.gg</th>
             </thead>
-            <tbody class="summoner-info">
-                <tr>
-                    <td class="name">Josh</td>
-                    <td class="last-played">Irelia</td>
-                    <td class="most-played">Irelia</td>
-                    <td class="lolking"><a href="www.lolking.com">LolKing</a></td>
-                    <td class="lolking"><a href="www.na.op.gg">na.op.gg</a></td>
-                </tr>
+            <tbody class="summoner-info" data-bind="foreach: validSummoners">
+                <td class="name" data-bind="text: summonerName"></td>
+                <td class="last-played">N/A</td>
+                <td class="most-played">N/A</td>
+                <td class="lolking"><a data-bind="attr: { href: lolKingUrl }">LolKing</a></td>
+                <td class="naopgg"><a data-bind="attr: { href: naOpGgUrl }">na.op.gg</a></td>
             </tbody>
         </table>
+        <!-- /ko -->
 
         <div class="parse-chat">
             <p>Or enter your chat logs below and we'll try to do the work for you!</p>

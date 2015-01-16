@@ -11,19 +11,45 @@
     }
 
     .summoner-table {
+        font-size: 15px;;
         margin-top: 10px;
         margin-bottom: 10px;
         align: center;
-        width: 50%;
-        margin-left: 25%;
+        width: 66%;
+        margin-left: 17%;
+
+        thead {
+            background-color: $black;
+            color: white;
+        }
+
+        tbody {
+            tr:nth-child(2n) {
+                background-color: $lightgray;
+            }
+        }
 
         th {
+            padding: 6px;
+            font-size: 13px;
             text-align: center;
             width: 100px;
         }
 
+        tr {
+            border-bottom: 1px solid $darkgray;
+        }
+
         td {
-            text-align: center;
+            text-align: left;
+            padding: 6px;
+            &:first-child {
+                border-left: 1px solid $darkgray;
+            }
+
+            &:last-child {
+                border-right: 1px solid $darkgray;
+            }
         }
     }
 
