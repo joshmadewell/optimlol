@@ -10,12 +10,32 @@
         }
     }
 
-    .summoner-info {
-        list-style-type: none;
+    .summoner-table {
+        margin-top: 10px;
+        margin-bottom: 10px;
+        align: center;
+        width: 50%;
+        margin-left: 25%;
+
+        th {
+            text-align: center;
+            width: 100px;
+        }
+
+        td {
+            text-align: center;
+        }
     }
 
-    textarea {
-        height: 100px;
-        width: 30%;
+    .parse-chat {
+        textarea {
+            margin-top: -8px;
+            height: 100px;
+            width: 30%;
+        }
+
+        button {
+            line-height: 16px;
+        }
     }
 }

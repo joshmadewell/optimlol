@@ -7,26 +7,29 @@
             <input class='summoner-input' data-bind="value: summonerName, attr: {placeholder: placeholder}, css : {'summoner-input-valid': status() === 'valid', 'summoner-input-invalid': status() === 'invalid', 'summoner-input': status() === 'unset'}">
         </div>
 
-        <table class="summoner-list">
+        <table class="summoner-table">
             <thead>
-                <th>Name</th>
-                <th>Last Played</th>
-                <th>Most Played</th>
-                <th>LolKing</th>
-                <th>op.gg</th>
+                <th class="name">Name</th>
+                <th class="last-played">Last Played</th>
+                <th class="most-played">Most Played</th>
+                <th class="lolking">LolKing</th>
+                <th class="lolking">op.gg</th>
             </thead>
-            <tbody class="summoner-info" data-bind="foreach: validSummoners">
+            <tbody class="summoner-info">
                 <tr>
-                    <label data-bind="text: summonerName"/>
-                    <img src="/img/lolking.png"/> <a data-bind="attr: {href: lolKingUrl}">LolKing</a>
-                    <img src="/img/naopgg.png"/> <a data-bind="attr: {href: naOpGgUrl}">na.op.gg</a>
+                    <td class="name">Josh</td>
+                    <td class="last-played">Irelia</td>
+                    <td class="most-played">Irelia</td>
+                    <td class="lolking"><a href="www.lolking.com">LolKing</a></td>
+                    <td class="lolking"><a href="www.na.op.gg">na.op.gg</a></td>
                 </tr>
             </tbody>
         </table>
 
-        <div>Or enter your chat logs below and we'll try to do the work for you!</div><br>
-        <textarea class="chatlog" data-bind="value: chatText"></textarea><br>
-
-        <button data-bind="click: parseChatForPlayers">Parse Chat Log</button>
+        <div class="parse-chat">
+            <p>Or enter your chat logs below and we'll try to do the work for you!</p>
+            <textarea class="chatlog" data-bind="value: chatText"></textarea><br>
+            <button data-bind="click: parseChatForPlayers">Parse Chat Log</button>
+        </div>
     </div>
 </div>
