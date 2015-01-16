@@ -15,29 +15,29 @@ gulp.task('clean', function(cb) {
 
 gulp.task('app', function(cb) {
 	es.concat(
-		gulp.src('./app/**/*')
+		gulp.src('./web/app/**/*')
 			.pipe(gulp.dest('./build/js/app')),
 
-		gulp.src('./appDependencies/lib/**/*')
+		gulp.src('./web/appDependencies/lib/**/*')
 			.pipe(gulp.dest('./build/lib')),
 
-		gulp.src('./appDependencies/img/**/*')
+		gulp.src('./web/appDependencies/img/**/*')
 			.pipe(gulp.dest('./build/img')),
 
-		gulp.src('index.html')
+		gulp.src('./web/index.html')
 			.pipe(gulp.dest('./build'))
 	).on('end', cb);
 });
 
 gulp.task('sass', function() {
-	gulp.src('./appDependencies/sass/main.scss')
+	gulp.src('./web/appDependencies/sass/main.scss')
 		.pipe(sass())
 		.pipe(gulp.dest('./build/css'));
 });
 
 // Lint Task
 gulp.task('lint', function() {
-    gulp.src('./**/*.js')
+    gulp.src(['./web/app/**/*.js', './node_api/app/**/*.js'])
         .pipe(jshint())
         .pipe(jshint.reporter('default'));
 });
@@ -45,13 +45,12 @@ gulp.task('lint', function() {
 gulp.task('webserver', function() {
     connect.server({
         root: './build',
-        port: 9001,
-        fallback: 'index.html'
+        port: 9001
     });
 });
 gulp.task('watch', function() {
-	gulp.watch('appDependencies/sass/**/*.scss', ['sass']);
-	gulp.watch('app/**/*', ['app']);
+	gulp.watch('./web/appDependencies/sass/**/*.scss', ['sass']);
+	gulp.watch('./web/app/**/*', ['app']);
 });
 
 // Default Task
@@ -62,3 +61,5 @@ gulp.task('build', function() {
 gulp.task('default', function() {
 	runSequence('clean', ['app', 'sass', 'watch', 'webserver']);
 });
+
+gulp.task('serve', ['webserver'])

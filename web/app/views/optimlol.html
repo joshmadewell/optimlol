@@ -28,11 +28,21 @@
                 <th class="naopgg">op.gg</th>
             </thead>
             <tbody class="summoner-info" data-bind="foreach: validSummoners">
-                <td class="name" data-bind="text: summonerName"></td>
-                <td class="last-played">N/A</td>
-                <td class="most-played">N/A</td>
-                <td class="lolking"><a data-bind="attr: { href: lolKingUrl }">LolKing</a></td>
-                <td class="naopgg"><a data-bind="attr: { href: naOpGgUrl }">na.op.gg</a></td>
+                <td data-bind="text: summonerName"></td>
+                <td >N/A</td>
+                <td >N/A</td>
+                <td>
+                    <div class="image-group-lolking">
+                        <img class="icon" src="/img/lolking.png"/>
+                        <a class="link" data-bind="attr: { href: lolKingUrl }">LolKing</a>
+                    </div>
+                </td>
+                <td>
+                    <div class="image-group">
+                        <img class="icon" src="/img/naopgg.png"/>
+                        <a class="link" data-bind="attr: { href: naOpGgUrl }">na.op.gg</a>
+                    </div>
+                </td>
             </tbody>
         </table>
         <!-- /ko -->
