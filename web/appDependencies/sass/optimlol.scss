@@ -27,46 +27,47 @@
         thead {
             background-color: $black;
             color: white;
+
+            th {
+                padding: 6px;
+                font-size: 13px;
+                text-align: center;
+                width: 100px;
+            }
         }
 
         tbody {
+            tr {
+                border-bottom: 1px solid $darkgray;
+            }
             tr:nth-child(2n) {
                 background-color: $lightgray;
             }
-        }
 
-        th {
-            padding: 6px;
-            font-size: 13px;
-            text-align: center;
-            width: 100px;
-        }
-
-        tr {
-            border-bottom: 1px solid $darkgray;
-        }
-
-        td {
-            text-align: left;
-            padding: 6px;
-            &:first-child {
-                border-left: 1px solid $darkgray;
-            }
-
-            &:last-child {
-                border-right: 1px solid $darkgray;
-            }
-
-            .image-group {
-                .icon {
-                    height: 40px;
+            td {
+                text-align: left;
+                padding: 6px;
+                &:first-child {
+                    border-left: 1px solid $darkgray;
                 }
 
-                .link {
-                    margin-left: 4px;
+                &:last-child {
+                    border-right: 1px solid $darkgray;
+                }
+
+                .image-group {
+                    .icon {
+                        height: 40px;
+                    }
+
+                    .link {
+                        margin-left: 4px;
+                    }
                 }
             }
         }
+
+        
     }
 
     .parse-chat {
