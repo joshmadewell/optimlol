@@ -21,11 +21,11 @@
         <!-- ko if: validSummoners().length > 0 -->
         <table class="summoner-table">
             <thead>
-                <th class="name">Name</th>
-                <th class="last-played">Last Played</th>
-                <th class="most-played">Most Played</th>
-                <th class="lolking">LolKing</th>
-                <th class="naopgg">op.gg</th>
+                <th>Name</th>
+                <th>Last Played</th>
+                <th>Most Played</th>
+                <th>LolKing</th>
+                <th>op.gg</th>
             </thead>
             <tbody class="summoner-info" data-bind="foreach: validSummoners">
                 <td data-bind="text: summonerName"></td>
