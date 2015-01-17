@@ -4,7 +4,7 @@ module.exports = function() {
 	var self = this;
 	var _summonerDataProvider = null;
 
-	_verifySummoner = function(region, summonerName) {
+	var _verifySummoner = function(region, summonerName) {
 		var deferred = q.defer();
 		_summonerDataProvider.getSummonerByName(region, summonerName)
 			.then(function(summonerResult) {
