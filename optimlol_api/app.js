@@ -9,6 +9,7 @@ var config = require('./config');
 var expressRouter = express.Router();
 var SummonerRoutes = require('./routes/summonerRoutes');
 var summonerRoutes = new SummonerRoutes(expressRouter);
+summonerRoutes.init();
 
 var crossOriginMiddleware = function(req, res, next) {
 	res.header('Access-Control-Allow-Origin', '*');

@@ -1,28 +1,60 @@
 var q = require('q');
 
-var SummonerDataProvider = require('../dataProviders/summonerDataProvider');
-var summonerDataProvider = new SummonerDataProvider();
-
 module.exports = function() {
 	var self = this;
+	var _summonerDataProvider = null;
 
-	self.verifySummoner = function(region, summonerName) {
+	_verifySummoner = function(region, summonerName) {
 		var deferred = q.defer();
-		summonerDataProvider.getSummonerByName(region, summonerName)
+		_summonerDataProvider.getSummonerByName(region, summonerName)
 			.then(function(summonerResult) {
-				var summonerResultToArray = [];
-				for(var summoner in summonerResult.data) {
-					summonerResult[summoner].queriedString = summoner;
-					summonerResultToArray.push(summonerResult[summoner]);
+				var resolvedObject = {
+					verified: false,
+					summoner: {}
 				}
+				if (summonerResult.length === 0) {
+					deferred.resolve(resolvedObject);
+				} else {
+					console.log("not empty!!!");
+					var summonerExists = false;
+					for(var x = 0; x < summonerResult.length; x++) {
+						if (summonerResult[x].queriedName === summonerName) {
+							resolvedObject.verified = true;
+							resolvedObject.summoner = summonerResult[x];
+						}
+					}
 
-				console.log(summonerResultToArray);
-				deferred.resolve(summonerResultToArray);
+					console.log(resolvedObject);
+					deferred.resolve(resolvedObject);
+				}
 			})
 			.fail(function(error) {
-				deferred.reject(summonerResult);
+				deferred.reject(resolvedObject);
 			});
 
 		return deferred.promise;
 	};
+
+	self.generateSummonerData = function(region, summonerName) {
+		var deferred = q.defer();
+		_verifySummoner(region, summonerName)
+			.then(function(verifiedSummoner) {
+				if (verifiedSummoner.verified) {
+					deferred.resolve(verifiedSummoner);
+				} else {
+					deferred.resolve(verifiedSummoner);
+				}
+			})
+			.fail(function(error) {
+				deferred.reject(error);
+			});
+
+		return deferred.promise;
+	};
+
+	self.init = function() {
+		var SummonerDataProvider = require('../dataProviders/summonerDataProvider');
+		_summonerDataProvider = new SummonerDataProvider();
+		_summonerDataProvider.init();
+	}
 };

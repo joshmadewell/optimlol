@@ -1,15 +1,13 @@
 var request = require('request');
 var q = require('q');
 
-var Logger = require('../common/logger');
-var logger = new Logger();
-var config = require('../config')
-
 module.exports = function() {
 	var self = this;
+	var _config = null;
+	var _logger = null;
 
 	var _handleResponse = function(jsonResponse) {
-		logger.riotApi(jsonResponse.body);
+		_logger.riotApi(jsonResponse.body);
 		var dataToReturn = {
 			data: jsonResponse.body
 		};
@@ -37,7 +35,7 @@ module.exports = function() {
 	}
 
 	self.makeRequest = function(path) {
-		var fullUrl = config.riot_api.url_prefix + path + config.riot_api.api_key;
+		var fullUrl = _config.riot_api.url_prefix + path + _config.riot_api.api_key;
 		var deffered = q.defer();
 		request.get({url: fullUrl, json: true}, function(error, result) {
 			if (error) {
@@ -54,4 +52,11 @@ module.exports = function() {
 
 		return deffered.promise;
 	};
+
+	self.init = function() {
+		_config = require('../config')
+
+		var Logger = require('../common/logger');
+		_logger = new Logger();
+	}
 };

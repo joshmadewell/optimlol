@@ -10,6 +10,7 @@ var logger = new(winston.Logger)({
 			prettyPrint: true,
 			levels: config.logLevels.levels,
 			colorize: true,
+			silent: config.logging.silent,
 			timestamp: function(time) { 
 				return moment(time).format('YYYY-MM-DD HH:mm:ss'); 
 			}
