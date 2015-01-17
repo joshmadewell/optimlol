@@ -6,14 +6,21 @@ var summonerDataProvider = new SummonerDataProvider();
 module.exports = function() {
 	var self = this;
 
-	self.verifySummoner = function(summonerName) {
+	self.verifySummoner = function(region, summonerName) {
 		var deferred = q.defer();
-		summonerDataProvider.getSummonerByName()
+		summonerDataProvider.getSummonerByName(region, summonerName)
 			.then(function(summonerResult) {
-				// check if summoner result is goodsies...
+				var summonerResultToArray = [];
+				for(var summoner in summonerResult.data) {
+					summonerResult[summoner].queriedString = summoner;
+					summonerResultToArray.push(summonerResult[summoner]);
+				}
+
+				console.log(summonerResultToArray);
+				deferred.resolve(summonerResultToArray);
 			})
 			.fail(function(error) {
-
+				deferred.reject(summonerResult);
 			});
 
 		return deferred.promise;
