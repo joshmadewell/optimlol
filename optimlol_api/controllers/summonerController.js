@@ -15,7 +15,6 @@ module.exports = function() {
 				if (summonerResult.length === 0) {
 					deferred.resolve(resolvedObject);
 				} else {
-					console.log("not empty!!!");
 					var summonerExists = false;
 					for(var x = 0; x < summonerResult.length; x++) {
 						if (summonerResult[x].queriedName === summonerName) {
