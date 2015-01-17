@@ -17,7 +17,6 @@ module.exports = function() {
 					returnedSummoner.push(summonerResult.data[property]);
 				}
 				
-				console.log(returnedSummoner);
 				deffered.resolve(returnedSummoner);
 			})
 			.fail(function(error) {

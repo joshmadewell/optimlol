@@ -3,6 +3,7 @@ var q = require('q');
 module.exports = function() {
 	var self = this;
 	var _summonerDataProvider = null;
+	var _statsDataProvider = null;
 
 	var _verifySummoner = function(region, summonerName) {
 		var deferred = q.defer();
@@ -23,7 +24,6 @@ module.exports = function() {
 						}
 					}
 
-					console.log(resolvedObject);
 					deferred.resolve(resolvedObject);
 				}
 			})
@@ -34,8 +34,35 @@ module.exports = function() {
 		return deferred.promise;
 	};
 
-	var _getMatchHistory = function(region, summonerName) {
-		
+	var _getStats = function(region, summonerId) {
+		var deferred = q.defer();
+		_statsDataProvider.getRankedStats(region, summonerId)
+			.then(function(rankedStats) {
+				rankedStats.data.champions.forEach(function(champion) {
+					
+				});
+				deferred.resolve(rankedStats);
+			})
+			.fail(function(error) {
+				deferred.reject(error);
+			});
+
+		return deferred.promise;
+	};
+
+	var _generatePerformanceData = function(region, summoner) {
+		console.log("_generatePerformanceData");
+		var promises = [_getStats(region, summoner.id)];
+		var deferred = q.defer();
+		q.allSettled(promises)
+			.then(function(results) {
+				//console.log(results);
+			})
+			.fail(function(error) {
+				deferred.reject(error);
+			})
+
+		return deferred.promise;
 	};
 
 	self.generateSummonerData = function(region, summonerName) {
@@ -43,7 +70,13 @@ module.exports = function() {
 		_verifySummoner(region, summonerName)
 			.then(function(verifiedSummoner) {
 				if (verifiedSummoner.verified) {
-					deferred.resolve(verifiedSummoner);
+					_generatePerformanceData(region, verifiedSummoner.summoner)
+						.then(function(summonerWithPerformanceData) {
+							deferred.resolve(summonerWithPerformanceData);
+						})
+						.fail(function(error) {
+							deferred.reject(error);
+						});
 				} else {
 					deferred.resolve(verifiedSummoner);
 				}
@@ -59,5 +92,9 @@ module.exports = function() {
 		var SummonerDataProvider = require('../dataProviders/summonerDataProvider');
 		_summonerDataProvider = new SummonerDataProvider();
 		_summonerDataProvider.init();
+
+		var StatsDataProvider = require('../dataProviders/statsDataProvider');
+		_statsDataProvider = new StatsDataProvider();
+		_statsDataProvider.init();
 	}
 };
