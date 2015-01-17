@@ -1,5 +1,5 @@
 define(function() {
 	return {
-		optimlolApiUrl: "localhost:8080/"
+		optimlolApiUrl: "http://localhost:8080/"
 	}
 });

@@ -3,9 +3,9 @@ define(['plugins/http', 'durandal/system', 'settings'], function (http, system, 
 		var self = this;
 
 		self.makeRequest = function(region, path) {
-			var url = settings.optimlolUrl + "/" + region + "/" + path; 
+			var url = settings.optimlolApiUrl + region + "/" + path; 
 			var promise = system.defer();
-			http.get(url + route)
+			http.get(url)
 				.then(function(response) {
 					promise.resolve(response);
 				})

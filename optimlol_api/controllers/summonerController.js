@@ -17,7 +17,7 @@ module.exports = function() {
 				} else {
 					var summonerExists = false;
 					for(var x = 0; x < summonerResult.length; x++) {
-						if (summonerResult[x].queriedName === summonerName) {
+						if (summonerResult[x].queriedName === summonerName.replace(/ /g, '').toLowerCase()) {
 							resolvedObject.verified = true;
 							resolvedObject.summoner = summonerResult[x];
 						}
@@ -32,6 +32,10 @@ module.exports = function() {
 			});
 
 		return deferred.promise;
+	};
+
+	var _getMatchHistory = function(region, summonerName) {
+		
 	};
 
 	self.generateSummonerData = function(region, summonerName) {

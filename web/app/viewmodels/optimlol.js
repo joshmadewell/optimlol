@@ -27,11 +27,12 @@
 				_summonerVerificationFailed(summoner);
 			} else {
 				summoner.status(STATUS.VALIDATING);
-				var queriedValue = summoner.summonerName().replace(/ /g, '').toLowerCase();
 				_getSummonerData(summonerName)
 					.then(function(result) {
-						if (result[queriedValue].name.toLowerCase() === summoner.summonerName().toLowerCase()) {
-							summoner.summonerId(result[queriedValue].id);
+						console.log(result);
+						if (result.verified) {
+							summoner.displayName = result.summoner.name;
+							summoner.summonerId(result.summoner.id);
 							summoner.status(STATUS.VALID);
 						} else {
 							_summonerVerificationFailed(summoner);
