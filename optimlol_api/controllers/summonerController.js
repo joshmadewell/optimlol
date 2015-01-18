@@ -38,9 +38,6 @@ module.exports = function() {
 		var deferred = q.defer();
 		_statsDataProvider.getRankedStats(region, summonerId)
 			.then(function(rankedStats) {
-				rankedStats.data.champions.forEach(function(champion) {
-					
-				});
 				deferred.resolve(rankedStats);
 			})
 			.fail(function(error) {
@@ -51,7 +48,6 @@ module.exports = function() {
 	};
 
 	var _generatePerformanceData = function(region, summoner) {
-		console.log("_generatePerformanceData");
 		var promises = [_getStats(region, summoner.id)];
 		var deferred = q.defer();
 		q.allSettled(promises)
