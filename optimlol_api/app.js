@@ -4,6 +4,10 @@ var moment = require('moment');
 var Logger = require('./common/logger');
 var logger = new Logger();
 
+var Mongo = require('./common/mongo');
+var mongo = new Mongo();
+mongo.init();
+
 var config = require('./config');
 
 var expressRouter = express.Router();

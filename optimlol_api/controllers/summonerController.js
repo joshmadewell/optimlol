@@ -13,6 +13,7 @@ module.exports = function() {
 					verified: false,
 					summoner: {}
 				}
+
 				if (summonerResult.length === 0) {
 					deferred.resolve(resolvedObject);
 				} else {
@@ -47,18 +48,29 @@ module.exports = function() {
 		return deferred.promise;
 	};
 
+	var _getMatchHistory = function(region, summonerId) {
+
+	};
+
 	var _generatePerformanceData = function(region, summoner) {
-		var promises = [_getStats(region, summoner.id)];
 		var deferred = q.defer();
-		q.allSettled(promises)
-			.then(function(results) {
-				//console.log(results);
+		_getStats(region, summoner.id)
+			.then(function(championStats) {
+				deferred.resolve(summoner);
 			})
 			.fail(function(error) {
 				deferred.reject(error);
-			})
+			});
 
 		return deferred.promise;
+		// var promises = [_getStats(region, summoner.id), _getMatchHistory(region, summoner.id)];
+		// var deferred = q.defer();
+		// q.allSettled(promises)
+		// 	.then(function(results) {
+		// 	})
+		// 	.fail(function(error) {
+		// 		deferred.reject(error);
+		// 	})
 	};
 
 	self.generateSummonerData = function(region, summonerName) {

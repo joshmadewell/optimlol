@@ -36,21 +36,21 @@ module.exports = function() {
 
 	self.makeRequest = function(path) {
 		var fullUrl = _config.riot_api.url_prefix + path + _config.riot_api.api_key;
-		var deffered = q.defer();
+		var deferred = q.defer();
 		request.get({url: fullUrl, json: true}, function(error, result) {
 			if (error) {
-				deffered.reject(error);
+				deferred.reject(error);
 			} else {
 				var handledResponse = _handleResponse(result.toJSON());
 				if (handledResponse.success) {
-					deffered.resolve(handledResponse);
+					deferred.resolve(handledResponse);
 				} else {
-					deffered.reject(handledResponse);
+					deferred.reject(handledResponse);
 				}
 			}
 		});
 
-		return deffered.promise;
+		return deferred.promise;
 	};
 
 	self.init = function() {

@@ -11,7 +11,7 @@ module.exports = function() {
 		var z = 1.28; // 80% confidence
 		var modifier = .0009*n; //custom modifier to pad scores.
 
-		return phat + z*z/(2*n) - z * Math.sqrt((phat*(1-phat)+z*z/(4*n))/n))/(1+z*z/n) + modifier;
+		return phat + z*z/(2*n) - z * Math.sqrt((phat*(1-phat)+z*z/(4*n))/n)/(1+z*z/n) + modifier;
 	};
 
 	self.getRankedStats = function(region, summonerId) {
