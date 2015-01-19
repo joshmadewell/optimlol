@@ -22,10 +22,10 @@ module.exports = function() {
 	}
 
 	self.init = function() {
-		var config = require('../config');
+		var config = require('../../config');
 		_apiVersion = config.riot_api.versions.matchHistory;
 
-		var RiotApi = require('../common/riotApi');
+		var RiotApi = require('../../common/riotApi');
 		_riotApi = new RiotApi();
 		_riotApi.init();
 	}

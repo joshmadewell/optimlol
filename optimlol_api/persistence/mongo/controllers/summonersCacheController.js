@@ -1,5 +1,7 @@
 var q = require('q');
 var SummonersModel = require('../models/summonersModel');
+var Logger = require('../../common/logger');
+var _logger = new Logger();
 
 module.exports = function() {
 	var self = this;
@@ -9,6 +11,7 @@ module.exports = function() {
 	}
 
 	self.cacheSummoner = function(region, summonerName, summoner) {
+		_logger.debug("Updating cached summoner: " + summonerName);
 		SummonersModel.findOne({ region: region, queryName: _queryName(summonerName) }, function(error, result) {
 			var toSave = result;
 			if (toSave === null) {
@@ -25,20 +28,13 @@ module.exports = function() {
 	};
 
 	self.getSummonerByName = function(region, summonerName) {
+		_logger.debug("Retrieving cached summoner by summonerName: " + summonerName);
 		var deferred = q.defer();
 		SummonersModel.findOne({region: region, queryName: _queryName(summonerName)}, function(error, result) {
 			if (error) {
 				deferred.reject(error);
 			} else {
-				var summonerResult = {};
-				if (result === null) {
-					deferred.resolve(result);
-				} else {
-					deferred.resolve({
-						success: true,
-						data: result.data
-					});
-				}
+				deferred.resolve(result);
 			}
 		});
 

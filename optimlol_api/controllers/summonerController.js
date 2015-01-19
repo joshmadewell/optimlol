@@ -97,11 +97,11 @@ module.exports = function() {
 	};
 
 	self.init = function() {
-		var SummonerDataProvider = require('../dataProviders/summonerDataProvider');
+		var SummonerDataProvider = require('../persistence/dataProviders/summonerDataProvider');
 		_summonerDataProvider = new SummonerDataProvider();
 		_summonerDataProvider.init();
 
-		var StatsDataProvider = require('../dataProviders/statsDataProvider');
+		var StatsDataProvider = require('../persistence/dataProviders/statsDataProvider');
 		_statsDataProvider = new StatsDataProvider();
 		_statsDataProvider.init();
 	}

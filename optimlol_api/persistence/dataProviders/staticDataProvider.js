@@ -1,9 +1,9 @@
 var q = require('q');
 
-var RiotApi = require('../common/riotApi');
+var RiotApi = require('../../common/riotApi');
 var riotApi = new RiotApi();
 
-var config = require('../config');
+var config = require('../../config');
 var apiVersion = config.riot_api.versions.staticData;
 
 module.exports = function() {

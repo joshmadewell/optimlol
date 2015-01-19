@@ -46,10 +46,10 @@ module.exports = function() {
 	}
 
 	self.init = function() {
-		var _config = require('../config');
+		var _config = require('../../config');
 		_apiVersion = _config.riot_api.versions.stats;
 
-		var RiotApi = require('../common/riotApi');
+		var RiotApi = require('../../common/riotApi');
 		_riotApi = new RiotApi();
 		_riotApi.init();
 	}
