@@ -1,4 +1,6 @@
 var mongoose = require('mongoose');
+var q = require('q');
+
 var Schema = mongoose.Schema;
 
 var SummonersSchema = new Schema({
@@ -8,6 +10,19 @@ var SummonersSchema = new Schema({
 	created_at: { type: Date },
 	updated_at: { type: Date }
 });
+
+SummonersSchema.statics.retrieve = function(identifiers, cb) {
+	identifiers.summonerName = identifiers.summonerName.replace(/ /g, '').toLowerCase();
+	var deferred = q.defer();
+	this.model('summoners').findOne(identifiers, function(error, result) {
+		if (error) deferred.reject(error);
+		else {
+			deferred.resolve(result);
+		}
+	});
+
+	return deferred.promise;
+}
 
 SummonersSchema.pre('save', function(next) {
 	var now = new Date();

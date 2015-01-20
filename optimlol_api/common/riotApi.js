@@ -7,7 +7,7 @@ module.exports = function() {
 	var _logger = null;
 
 	var _handleResponse = function(jsonResponse) {
-		_logger.riotApi(jsonResponse.body);
+		_logger.riotApi("Response body:", jsonResponse.body);
 		var dataToReturn = {
 			data: jsonResponse.body
 		};
@@ -35,7 +35,7 @@ module.exports = function() {
 	}
 
 	self.makeRequest = function(path) {
-		var fullUrl = _config.riot_api.url_prefix + path + _config.riot_api.api_key;
+		var fullUrl = _config.riot_api.url_prefix + path + "?api_key=" + process.env.RIOT_API_KEY;
 		var deferred = q.defer();
 		request.get({url: fullUrl, json: true}, function(error, result) {
 			if (error) {
