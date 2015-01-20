@@ -31,4 +31,7 @@ var app = express();
 app.use(crossOriginMiddleware);
 app.use(loggerMiddleware);
 app.use(expressRouter);
+app.use(function(req, res, next) {
+	res.status(404).send("That's not nice of you.");
+});
 app.listen(config.optimlol_api.port);

@@ -44,6 +44,7 @@ module.exports = function() {
 	};
 
 	self.set = function(collection, identifiers, data) {
+		// this is just a save it and forget it...we dont care abotu what happens afterwards.
 		_logger.debug("Cache Set:", { "from": collection, "with": identifiers, "data": data } );
 		var model = require('../persistence/mongoModels/' + collection + 'Model');
 		model.retrieve(identifiers)
