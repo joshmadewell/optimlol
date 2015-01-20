@@ -4,7 +4,7 @@ var moment = require('moment');
 module.exports = function() {
 	var self = this;
 	var _config = require('../config');
-	var Logger = require('logger');
+	var Logger = require('./logger');
 	var _logger = new Logger();
 
 	var _returnData = function(cachedData) {
