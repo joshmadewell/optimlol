@@ -2,7 +2,6 @@ var config = {};
 
 // Optimlol API
 config.optimlol_api = {};
-config.optimlol_api.port = 8080;
 config.optimlol_api.expiredCacheMinutes = 20;
 
 // Riot API
