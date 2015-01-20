@@ -13,7 +13,7 @@ gulp.task('clean', function(cb) {
 	del(['./build'], cb);
 });
 
-gulp.task('app', function(cb) {
+gulp.task('web-app', function(cb) {
 	es.concat(
 		gulp.src('./web/app/**/*')
 			.pipe(gulp.dest('./build/js/app')),
@@ -54,12 +54,10 @@ gulp.task('watch', function() {
 });
 
 // Default Task
-gulp.task('build', function() {
-	runSequence('clean', ['app', 'sass']);
+gulp.task('build-web', function() {
+	runSequence('clean', ['web-app', 'sass']);
 });
 
-gulp.task('default', function() {
-	runSequence('clean', ['app', 'sass', 'watch', 'webserver']);
+gulp.task('debug-web', function() {
+	runSequence('clean', ['web-app', 'sass', 'watch', 'webserver']);
 });
-
-gulp.task('serve', ['webserver'])
