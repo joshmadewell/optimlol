@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var SummonersSchema = new Schema({
-	queryName: { type: String, required: true },
+	summonerName: { type: String, required: true },
 	region: { type: String, required: true },
 	data: Schema.Types.Mixed,
 	created_at: { type: Date },
@@ -12,6 +12,7 @@ var SummonersSchema = new Schema({
 SummonersSchema.pre('save', function(next) {
 	var now = new Date();
 	this.updated_at = now;
+	this.summonerName = this.summonerName.replace(/ /g, '').toLowerCase();
 	if (!this.created_at) {
 		this.created_at = now;
 	}

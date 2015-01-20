@@ -37,19 +37,17 @@ module.exports = function() {
 	self.getSummonerByName = function(region, summonerName) {
 		var now = moment();
 		var deferred = q.defer();
-		_summonerCacheController.getSummonerByName(region, summonerName)
+		
 			.then(function(cacheSummonerResult) {
 				console.log(cacheSummonerResult);
-				var cacheLastUpdated = moment(now).diff(cacheSummonerResult.updated_at, 'minutes');
-				_logger.debug("Cached summoner is " + cacheLastUpdated + " minutes old.")
-				if(cacheSummonerResult !== null && (cacheLastUpdated <= _config.expiredCacheMinutes)) {
+				
+				if(cacheSummonerResult !== null) {
 					_logger.debug("Using cached summoner.");
-					var expectedSummoner = { success: true, data: cacheSummonerResult.data };
-					deferred.resolve(_prepareSummoner(expectedSummoner));
+					deferred.resolve(_prepareSummoner(cacheSummonerResult));
 				} else {
 					_getSummonerByNameApi(region, summonerName)
 						.then(function(apiSummoner) {
-							_summonerCacheController.cacheSummoner(region, summonerName, apiSummoner);
+							_mongoCache.set('summoners', {region: region, summonerName: summonerName}, apiSummoner);
 							deferred.resolve(_prepareSummoner(apiSummoner))
 						})
 						.fail(function(error) {
@@ -68,7 +66,7 @@ module.exports = function() {
 		_config = require('../../config');
 		_apiVersion = _config.riot_api.versions.summoners;
 
-		var SummonerCacheController = require('../../persistence/mongo/controllers/summonersCacheController');
+		var SummonerCacheController = require('../mongo/controllers/summonersCacheController');
 		_summonerCacheController = new SummonerCacheController();
 
 		var Logger = require('../../common/logger');
