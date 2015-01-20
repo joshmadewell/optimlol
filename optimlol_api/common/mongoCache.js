@@ -44,25 +44,39 @@ module.exports = function() {
 	};
 
 	self.set = function(collection, identifiers, data) {
-		// this is just a save it and forget it...we dont care abotu what happens afterwards.
 		_logger.debug("Cache Set:", { "from": collection, "with": identifiers, "data": data } );
 		var model = require('../persistence/mongoModels/' + collection + 'Model');
+
+		var deferred = q.defer();
 		model.retrieve(identifiers)
 			.then(function(cachedResult) {
 				if (cachedResult) {
 					cachedResult.data = data;
-					cachedResult.save();
+					cachedResult.save(function(error, result) {
+						if (error) deferred.reject(error);
+						else {
+							deferred.resolve();
+						}
+					});
 				} else {
 					var toSave = new model();
 					for(property in identifiers) {
 						toSave[property] = identifiers[property];
 					}
 					toSave.data = data;
-					toSave.save();
+					toSave.save(function(error, result) {
+						if (error) deferred.reject(error);
+						else {
+							deferred.resolve();
+						}
+					});
 				}
 			})
 			.fail(function(error) {
-				_logger.warn("Error setting cache", { "from": collection, "with": identifiers });
+				_logger.warn("Error checking mongo for cache", { "from": collection, "with": identifiers });
+				deferred.reject(error);
 			});
+
+		return deferred.promise;
 	};
 }
