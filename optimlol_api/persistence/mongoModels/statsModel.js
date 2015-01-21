@@ -4,7 +4,7 @@ var q = require('q');
 var Schema = mongoose.Schema;
 
 var StatsSchema = new Schema({
-	summonerId: { type: String, required: true },
+	summonerId: { type: Number, required: true },
 	region: { type: String, required: true },
 	expiredTimeMinutes: { type: Number, default: 60 },
 	data: Schema.Types.Mixed,
