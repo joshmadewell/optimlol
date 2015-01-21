@@ -84,8 +84,7 @@
 		var _onSummonerStatusUpdated = function() {
 			self.validSummoners.removeAll();
 
-			var _sortingComparitor = function(a, b) {
-				console.log(a, b);
+			var _sortingComparator = function(a, b) {
 				if (!a.totalStats && b.totalStats) {
 					return 1;
 				} else if (a.totalStats && !b.totalStats) {
@@ -100,6 +99,8 @@
 					return 0;
 				}
 			};
+
+			self.summonerInputs.sort(_sortingComparator);
 
 			self.summonerInputs.forEach(function(summoner) {
 				if (summoner.status() === STATUS.VALID) {
@@ -133,10 +134,8 @@
 			});
 
 			potentialSummoners.forEach(function(potentialSummoner) {
-				console.log(potentialSummoner);
 				for(var x = 0; x < self.summonerInputs.length; ++x) {
 					var currentSummoner = self.summonerInputs[x];
-					console.log(currentSummoner.status())
 					if (currentSummoner.status() === STATUS.INVALID || currentSummoner.status() === STATUS.UNSET) {
 						currentSummoner.summonerName(potentialSummoner);
 						break;

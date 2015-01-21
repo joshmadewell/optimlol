@@ -21,27 +21,21 @@
         <!-- ko if: validSummoners().length > 0 -->
         <table class="summoner-table">
             <thead>
-                <th>Name</th>
-                <th>Last Played</th>
-                <th>Most Played</th>
-                <th>LolKing</th>
-                <th>op.gg</th>
+                <th class="name">Name</th>
+                <th class="last-played">Last Played</th>
+                <th class="most-played">Most Played</th>
+                <th class="img-link">LolKing</th>
+                <th class="img-link">op.gg</th>
             </thead>
             <tbody class="summoner-info" data-bind="foreach: validSummoners">
-                <td data-bind="text: displayName"></td>
-                <td >N/A</td>
-                <td >N/A</td>
-                <td>
-                    <div class="image-group-lolking">
-                        <img class="icon" src="/img/lolking.png"/>
-                        <a class="link" data-bind="attr: { href: lolKingUrl }">LolKing</a>
-                    </div>
+                <td class="name" data-bind="text: displayName"></td>
+                <td class="last-played">N/A</td>
+                <td class="most-played">N/A</td>
+                <td class="img-link">
+                    <a data-bind="attr: { href: lolKingUrl }"><img class="icon" src="/img/lolking.png"/></a>
                 </td>
-                <td>
-                    <div class="image-group">
-                        <img class="icon" src="/img/naopgg.png"/>
-                        <a class="link" data-bind="attr: { href: naOpGgUrl }">na.op.gg</a>
-                    </div>
+                <td class="img-link">
+                    <a data-bind="attr: { href: naOpGgUrl }"><img class="icon" src="/img/naopgg.png"/></a>
                 </td>
             </tbody>
         </table>
