@@ -46,11 +46,15 @@ module.exports = function() {
 				console.log("donsies!!!");
 				var championStats = results[0].value;
 				championStats.data.champions.forEach(function(championStat) {
-					// something is breaking here :/
-					championStat.championName = results[1].value.data.data[championStat.id.toString()].name;
+					// we get data back with string id's le sigh....
+					var championIdString = championStat.id.toString();
+					if (championIdString !== "0") {
+						championStat.championName = results[1].value.data.data[championIdString].name;
+					else {
+						championStat.championName = "All";
+					}
 				});
 
-				console.log(championStats, "pew pew");
 				deferred.resolve(championStats);
 			})
 			.fail(function(error) {
