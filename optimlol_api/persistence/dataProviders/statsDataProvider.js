@@ -5,6 +5,7 @@ module.exports = function() {
 	var _apiVersion = null;
 	var _riotApi = null;
 	var _mongoCache = null;
+	var _logger = null;
 
 	var _calculatePerformance = function(wins, losses) {
 		var n = wins + losses;
@@ -78,6 +79,9 @@ module.exports = function() {
 	self.init = function() {
 		var _config = require('../../config');
 		_apiVersion = _config.riot_api.versions.stats;
+
+		var Logger = require('../../common/logger');
+		_logger = new Logger();
 
 		var MongoCache = require('../../common/mongoCache');
 		_mongoCache = new MongoCache();
