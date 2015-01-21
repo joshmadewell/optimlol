@@ -13,7 +13,7 @@ module.exports = function() {
 		//var modifier = .0009*n; //custom modifier to pad scores.
 
 		var performance = (phat + z*z/(2*n) - z * Math.sqrt((phat*(1-phat)+z*z/(4*n))/n))/(1+z*z/n)// + modifier;
-		return performance.toFixed(2);
+		return performance.toFixed(2)/1;
 	};
 
 	var _prepareStats = function(stats) {

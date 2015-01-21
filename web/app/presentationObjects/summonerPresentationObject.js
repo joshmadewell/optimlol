@@ -7,7 +7,9 @@ define(['knockout'], function (ko) {
 			placeholder: "",
 			status: ko.observable("unset"),
 			lolKingUrl: ko.observable(""),
-			naOpGgUrl: ko.observable("")
+			naOpGgUrl: ko.observable(""),
+			totalStats: {},
+			championStats: []
 		}
 	}
 });

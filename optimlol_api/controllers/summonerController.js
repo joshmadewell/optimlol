@@ -51,12 +51,13 @@ module.exports = function() {
 				if (results[promiseObject.STATS_INDEX].state === 'fulfilled') {
 					var championStats = results[0].value;
 					if (championStats.data) {
-						championStats.data.champions.forEach(function(championStat) {
+						championStats.data.champions.forEach(function(championStat, index) {
 							// we get data back with string id's le sigh....
 							var championIdString = championStat.id.toString();
 							if (championIdString !== "0") {
 								championStat.championName = results[1].value.data.data[championIdString].name;
 							} else {
+								championStats.allChampIndex = index;
 								championStat.championName = "All";
 							}
 						});
@@ -82,7 +83,12 @@ module.exports = function() {
 		_getStats(region, summoner.id)
 			.then(function(championStats) {
 				if (championStats.success) {
-					summoner.championStats = championStats.data;
+					if (championStats.allChampIndex) {
+						summoner.totalStats = championStats.data.champions[championStats.allChampIndex];
+						championStats.data.champions.splice(championStats.allChampIndex, 1);
+					}
+
+					summoner.championStats = championStats.data ? championStats.data.champions : null;
 				}
 
 				deferred.resolve(summoner);

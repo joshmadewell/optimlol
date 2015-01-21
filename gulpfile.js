@@ -50,7 +50,7 @@ gulp.task('webserver', function() {
 });
 gulp.task('watch', function() {
 	gulp.watch('./web/appDependencies/sass/**/*.scss', ['sass']);
-	gulp.watch('./web/app/**/*', ['app']);
+	gulp.watch('./web/app/**/*', ['web-app']);
 });
 
 // Default Task

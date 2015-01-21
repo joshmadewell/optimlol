@@ -29,10 +29,11 @@
 				summoner.status(STATUS.VALIDATING);
 				_getSummonerData(summonerName)
 					.then(function(result) {
-						console.log(result);
-						if (result.verified) {
-							summoner.displayName = result.summoner.name;
-							summoner.summonerId(result.summoner.id);
+						if (result.id) {
+							summoner.displayName = result.name;
+							summoner.championStats = result.championStats;
+							summoner.totalStats = result.totalStats;
+							summoner.summonerId(result.id);
 							summoner.status(STATUS.VALID);
 						} else {
 							_summonerVerificationFailed(summoner);
@@ -82,6 +83,23 @@
 
 		var _onSummonerStatusUpdated = function() {
 			self.validSummoners.removeAll();
+
+			var _sortingComparitor = function(a, b) {
+				console.log(a, b);
+				if (!a.totalStats && b.totalStats) {
+					return 1;
+				} else if (a.totalStats && !b.totalStats) {
+					return -1;
+				} else if (!a.totalStats && !b.totalStats) {
+					return 0;
+				} else if (a.totalStats.performance < b.totalStats.performance) {
+					return 1;
+				} else if (a.totalStats.performance > b.totalStats.performance) {
+					return -1;
+				} else {
+					return 0;
+				}
+			};
 
 			self.summonerInputs.forEach(function(summoner) {
 				if (summoner.status() === STATUS.VALID) {
