@@ -16,9 +16,9 @@ module.exports = function() {
 		if (cachedData) {
 			var cacheLastUpdated = moment().diff(cachedData.updated_at, 'minutes');
 
-			_logger.debug("Cached object is " + cacheLastUpdated + " minutes old.");
+			_logger.debug("Cached object is " + cacheLastUpdated + " minutes old.", "Expire time is", cachedData.expiredTimeMinutes);
 
-			if (cacheLastUpdated < _config.optimlol_api.expiredCacheMinutes) {
+			if (cacheLastUpdated < cachedData.expiredTimeMinutes || cachedData.expiredTimeMinutes === -1) {
 				returnData.data = cachedData.data;
 			}
 		}
@@ -33,7 +33,7 @@ module.exports = function() {
 		var deferred = q.defer();
 		model.retrieve(identifiers)
 			.then(function(cachedResult) {
-				_logger.info("Cache returned:", cachedResult ? "value" : "nothing");
+				_logger.debug("Cache returned:", cachedResult ? "value" : "nothing");
 				deferred.resolve(_returnData(cachedResult));
 			})
 			.fail(function(error) {

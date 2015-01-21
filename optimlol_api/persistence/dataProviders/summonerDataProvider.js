@@ -4,10 +4,9 @@ var moment = require('moment');
 module.exports = function() {
 	var self = this;
 	var _logger = null;
-	var _summonerCacheController = null;
+	var _mongoCache = null;
 	var _apiVersion = null;
 	var _riotApi = null;
-	var _config = null;
 
 	var _prepareSummoner =function(summoner) {
 		var returnedSummoner = [];
@@ -38,7 +37,6 @@ module.exports = function() {
 	};
 
 	self.getSummonerByName = function(region, summonerName) {
-		var now = moment();
 		var deferred = q.defer();
 		_logger.debug("Getting summoner by name", summonerName);
 		_mongoCache.get('summoners', {region: region, summonerName: summonerName})
@@ -59,8 +57,8 @@ module.exports = function() {
 	}
 
 	self.init = function() {
-		_config = require('../../config');
-		_apiVersion = _config.riot_api.versions.summoners;
+		var config = require('../../config');
+		_apiVersion = config.riot_api.versions.summoners;
 
 		var MongoCache = require('../../common/mongoCache');
 		_mongoCache = new MongoCache();

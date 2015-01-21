@@ -1,41 +1,64 @@
 var q = require('q');
 
-var RiotApi = require('../../common/riotApi');
-var riotApi = new RiotApi();
-
-var config = require('../../config');
-var apiVersion = config.riot_api.versions.staticData;
-
 module.exports = function() {
 	var self = this;
+	var _config = null;
+	var _apiVersion = null;
+	var _logger = null
+	var _riotApi = null;
+	var _mongoCache = null;
 
-	self.getAllChampions = function(region) {
-		var championsPath = "static-data/" + region + "/" + apiVersion + "/champion?dataById=true" + config.riot_api.api_key;
-		var deffered = q.defer();
+	var _getStaticDataApi = function(region, staticType, deferred) {
+		var staticDataPath = "static-data/" + region + "/" + _apiVersion + "/" + _config.riot_api.staticTypes[staticType];
 
-		riotApi.makeRequest(championsPath)
-			.then(function(result) {
+		_riotApi.makeRequest(staticDataPath)
+			.then(function(staticDataResult) {
+				_mongoCache.set('staticData', {region: region, staticType: staticType}, staticDataResult.data)
+					.then(function() {
+						deferred.resolve(staticDataResult);
+					})
+					.fail(function() {
+						// if setting cache fails, don't worry, move on.
+						deferred.resolve(staticDataResult);
+					});
 				deffered.resolve(result);
 			})
 			.fail(function(error) {
 				deffered.reject(error);
 			});
+	};
 
-		return deffered.promise;
-	}
-
-	self.getChampionById = function(id, region) {
-		var championsPath = "static-data/" + region + "/" + apiVersion + "/champion" + id + config.riot_api.api_key;
-		var deffered = q.defer();
-
-		riotApi.makeRequest(championsPath)
-			.then(function(result) {
-				deffered.resolve(result);
+	self.getStaticData = function(region, staticType) {
+		_logger.debug("Getting static data", staticType);
+		var deferred = q.defer();
+		_mongoCache.get('staticData', {region: region, staticType: staticType})
+			.then(function(cachedStaticData) {
+				if (cachedStaticData.data !== null) {
+					_logger.debug("Using cached static data");
+					deferred.resolve(cachedStaticData);
+				} else {
+					_getStaticDataApi(region, staticType, deferred);
+				}
 			})
 			.fail(function(error) {
-				deffered.reject(error);
+				_getStaticDataApi(region, staticType, deferred);
 			});
 
-		return deffered.promise;
+		return deferred.promise;
+	};
+
+	self.init = function() {
+		_config = require('../../config');
+		_apiVersion = _config.riot_api.versions.staticData;
+
+		var MongoCache = require('../../common/mongoCache');
+		_mongoCache = new MongoCache();
+
+		var Logger = require('../../common/logger');
+		_logger = new Logger();
+
+		var RiotApi = require('../../common/riotApi');
+		_riotApi = new RiotApi();
+		_riotApi.init();
 	}
 };

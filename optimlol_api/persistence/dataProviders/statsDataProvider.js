@@ -10,37 +10,42 @@ module.exports = function() {
 		var n = wins + losses;
 		var phat = wins / n;
 		var z = 1.28; // 80% confidence
-		var modifier = .0009*n; //custom modifier to pad scores.
+		//var modifier = .0009*n; //custom modifier to pad scores.
 
-		return phat + z*z/(2*n) - z * Math.sqrt((phat*(1-phat)+z*z/(4*n))/n)/(1+z*z/n) + modifier;
+		var performance = (phat + z*z/(2*n) - z * Math.sqrt((phat*(1-phat)+z*z/(4*n))/n))/(1+z*z/n)// + modifier;
+		return performance.toFixed(2);
 	};
 
 	var _prepareStats = function(stats) {
-		var optimlolChampions = [];
-		stats.data.champions.forEach(function(champion) {
-			var optimlolChampion = {};
-			optimlolChampion.id = champion.id;
-			optimlolChampion.wins = champion.totalSessionsWon;
-			optimlolChampion.losses = champion.totalSessionsLost;
-			optimlolChampion.kills = champion.totalChampionKills;
-			optimlolChampion.deaths = champion.totalDeathsPerSession;
-			optimlolChampion.assists = champion.totalAssists;
-			optimlolChampion.kda = (champion.totalChampionKills + champion.totalAssists) / champion.totalDeathsPerSession;
-			optimlolChampion.gamesPlayed = champion.totalSessionsPlayed;
-			optimlolChampion.performance = _calculatePerformance(champion.totalSessionsWon, champion.totalSessionsLost);
-			optimlolChampions.push(optimlolChampion);
-		});
+		if (stats.data) {
+			var optimlolChampions = [];
+			stats.data.champions.forEach(function(champion) {
+				var optimlolChampion = {};
+				optimlolChampion.id = champion.id;
+				optimlolChampion.wins = champion.stats.totalSessionsWon;
+				optimlolChampion.losses = champion.stats.totalSessionsLost;
+				optimlolChampion.kills = champion.stats.totalChampionKills;
+				optimlolChampion.deaths = champion.stats.totalDeathsPerSession;
+				optimlolChampion.assists = champion.stats.totalAssists;
+				optimlolChampion.kda = (champion.stats.totalChampionKills + champion.stats.totalAssists) / champion.stats.totalDeathsPerSession;
+				optimlolChampion.gamesPlayed = champion.stats.totalSessionsPlayed;
+				optimlolChampion.performance = _calculatePerformance(champion.stats.totalSessionsWon, champion.stats.totalSessionsLost);
+				optimlolChampions.push(optimlolChampion);
+			});
 
-		stats.data.champions = optimlolChampions;
+			stats.data.champions = optimlolChampions;
+		}
+
+		return stats;
 	};
 
 	var _getStatsApi = function(region, summonerId, deferred) {
 		var statsPath = region + "/" + _apiVersion + "/stats/by-summoner/" + summonerId + "/ranked";
 		_riotApi.makeRequest(statsPath)
 			.then(function(statsResult) {
-				_mongoCache.set('stats', {region: region, summonerId: summonerId})
+				_mongoCache.set('stats', {region: region, summonerId: summonerId}, statsResult.data)
 					.then(function() {
-						deffered.resolve(_prepareStats(statsResult));
+						deferred.resolve(_prepareStats(statsResult));
 					})
 					.fail(function(error) {
 						_logger.warn("Some failure when setting cache", error);
@@ -48,12 +53,12 @@ module.exports = function() {
 					})
 			})
 			.fail(function(error) {
-				deffered.reject(error);
+				deferred.reject(error);
 			});
 	};
 
 	self.getRankedStats = function(region, summonerId) {
-		var deffered = q.defer();
+		var deferred = q.defer();
 		_mongoCache.get('stats', {region: region, summonerId: summonerId})
 			.then(function(cacheStatsResult) {
 				if (cacheStatsResult.data !== null) {
@@ -67,7 +72,7 @@ module.exports = function() {
 				_getStatsApi(region, summonerId, deferred);
 			})
 
-		return deffered.promise;
+		return deferred.promise;
 	}
 
 	self.init = function() {

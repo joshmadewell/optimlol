@@ -3,18 +3,18 @@ var q = require('q');
 
 var Schema = mongoose.Schema;
 
-var StatsSchema = new Schema({
-	summonerId: { type: String, required: true },
+var StaticDataSchema = new Schema({
+	staticType: { type: String, required: true },
 	region: { type: String, required: true },
-	expiredTimeMinutes: { type: Number, default: 60 },
+	expiredTimeMinutes: { type: Number, default: 60 * 24 * 7 },
 	data: Schema.Types.Mixed,
 	created_at: { type: Date },
 	updated_at: { type: Date }
 });
 
-StatsSchema.statics.retrieve = function(identifiers) {
+StaticDataSchema.statics.retrieve = function(identifiers) {
 	var deferred = q.defer();
-	this.model('stats').findOne(identifiers, function(error, result) {
+	this.model('static_data').findOne(identifiers, function(error, result) {
 		if (error) deferred.reject(error);
 		else {
 			deferred.resolve(result);
@@ -24,7 +24,7 @@ StatsSchema.statics.retrieve = function(identifiers) {
 	return deferred.promise;
 }
 
-StatsSchema.pre('save', function(next) {
+StaticDataSchema.pre('save', function(next) {
 	var now = new Date();
 	this.updated_at = now;
 	if (!this.created_at) {
@@ -33,4 +33,4 @@ StatsSchema.pre('save', function(next) {
 	next();
 });
 
-module.exports = mongoose.model('stats', StatsSchema);
+module.exports = mongoose.model('static_data', StaticDataSchema);

@@ -7,6 +7,13 @@ config.optimlol_api.expiredCacheMinutes = 20;
 // Riot API
 config.riot_api = {};
 config.riot_api.url_prefix = "https://na.api.pvp.net/api/lol/"
+config.riot_api.staticTypes = {
+	champions: "champion?dataById=true&champData=info",
+	items: "item",
+	masteries: "mastery",
+	runes: "rune",
+	summonerSpells: "summoner-spell"
+}
 config.riot_api.versions = {
 	champions: "v1.2",
 	staticData: "v1.2",

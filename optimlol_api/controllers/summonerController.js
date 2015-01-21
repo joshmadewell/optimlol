@@ -36,10 +36,22 @@ module.exports = function() {
 	};
 
 	var _getStats = function(region, summonerId) {
+		var promises = [
+			_statsDataProvider.getRankedStats(region, summonerId),
+			_staticDataProvider.getStaticData(region, 'champions')
+		];
 		var deferred = q.defer();
-		_statsDataProvider.getRankedStats(region, summonerId)
-			.then(function(rankedStats) {
-				deferred.resolve(rankedStats);
+		q.allSettled(promises)
+			.then(function(results) {
+				console.log("donsies!!!");
+				var championStats = results[0].value;
+				championStats.data.champions.forEach(function(championStat) {
+					// something is breaking here :/
+					championStat.championName = results[1].value.data.data[championStat.id.toString()].name;
+				});
+
+				console.log(championStats, "pew pew");
+				deferred.resolve(championStats);
 			})
 			.fail(function(error) {
 				deferred.reject(error);
@@ -48,7 +60,7 @@ module.exports = function() {
 		return deferred.promise;
 	};
 
-	var _getMatchHistory = function(region, summonerId) {
+	var _getMatchHistory = function(region, summonerId, championId) {
 
 	};
 
@@ -56,6 +68,7 @@ module.exports = function() {
 		var deferred = q.defer();
 		_getStats(region, summoner.id)
 			.then(function(championStats) {
+				summoner.championStats = championStats.data;
 				deferred.resolve(summoner);
 			})
 			.fail(function(error) {
@@ -104,5 +117,9 @@ module.exports = function() {
 		var StatsDataProvider = require('../persistence/dataProviders/statsDataProvider');
 		_statsDataProvider = new StatsDataProvider();
 		_statsDataProvider.init();
+
+		var StaticDataProvider = require('../persistence/dataProviders/staticDataProvider');
+		_staticDataProvider = new StaticDataProvider();
+		_staticDataProvider.init();
 	}
 };

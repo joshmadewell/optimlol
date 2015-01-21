@@ -7,35 +7,38 @@ module.exports = function() {
 	var _logger = null;
 
 	var _handleResponse = function(jsonResponse) {
-		_logger.riotApi("Response body:", jsonResponse.body);
-		var dataToReturn = {
-			data: jsonResponse.body
-		};
-
+		var dataToReturn = {};
 		switch (jsonResponse.statusCode) {
 			case 200:
+				_logger.riotApi("Response body:", jsonResponse.body);
 				dataToReturn.success = true;
+				dataToReturn.data = jsonResponse.body;
 				break;
 			case 404:
+				_logger.riotApi("Riot: 404");
 				dataToReturn.success = true;
-				dataToReturn.data = {};
+				dataToReturn.data = null;
 				break;
 			case 401:
 			case 429:
 			case 500:
 			case 503:
+				_logger.riotApi("Riot:", jsonResponse.statusCode);
 				dataToReturn.success = false;
+				dataToReturn.data = null;
 				break;
 			default:
+				_logger.riotApi("Riot Unknown StatusCode:", jsonResponse.statusCode);
 				dataToReturn.success = false;
-				dataToReturn.message = "Uknown response from Riot.";
+				dataToReturn.data = null;
 		}
 
 		return dataToReturn;
 	}
 
 	self.makeRequest = function(path) {
-		var fullUrl = _config.riot_api.url_prefix + path + "?api_key=" + process.env.RIOT_API_KEY;
+		var apiKeyPrefix = path.indexOf('?') !== -1 ? "&api_key=" : "?api_key="; 
+		var fullUrl = _config.riot_api.url_prefix + path + apiKeyPrefix + process.env.RIOT_API_KEY;
 		var deferred = q.defer();
 		request.get({url: fullUrl, json: true}, function(error, result) {
 			if (error) {

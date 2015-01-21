@@ -8,7 +8,7 @@ module.exports = function() {
 		mongoose.connect(process.env.MONGOLAB_URI);
 
 		var models = [
-			'../persistence/mongoModels/championsModel',
+			'../persistence/mongoModels/staticDataModel',
 			'../persistence/mongoModels/statsModel',
 			'../persistence/mongoModels/summonersModel'
 		];

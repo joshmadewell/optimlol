@@ -6,12 +6,13 @@ var Schema = mongoose.Schema;
 var SummonersSchema = new Schema({
 	summonerName: { type: String, required: true },
 	region: { type: String, required: true },
+	expiredTimeMinutes: { type: Number, default: -1 },
 	data: Schema.Types.Mixed,
 	created_at: { type: Date },
 	updated_at: { type: Date }
 });
 
-SummonersSchema.statics.retrieve = function(identifiers, cb) {
+SummonersSchema.statics.retrieve = function(identifiers) {
 	identifiers.summonerName = identifiers.summonerName.replace(/ /g, '').toLowerCase();
 	var deferred = q.defer();
 	this.model('summoners').findOne(identifiers, function(error, result) {
