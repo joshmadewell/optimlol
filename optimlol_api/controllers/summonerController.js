@@ -36,26 +36,35 @@ module.exports = function() {
 	};
 
 	var _getStats = function(region, summonerId) {
-		var promises = [
-			_statsDataProvider.getRankedStats(region, summonerId),
-			_staticDataProvider.getStaticData(region, 'champions')
-		];
+		var promiseObject = {
+			STATS_INDEX: 0,
+			CHAMPS_INDEX: 1,
+			PRMOMISES: [
+				_statsDataProvider.getRankedStats(region, summonerId),
+				_staticDataProvider.getStaticData(region, 'champions')
+			]
+		};
 		var deferred = q.defer();
-		q.allSettled(promises)
+		q.allSettled(promiseObject.PRMOMISES)
 			.then(function(results) {
-				console.log("donsies!!!");
-				var championStats = results[0].value;
-				championStats.data.champions.forEach(function(championStat) {
-					// we get data back with string id's le sigh....
-					var championIdString = championStat.id.toString();
-					if (championIdString !== "0") {
-						championStat.championName = results[1].value.data.data[championIdString].name;
-					else {
-						championStat.championName = "All";
+				var haveStats = true;
+				if (results[promiseObject.STATS_INDEX].state === 'fulfilled') {
+					var championStats = results[0].value;
+					if (championStats.data) {
+						championStats.data.champions.forEach(function(championStat) {
+							// we get data back with string id's le sigh....
+							var championIdString = championStat.id.toString();
+							if (championIdString !== "0") {
+								championStat.championName = results[1].value.data.data[championIdString].name;
+							} else {
+								championStat.championName = "All";
+							}
+						});
 					}
-				});
-
-				deferred.resolve(championStats);
+					deferred.resolve(championStats);
+				} else {
+					deferred.resolve({ success: false, data: null });
+				}
 			})
 			.fail(function(error) {
 				deferred.reject(error);
@@ -72,7 +81,10 @@ module.exports = function() {
 		var deferred = q.defer();
 		_getStats(region, summoner.id)
 			.then(function(championStats) {
-				summoner.championStats = championStats.data;
+				if (championStats.success) {
+					summoner.championStats = championStats.data;
+				}
+
 				deferred.resolve(summoner);
 			})
 			.fail(function(error) {

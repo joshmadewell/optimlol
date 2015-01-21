@@ -12,6 +12,10 @@ var SummonersSchema = new Schema({
 	updated_at: { type: Date }
 });
 
+// every model should have a retrieve function that does any
+// special things necessary to get the proper data.
+// most of the time...this isn't an issue so really, we're using retrieve 
+// so we can always have a promise :)
 SummonersSchema.statics.retrieve = function(identifiers) {
 	identifiers.summonerName = identifiers.summonerName.replace(/ /g, '').toLowerCase();
 	var deferred = q.defer();
@@ -35,4 +39,6 @@ SummonersSchema.pre('save', function(next) {
 	next();
 });
 
-module.exports = mongoose.model('summoners', SummonersSchema);
+// mongoose makes collections plural if we don't specify an name in third parameter :[
+// this one is already plural but I like consistency.
+module.exports = mongoose.model('summoners', SummonersSchema, 'summoners');
