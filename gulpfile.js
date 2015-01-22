@@ -7,7 +7,9 @@ var jshint = require('gulp-jshint');
 var connect = require('gulp-connect');
 var sass = require('gulp-sass');
 var es = require('event-stream');
-var runSequence = require('run-sequence')
+var runSequence = require('run-sequence');
+var sprite = require('css-sprite').stream;
+var gulpif = require('gulp-if');
 
 gulp.task('clean', function(cb) {
 	del(['./build'], cb);
@@ -21,12 +23,18 @@ gulp.task('web-app', function(cb) {
 		gulp.src('./web/appDependencies/lib/**/*')
 			.pipe(gulp.dest('./build/lib')),
 
-		gulp.src('./web/appDependencies/img/**/*')
-			.pipe(gulp.dest('./build/img')),
-
 		gulp.src('./web/index.html')
 			.pipe(gulp.dest('./build'))
 	).on('end', cb);
+});
+
+gulp.task('sprites', function() {
+	gulp.src('./web/appDependencies/img/champion*.png')
+		.pipe(sprite({
+			name: 'champions',
+			margin: 0
+		}))
+		.pipe(gulp.dest('./build/img/'));
 });
 
 gulp.task('sass', function() {
@@ -37,16 +45,16 @@ gulp.task('sass', function() {
 
 // Lint Task
 gulp.task('lint', function() {
-    gulp.src(['./web/app/**/*.js', './node_api/app/**/*.js'])
-        .pipe(jshint())
-        .pipe(jshint.reporter('default'));
+	gulp.src(['./web/app/**/*.js', './node_api/app/**/*.js'])
+		.pipe(jshint())
+		.pipe(jshint.reporter('default'));
 });
 
 gulp.task('webserver', function() {
-    connect.server({
-        root: './build',
-        port: 9001
-    });
+	connect.server({
+		root: './build',
+		port: 9001
+	});
 });
 gulp.task('watch', function() {
 	gulp.watch('./web/appDependencies/sass/**/*.scss', ['sass']);
@@ -55,9 +63,9 @@ gulp.task('watch', function() {
 
 // Default Task
 gulp.task('build-web', function() {
-	runSequence('clean', ['web-app', 'sass']);
+	runSequence('clean', ['web-app', 'sprites', 'sass']);
 });
 
 gulp.task('debug-web', function() {
-	runSequence('clean', ['web-app', 'sass', 'watch', 'webserver']);
+	runSequence('clean', 'sprites', ['web-app', 'sass', 'watch', 'webserver']);
 });

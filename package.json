@@ -4,11 +4,13 @@
   "description": "Champion Selection Optimization for League Of Legends",
   "main": "gulpfile.js",
   "dependencies": {
+    "css-sprite": "^0.9.0",
     "del": "^1.1.1",
     "event-stream": "^3.2.1",
     "express": "^4.11.0",
     "gulp": "^3.8.10",
     "gulp-connect": "^2.2.0",
+    "gulp-if": "^1.2.5",
     "gulp-jshint": "^1.9.0",
     "gulp-sass": "^1.3.1",
     "moment": "^2.9.0",

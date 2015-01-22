@@ -1,0 +1,501 @@
+.icon-champion-full {
+	background-image: url('/img/champions.png');
+}
+
+.icon-champion-large {
+	@extend .icon-champion-full;
+	height: 48px;
+	width: 48px;
+}
+.icon-champion-large-aatrox {
+	@extend .icon-champion-large;
+	background-position: 0px -48px;
+}
+.icon-champion-large-ahri {
+	@extend .icon-champion-large;
+	background-position: -48px -48px;
+}
+.icon-champion-large-akali {
+	@extend .icon-champion-large;
+	background-position: -96px -48px;
+}
+.icon-champion-large-alistar {
+	@extend .icon-champion-large;
+	background-position: -144px -48px;
+}
+.icon-champion-large-amumu {
+	@extend .icon-champion-large;
+	background-position: -192px -48px;
+}
+.icon-champion-large-anivia {
+	@extend .icon-champion-large;
+	background-position: -240px -48px;
+}
+.icon-champion-large-annie {
+	@extend .icon-champion-large;
+	background-position: -288px -48px;
+}
+.icon-champion-large-ashe {
+	@extend .icon-champion-large;
+	background-position: -336px -48px;
+}
+.icon-champion-large-azir {
+	@extend .icon-champion-large;
+	background-position: -384px -48px;
+}
+.icon-champion-large-blitzcrank {
+	@extend .icon-champion-large;
+	background-position: -432px -48px;
+}
+.icon-champion-large-brand {
+	@extend .icon-champion-large;
+	background-position: 0px -96px;
+}
+.icon-champion-large-braum {
+	@extend .icon-champion-large;
+	background-position: -48px -96px;
+}
+.icon-champion-large-caitlyn {
+	@extend .icon-champion-large;
+	background-position: -96px -96px;
+}
+.icon-champion-large-cassiopeia {
+	@extend .icon-champion-large;
+	background-position: -144px -96px;
+}
+.icon-champion-large-chogath {
+	@extend .icon-champion-large;
+	background-position: -192px -96px;
+}
+.icon-champion-large-corki {
+	@extend .icon-champion-large;
+	background-position: -240px -96px;
+}
+.icon-champion-large-darius {
+	@extend .icon-champion-large;
+	background-position: -288px -96px;
+}
+.icon-champion-large-diana {
+	@extend .icon-champion-large;
+	background-position: -336px -96px;
+}
+.icon-champion-large-draven {
+	@extend .icon-champion-large;
+	background-position: -384px -96px;
+}
+.icon-champion-large-drmundo {
+	@extend .icon-champion-large;
+	background-position: -432px -96px;
+}
+.icon-champion-large-elise {
+	@extend .icon-champion-large;
+	background-position: 0px -144px;
+}
+.icon-champion-large-evelynn {
+	@extend .icon-champion-large;
+	background-position: -48px -144px;
+}
+.icon-champion-large-ezreal {
+	@extend .icon-champion-large;
+	background-position: -96px -144px;
+}
+.icon-champion-large-fiddlesticks {
+	@extend .icon-champion-large;
+	background-position: -144px -144px;
+}
+.icon-champion-large-fiora {
+	@extend .icon-champion-large;
+	background-position: -192px -144px;
+}
+.icon-champion-large-fizz {
+	@extend .icon-champion-large;
+	background-position: -240px -144px;
+}
+.icon-champion-large-galio {
+	@extend .icon-champion-large;
+	background-position: -288px -144px;
+}
+.icon-champion-large-gangplank {
+	@extend .icon-champion-large;
+	background-position: -336px -144px;
+}
+.icon-champion-large-garen {
+	@extend .icon-champion-large;
+	background-position: -384px -144px;
+}
+.icon-champion-large-gnar {
+	@extend .icon-champion-large;
+	background-position: -432px -144px;
+}
+.icon-champion-large-gragas {
+	@extend .icon-champion-large;
+	background-position: 0px -192px;
+}
+.icon-champion-large-graves {
+	@extend .icon-champion-large;
+	background-position: -48px -192px;
+}
+.icon-champion-large-hecarim {
+	@extend .icon-champion-large;
+	background-position: -96px -192px;
+}
+.icon-champion-large-heimerdinger {
+	@extend .icon-champion-large;
+	background-position: -144px -192px;
+}
+.icon-champion-large-irelia {
+	@extend .icon-champion-large;
+	background-position: -192px -192px;
+}
+.icon-champion-large-janna {
+	@extend .icon-champion-large;
+	background-position: -240px -192px;
+}
+.icon-champion-large-jarvaniv {
+	@extend .icon-champion-large;
+	background-position: -288px -192px;
+}
+.icon-champion-large-jax {
+	@extend .icon-champion-large;
+	background-position: -336px -192px;
+}
+.icon-champion-large-jayce {
+	@extend .icon-champion-large;
+	background-position: -384px -192px;
+}
+.icon-champion-large-jinx {
+	@extend .icon-champion-large;
+	background-position: -432px -192px;
+}
+.icon-champion-large-kalista {
+	@extend .icon-champion-large;
+	background-position: -48px 0px;
+}
+.icon-champion-large-karma {
+	@extend .icon-champion-large;
+	background-position: 0px -240px;
+}
+.icon-champion-large-karthus {
+	@extend .icon-champion-large;
+	background-position: -48px -240px;
+}
+.icon-champion-large-kassadin {
+	@extend .icon-champion-large;
+	background-position: -96px -240px;
+}
+.icon-champion-large-katarina {
+	@extend .icon-champion-large;
+	background-position: -144px -240px;
+}
+.icon-champion-large-kayle {
+	@extend .icon-champion-large;
+	background-position: -192px -240px;
+}
+.icon-champion-large-kennen {
+	@extend .icon-champion-large;
+	background-position: -240px -240px;
+}
+.icon-champion-large-khazix {
+	@extend .icon-champion-large;
+	background-position: -288px -240px;
+}
+.icon-champion-large-kogmaw {
+	@extend .icon-champion-large;
+	background-position: -336px -240px;
+}
+.icon-champion-large-leblanc {
+	@extend .icon-champion-large;
+	background-position: -384px -240px;
+}
+.icon-champion-large-leesin {
+	@extend .icon-champion-large;
+	background-position: -432px -240px;
+}
+.icon-champion-large-leona {
+	@extend .icon-champion-large;
+	background-position: 0px -288px;
+}
+.icon-champion-large-lissandra {
+	@extend .icon-champion-large;
+	background-position: -48px -288px;
+}
+.icon-champion-large-lucian {
+	@extend .icon-champion-large;
+	background-position: -96px -288px;
+}
+.icon-champion-large-lulu {
+	@extend .icon-champion-large;
+	background-position: -144px -288px;
+}
+.icon-champion-large-lux {
+	@extend .icon-champion-large;
+	background-position: -192px -288px;
+}
+.icon-champion-large-malphite {
+	@extend .icon-champion-large;
+	background-position: -240px -288px;
+}
+.icon-champion-large-malzahar {
+	@extend .icon-champion-large;
+	background-position: -288px -288px;
+}
+.icon-champion-large-maokai {
+	@extend .icon-champion-large;
+	background-position: -336px -288px;
+}
+.icon-champion-large-masteryi {
+	@extend .icon-champion-large;
+	background-position: -384px -288px;
+}
+.icon-champion-large-missfortune {
+	@extend .icon-champion-large;
+	background-position: -432px -288px;
+}
+.icon-champion-large-monkeyking {
+	@extend .icon-champion-large;
+	background-position: 0px -336px;
+}
+.icon-champion-large-mordekaiser {
+	@extend .icon-champion-large;
+	background-position: -48px -336px;
+}
+.icon-champion-large-morgana {
+	@extend .icon-champion-large;
+	background-position: -96px -336px;
+}
+.icon-champion-large-nami {
+	@extend .icon-champion-large;
+	background-position: -144px -336px;
+}
+.icon-champion-large-nasus {
+	@extend .icon-champion-large;
+	background-position: -192px -336px;
+}
+.icon-champion-large-nautilus {
+	@extend .icon-champion-large;
+	background-position: -240px -336px;
+}
+.icon-champion-large-nidalee {
+	@extend .icon-champion-large;
+	background-position: -288px -336px;
+}
+.icon-champion-large-nocturne {
+	@extend .icon-champion-large;
+	background-position: -336px -336px;
+}
+.icon-champion-large-nunu {
+	@extend .icon-champion-large;
+	background-position: -384px -336px;
+}
+.icon-champion-large-olaf {
+	@extend .icon-champion-large;
+	background-position: -432px -336px;
+}
+.icon-champion-large-orianna {
+	@extend .icon-champion-large;
+	background-position: 0px -384px;
+}
+.icon-champion-large-pantheon {
+	@extend .icon-champion-large;
+	background-position: -48px -384px;
+}
+.icon-champion-large-poppy {
+	@extend .icon-champion-large;
+	background-position: -96px -384px;
+}
+.icon-champion-large-quinn {
+	@extend .icon-champion-large;
+	background-position: -144px -384px;
+}
+.icon-champion-large-rammus {
+	@extend .icon-champion-large;
+	background-position: -192px -384px;
+}
+.icon-champion-large-reksai {
+	@extend .icon-champion-large;
+	background-position: -96px 0px;
+}
+.icon-champion-large-renekton {
+	@extend .icon-champion-large;
+	background-position: -240px -384px;
+}
+.icon-champion-large-rengar {
+	@extend .icon-champion-large;
+	background-position: -288px -384px;
+}
+.icon-champion-large-riven {
+	@extend .icon-champion-large;
+	background-position: -336px -384px;
+}
+.icon-champion-large-rumble {
+	@extend .icon-champion-large;
+	background-position: -384px -384px;
+}
+.icon-champion-large-ryze {
+	@extend .icon-champion-large;
+	background-position: -432px -384px;
+}
+.icon-champion-large-sejuani {
+	@extend .icon-champion-large;
+	background-position: 0px -432px;
+}
+.icon-champion-large-shaco {
+	@extend .icon-champion-large;
+	background-position: -48px -432px;
+}
+.icon-champion-large-shen {
+	@extend .icon-champion-large;
+	background-position: -96px -432px;
+}
+.icon-champion-large-shyvana {
+	@extend .icon-champion-large;
+	background-position: -144px -432px;
+}
+.icon-champion-large-singed {
+	@extend .icon-champion-large;
+	background-position: -192px -432px;
+}
+.icon-champion-large-sion {
+	@extend .icon-champion-large;
+	background-position: -240px -432px;
+}
+.icon-champion-large-sivir {
+	@extend .icon-champion-large;
+	background-position: -288px -432px;
+}
+.icon-champion-large-skarner {
+	@extend .icon-champion-large;
+	background-position: -336px -432px;
+}
+.icon-champion-large-sona {
+	@extend .icon-champion-large;
+	background-position: -384px -432px;
+}
+.icon-champion-large-soraka {
+	@extend .icon-champion-large;
+	background-position: -432px -432px;
+}
+.icon-champion-large-swain {
+	@extend .icon-champion-large;
+	background-position: 0px -480px;
+}
+.icon-champion-large-syndra {
+	@extend .icon-champion-large;
+	background-position: -48px -480px;
+}
+.icon-champion-large-talon {
+	@extend .icon-champion-large;
+	background-position: -96px -480px;
+}
+.icon-champion-large-taric {
+	@extend .icon-champion-large;
+	background-position: -144px -480px;
+}
+.icon-champion-large-teemo {
+	@extend .icon-champion-large;
+	background-position: -192px -480px;
+}
+.icon-champion-large-thresh {
+	@extend .icon-champion-large;
+	background-position: -240px -480px;
+}
+.icon-champion-large-tristana {
+	@extend .icon-champion-large;
+	background-position: -288px -480px;
+}
+.icon-champion-large-trundle {
+	@extend .icon-champion-large;
+	background-position: -336px -480px;
+}
+.icon-champion-large-tryndamere {
+	@extend .icon-champion-large;
+	background-position: -384px -480px;
+}
+.icon-champion-large-twistedfate {
+	@extend .icon-champion-large;
+	background-position: -432px -480px;
+}
+.icon-champion-large-twitch {
+	@extend .icon-champion-large;
+	background-position: 0px -528px;
+}
+.icon-champion-large-udyr {
+	@extend .icon-champion-large;
+	background-position: -48px -528px;
+}
+.icon-champion-large-urgot {
+	@extend .icon-champion-large;
+	background-position: -96px -528px;
+}
+.icon-champion-large-varus {
+	@extend .icon-champion-large;
+	background-position: -144px -528px;
+}
+.icon-champion-large-vayne {
+	@extend .icon-champion-large;
+	background-position: -192px -528px;
+}
+.icon-champion-large-veigar {
+	@extend .icon-champion-large;
+	background-position: -240px -528px;
+}
+.icon-champion-large-velkoz {
+	@extend .icon-champion-large;
+	background-position: -288px -528px;
+}
+.icon-champion-large-vi {
+	@extend .icon-champion-large;
+	background-position: -336px -528px;
+}
+.icon-champion-large-viktor {
+	@extend .icon-champion-large;
+	background-position: -384px -528px;
+}
+.icon-champion-large-vladimir {
+	@extend .icon-champion-large;
+	background-position: -432px -528px;
+}
+.icon-champion-large-volibear {
+	@extend .icon-champion-large;
+	background-position: 0px -576px;
+}
+.icon-champion-large-warwick {
+	@extend .icon-champion-large;
+	background-position: -48px -576px;
+}
+.icon-champion-large-xerath {
+	@extend .icon-champion-large;
+	background-position: -96px -576px;
+}
+.icon-champion-large-xinzhao {
+	@extend .icon-champion-large;
+	background-position: -144px -576px;
+}
+.icon-champion-large-yasuo {
+	@extend .icon-champion-large;
+	background-position: -192px -576px;
+}
+.icon-champion-large-yorick {
+	@extend .icon-champion-large;
+	background-position: -240px -576px;
+}
+.icon-champion-large-zac {
+	@extend .icon-champion-large;
+	background-position: -288px -576px;
+}
+.icon-champion-large-zed {
+	@extend .icon-champion-large;
+	background-position: -336px -576px;
+}
+.icon-champion-large-ziggs {
+	@extend .icon-champion-large;
+	background-position: -384px -576px;
+}
+.icon-champion-large-zilean {
+	@extend .icon-champion-large;
+	background-position: -432px -576px;
+}
+.icon-champion-large-zyra {
+	@extend .icon-champion-large;
+	background-position: 0px 0px;
+}
