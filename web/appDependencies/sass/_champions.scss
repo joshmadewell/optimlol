@@ -1,0 +1,11 @@
+.icon-champion-full {
+	background-image: url('/img/champions.png');
+}
+
+.icon-champion-large {
+	@extend .icon-champion-full;
+	height: 48px;
+	width: 48px;
+}
+
+@import "sprite_scss/champions.scss";

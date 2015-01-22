@@ -1,5 +1,7 @@
 var request = require('request');
 var fs = require('fs');
+var q = require('q');
+var config = require('../optimlol_api/config');
 
 var envContent = fs.readFileSync(__dirname + '/../.env', 'utf8');
 var envArray = envContent.split('\n');
@@ -9,6 +11,23 @@ envArray.forEach(function(variable) {
 	env[splitVariable[0]] = splitVariable[1].replace(/'/g, '');
 });
 
+var RIOT_SPRITE_LOCATION = "http://ddragon.leagueoflegends.com/cdn/{{version}}/img/sprite/{{file_name}}";
+var SPRITE_SAVE_PATH = __dirname + "/../web/appDependencies/sass/sprite_scss/";
+var generationConfig = [
+	{
+		name: "champions",
+		spriteName: "champions.png",
+		prefix: "icon-champion-large-",
+		riot_url: "https://na.api.pvp.net/api/lol/static-data/na/" + config.riot_api.versions.staticData + "/champion?champData=image&api_key="
+	},
+	{
+		name: "summonerSpells",
+		spriteName: "spells",
+		prefix: "icon-summoner-spell-small-"
+		riot_url: "https://na.api.pvp.net/api/lol/static-data/na/" + config.riot_api.versions.staticData + "/summoner-spell?spellData=image&api_key="
+	}
+]
+
 var _version = null;
 var _champions = [];
 var _sprites = [];
@@ -16,18 +35,7 @@ var versionUrl = "https://na.api.pvp.net/api/lol/static-data/na/v1.2/versions?ap
 var imagesUrl = "https://na.api.pvp.net/api/lol/static-data/na/v1.2/champion?champData=image&api_key=" + env.RIOT_API_KEY;
 var binaryImage = "http://ddragon.leagueoflegends.com/cdn/{{version}}/img/sprite/{{file}}";
 
-var _fileBeginning = ".icon-champion-full {\n" +
-"\tbackground-image: url('/img/champions.png');\n" + 
-"}\n\n" +
-".icon-champion-large {\n" +
-"\t@extend .icon-champion-full;\n" +
-"\theight: 48px;\n" +
-"\twidth: 48px;\n" +
-"}\n";
-
 var _writeScssFile = function() {
-	fs.writeFileSync(__dirname + '/../web/appDependencies/sass/champions.scss', _fileBeginning);
-
 	_champions.forEach(function(champion) {
 		console.log(champion);
 		var spriteGroup = parseInt(champion.sprite.match(/\d+/)[0]);

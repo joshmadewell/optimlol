@@ -28,13 +28,22 @@ gulp.task('web-app', function(cb) {
 	).on('end', cb);
 });
 
-gulp.task('sprites', function() {
-	gulp.src('./web/appDependencies/img/champion*.png')
-		.pipe(sprite({
-			name: 'champions',
-			margin: 0
-		}))
-		.pipe(gulp.dest('./build/img/'));
+gulp.task('sprites', function(cb) {
+	es.concat(
+		gulp.src('./web/appDependencies/img/champion*.png')
+			.pipe(sprite({
+				name: 'champions',
+				margin: 0
+			}))
+			.pipe(gulp.dest('./build/img/')),
+
+		gulp.src('./web/appDependencies/img/spell*.png')
+			.pipe(sprite({
+				name: 'summonerSpells',
+				margin: 0
+			}))
+			.pipe(gulp.dest('./build/img/'))
+	).on('end', cb);
 });
 
 gulp.task('sass', function() {

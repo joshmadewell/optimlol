@@ -1,12 +1,3 @@
-.icon-champion-full {
-	background-image: url('/img/champions.png');
-}
-
-.icon-champion-large {
-	@extend .icon-champion-full;
-	height: 48px;
-	width: 48px;
-}
 .icon-champion-large-aatrox {
 	@extend .icon-champion-large;
 	background-position: 0px -48px;
