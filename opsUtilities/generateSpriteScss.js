@@ -14,7 +14,7 @@ var _champions = [];
 var _sprites = [];
 var versionUrl = "https://na.api.pvp.net/api/lol/static-data/na/v1.2/versions?api_key=" + env.RIOT_API_KEY;
 var imagesUrl = "https://na.api.pvp.net/api/lol/static-data/na/v1.2/champion?champData=image&api_key=" + env.RIOT_API_KEY;
-var binaryImage = "http://ddragon.leagueoflegends.com/cdn/{{version}}/img/sprite/{{file}}.png";
+var binaryImage = "http://ddragon.leagueoflegends.com/cdn/{{version}}/img/sprite/{{file}}";
 
 var _fileBeginning = ".icon-champion-full {\n" +
 "\tbackground-image: url('/img/champions.png');\n" + 
@@ -45,6 +45,21 @@ var _writeScssFile = function() {
 
 		var data = ".icon-champion-large-" + champion.name +' {\n\t@extend .icon-champion-large;\n\tbackground-position: ' + x + "px " + y + "px;\n}\n";
 		fs.appendFileSync(__dirname + '/../web/appDependencies/sass/champions.scss', data);
+	});
+}
+
+var _downloadImages = function() {
+	var download = function(uri, filename, callback){
+		request.head(uri, function(err, res, body) {
+		    request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
+		});
+	};
+
+	_sprites.forEach(function(sprite) {
+		var url = binaryImage.replace('{{version}}', _version).replace('{{file}}', sprite);
+		download(url, __dirname + '/../web/appDependencies/img/' + sprite, function(){
+		  	console.log('done');
+		});
 	});
 }
 
@@ -84,5 +99,6 @@ request.get(versionUrl, function(error, result) {
 
 
 		_writeScssFile();
+		_downloadImages();
 	});
 });
