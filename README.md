@@ -15,3 +15,8 @@ To Run Code:
 4. Run the optimlol_api. ```foreman start -e .env```
 5. In another command console, run gulp. ```gulp debug-web```
 6. Enjoy!
+
+
+#License
+GNU General Public License Version 3
+http://www.gnu.org/licenses/gpl-3.0.txt
