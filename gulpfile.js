@@ -9,6 +9,7 @@ var sass = require('gulp-sass');
 var es = require('event-stream');
 var runSequence = require('run-sequence');
 var sprite = require('css-sprite').stream;
+var rename = require('gulp-rename');
 
 gulp.task('clean', function(cb) {
 	del(['./build'], cb);
@@ -16,7 +17,10 @@ gulp.task('clean', function(cb) {
 
 gulp.task('web-app', function(cb) {
 	es.concat(
-		gulp.src('./web/app/**/*')
+		gulp.src('./web/app/**/*.js')
+			.pipe(gulp.dest('./build/js/app')),
+
+		gulp.src('./web/app/**/*.html')
 			.pipe(gulp.dest('./build/js/app')),
 
 		gulp.src('./web/appDependencies/lib/**/*')
@@ -25,6 +29,22 @@ gulp.task('web-app', function(cb) {
 		gulp.src('./web/index.*')
 			.pipe(gulp.dest('./build'))
 	).on('end', cb);
+});
+
+gulp.task('settings', function() {
+	var settingsFile = null;
+	switch (process.env.ENVIRONMENT) {
+		case "OPTIMLOL_UI_HEROKU":
+			settingsFile = "./web/app/settings.prod";
+			break;
+		case "OPTIMLOL_UI_LOCAL":
+			settingsFile = "./web/app/settings.local";
+			break;
+	}
+
+	gulp.src(settingsFile)
+		.pipe(rename('settings.js'))
+		.pipe(gulp.dest('./build/js/app/'));
 });
 
 gulp.task('sprites', function(cb) {
@@ -71,9 +91,9 @@ gulp.task('watch', function() {
 
 // Default Task
 gulp.task('build-web', function() {
-	runSequence('clean', ['web-app', 'sprites', 'sass']);
+	runSequence('clean', ['web-app', 'settings', 'sprites', 'sass']);
 });
 
 gulp.task('debug-web', function() {
-	runSequence('clean', 'sprites', ['web-app', 'sass', 'watch', 'webserver']);
+	runSequence('clean', 'sprites', ['web-app', 'settings', 'sass', 'watch', 'webserver']);
 });
