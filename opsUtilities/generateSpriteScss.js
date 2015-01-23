@@ -34,13 +34,15 @@ var doWork = function() {
 	var _version = null;
 	var _filesToDownload = [];
 
-	request.get(versionUrl, function(error, result) {
-		_version = JSON.parse(result.body)[0].toString();
+	generationConfig.forEach(function(spriteToGenerate) {
+		request.get(spriteToGenerate.riot_url, function(error, result) {
+			var spriteData = JSON.parse(result.body).data;
 
-		generationConfig.forEach(function(spriteToGenerate) {
-
+			for (dataSet in spriteData) {
+				
+			}
 		});
-	};
+	});
 }
 
 var _champions = [];

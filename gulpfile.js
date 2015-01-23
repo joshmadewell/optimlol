@@ -40,6 +40,8 @@ gulp.task('settings', function() {
 		case "OPTIMLOL_UI_LOCAL":
 			settingsFile = "./web/app/settings.local";
 			break;
+		default:
+			settingsFile = "./web/app/settings.local";
 	}
 
 	gulp.src(settingsFile)
