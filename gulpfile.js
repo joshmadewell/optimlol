@@ -9,7 +9,6 @@ var sass = require('gulp-sass');
 var es = require('event-stream');
 var runSequence = require('run-sequence');
 var sprite = require('css-sprite').stream;
-var gulpif = require('gulp-if');
 
 gulp.task('clean', function(cb) {
 	del(['./build'], cb);
