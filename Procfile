@@ -1,1 +1,1 @@
-web: node ./optimlol_api/server.js
+web: ./bin/web

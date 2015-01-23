@@ -23,7 +23,7 @@ gulp.task('web-app', function(cb) {
 		gulp.src('./web/appDependencies/lib/**/*')
 			.pipe(gulp.dest('./build/lib')),
 
-		gulp.src('./web/index.html')
+		gulp.src('./web/index.*')
 			.pipe(gulp.dest('./build'))
 	).on('end', cb);
 });

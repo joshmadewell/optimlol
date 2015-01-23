@@ -18,22 +18,33 @@ var generationConfig = [
 		name: "champions",
 		spriteName: "champions.png",
 		prefix: "icon-champion-large-",
+		extend: "icon-champion-large",
 		riot_url: "https://na.api.pvp.net/api/lol/static-data/na/" + config.riot_api.versions.staticData + "/champion?champData=image&api_key="
 	},
 	{
 		name: "summonerSpells",
 		spriteName: "spells",
-		prefix: "icon-summoner-spell-small-"
+		prefix: "icon-summoner-spell-small-",
+		extend: "icon-summoner-spell-small",
 		riot_url: "https://na.api.pvp.net/api/lol/static-data/na/" + config.riot_api.versions.staticData + "/summoner-spell?spellData=image&api_key="
 	}
 ]
 
-var _version = null;
+var doWork = function() {
+	var _version = null;
+	var _filesToDownload = [];
+
+	request.get(versionUrl, function(error, result) {
+		_version = JSON.parse(result.body)[0].toString();
+
+		generationConfig.forEach(function(spriteToGenerate) {
+
+		});
+	};
+}
+
 var _champions = [];
 var _sprites = [];
-var versionUrl = "https://na.api.pvp.net/api/lol/static-data/na/v1.2/versions?api_key=" + env.RIOT_API_KEY;
-var imagesUrl = "https://na.api.pvp.net/api/lol/static-data/na/v1.2/champion?champData=image&api_key=" + env.RIOT_API_KEY;
-var binaryImage = "http://ddragon.leagueoflegends.com/cdn/{{version}}/img/sprite/{{file}}";
 
 var _writeScssFile = function() {
 	_champions.forEach(function(champion) {
