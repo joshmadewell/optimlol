@@ -21,7 +21,9 @@ var generationConfig = [
 		spriteName: "champions.png",
 		prefix: "icon-champion-large-",
 		extend: "icon-champion-large",
-		riot_url: "https://na.api.pvp.net/api/lol/static-data/na/" + config.riot_api.versions.staticData + "/champion?champData=image&api_key="
+		riot_url: "https://na.api.pvp.net/api/lol/static-data/na/" + config.riot_api.versions.staticData + "/champion?champData=image&api_key=",
+		xAxis: function(x, set) { return x * -1; }
+		yAxis: function(y, set) { return set === 4 ? 0 : y * -1 - 48 - (144*set)}
 	},
 	{
 		name: "summonerSpells",
@@ -32,19 +34,55 @@ var generationConfig = [
 	}
 ]
 
+var _sortComparator = function(a, b) {
+	if (a.name < b.name) {
+		return -1;
+	} else if (a.name > b.name) {
+		return 1;
+	} else {
+		return 0;
+	}
+};
+
 var doWork = function() {
 	var _version = null;
 	var _filesToDownload = [];
+	var _promises = [];
 
 	generationConfig.forEach(function(spriteToGenerate) {
+		var deferred = q.defer();
 		request.get(spriteToGenerate.riot_url, function(error, result) {
 			var spriteData = JSON.parse(result.body).data;
+			var dataToWriteToFile = [];
 
 			for (dataSet in spriteData) {
-				
+				var dataNeeded = {};
+				var currentDataSet = spriteData[dataSet];
+
+				dataNeeded.name = dataSet.key.toLowerCase();
+				dataNeeded.sprite = dataSet.image.sprite;
+				dataNeeded.x = dataSet.image.x;
+				dataNeeded.y = dataSet.image.y;
+
+				if (_sprites.indexOf(dataSet.image.sprite) === -1) {
+					_filesToDownload.push(dataSet.image.sprite);
+				}
+
+				dataToWriteToFile.push(dataNeeded);
 			}
+
+			dataToWriteToFile.sort(_sortComparator);
+
+			deferred.resolve();
 		});
+
+		_promises.push(deferred.promise);
 	});
+
+	q.allSettled(_promises)
+		.then(function() {
+			// download files
+		});
 }
 
 var _champions = [];
