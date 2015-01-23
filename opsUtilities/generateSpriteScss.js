@@ -1,3 +1,5 @@
+// FOR THE LOVE OF GOD REFACTOR THIS GARBAGE
+
 var request = require('request');
 var fs = require('fs');
 var q = require('q');
