@@ -1,8 +1,9 @@
 ﻿define(['durandal/system', 
 	'knockout', 
 	'dataProviders/summonersDataProvider',
-	'presentationObjects/summonerPresentationObject'], 
-	function (durandal, ko, SummonersDataProvider, SummonerPresentationObject) {
+	'presentationObjects/summonerPresentationObject',
+	'common/sort'], 
+	function (durandal, ko, SummonersDataProvider, SummonerPresentationObject, sorter) {
 	return function() {
 		var self = this;
 		var NUMBER_OF_SUMMONERS = 5;
@@ -32,6 +33,9 @@
 						if (result.id) {
 							summoner.displayName = result.name;
 							summoner.championStats = result.championStats;
+							if (summoner.championStats && summoner.championStats.length) {
+								sorter.sort(summoner.championStats, "performance", "descending");
+							}
 							summoner.totalStats = result.totalStats;
 							summoner.summonerId(result.id);
 							summoner.status(STATUS.VALID);

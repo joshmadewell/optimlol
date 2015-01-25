@@ -55,7 +55,9 @@ module.exports = function() {
 							// we get data back with string id's le sigh....
 							var championIdString = championStat.id.toString();
 							if (championIdString !== "0") {
+								championStat.championKey = results[1].value.data.data[championIdString].key.toLowerCase();
 								championStat.championName = results[1].value.data.data[championIdString].name;
+								console.log(championStat);
 							} else {
 								championStats.allChampIndex = index;
 								championStat.championName = "All";

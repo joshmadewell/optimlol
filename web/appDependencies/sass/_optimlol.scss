@@ -42,11 +42,32 @@
                 .name {
                     width: 20%;
                 }
-                .last-played {
+                .recently-played {
                     width: 35%;
                 }
-                .most-played {
+                .best-performance {
                     width: 35%;
+
+                    .champion-list {
+                        min-width: 262px;
+                        list-style-type: none;
+                        padding: 0;
+                        margin-bottom: -6px;
+                        text-align: center;
+
+                        .champion-data {
+                            display: inline-block;
+                            font-size: 10px;
+
+                            .wins {
+                                color: green;
+                            }
+
+                            .losses {
+                                color: red;
+                            }
+                        }
+                    }
                 }
                 .img-link {
                     text-align: center;
