@@ -139,6 +139,7 @@ module.exports = function() {
 				summoner.recentHistory = null;
 
 				if (championStats) {
+					var allIndex = null;
 					championStats.champions.forEach(function(championStat, index) {
 						// we get data back with string id's le sigh....
 						var championIdString = championStat.id.toString();
@@ -146,10 +147,15 @@ module.exports = function() {
 							championStat.championKey = champions.data.data[championIdString].key.toLowerCase();
 							championStat.championName = champions.data.data[championIdString].name;
 						} else {
-							championStats.allChampIndex = index;
+							allIndex = index;
 							championStat.championName = "All";
+							summoner.totalStats = championStat;
 						}
 					});
+
+					if (allIndex) {
+						championStats.champions.splice(allIndex, 1);
+					}
 
 					summoner.championStats = championStats.champions;
 				}

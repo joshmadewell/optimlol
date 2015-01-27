@@ -32,10 +32,14 @@
 					.then(function(result) {
 						if (result.id) {
 							summoner.displayName = result.name;
-							summoner.championStats = result.championStats;
-							if (summoner.championStats && summoner.championStats.length) {
-								sorter.sort(summoner.championStats, "performance", "descending");
+							if (result.recentHistory && result.recentHistory.champions) {
+								sorter.sort(result.recentHistory.champions, "count", "descending");
 							}
+							summoner.recentHistory = result.recentHistory;
+							if (result.championStats && result.championStats.length) {
+								sorter.sort(result.championStats, "performance", "descending");
+							}
+							summoner.championStats = result.championStats;
 							summoner.totalStats = result.totalStats;
 							summoner.summonerId(result.id);
 							summoner.status(STATUS.VALID);

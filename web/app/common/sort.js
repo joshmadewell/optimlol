@@ -1,7 +1,6 @@
 define([], function() {
 	var _sort = function(arrayToSort, sortingKey, direction) {
 		var _comparator = function(a, b) {
-			console.log(a, b);
 			if (a[sortingKey] < b[sortingKey]) {
 				if (direction === "ascending") {
 					return -1;
