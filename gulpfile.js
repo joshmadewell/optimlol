@@ -31,6 +31,9 @@ gulp.task('web-app', function(cb) {
 
 		gulp.src('./web/index.*')
 			.pipe(gulp.dest('./build'))
+
+		gulp.src('./web/riot.txt')
+			.pipe(gulp.dest('./build'))
 	).on('end', cb);
 });
 
