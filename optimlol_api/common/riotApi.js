@@ -10,12 +10,12 @@ module.exports = function() {
 		var dataToReturn = {};
 		switch (jsonResponse.statusCode) {
 			case 200:
-				_logger.riotApi("Response body:", jsonResponse.body);
+				_logger.riotApi("Riot:", jsonResponse.statusCode);
 				dataToReturn.success = true;
 				dataToReturn.data = jsonResponse.body;
 				break;
 			case 404:
-				_logger.riotApi("Riot: 404");
+				_logger.riotApi("Riot:", jsonResponse.statusCode);
 				dataToReturn.success = true;
 				dataToReturn.data = null;
 				break;

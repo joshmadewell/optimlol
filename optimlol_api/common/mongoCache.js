@@ -51,7 +51,7 @@ module.exports = function() {
 	};
 
 	self.set = function(collection, identifiers, data) {
-		_logger.debug("Cache Set:", { "from": collection, "with": identifiers, "data": data } );
+		_logger.debug("Cache Set:", { "from": collection, "with": identifiers } );
 		var model = require('../persistence/mongoModels/' + collection + 'Model');
 
 		var deferred = q.defer();
