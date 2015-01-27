@@ -14,16 +14,16 @@ var logger = new(winston.Logger)({
 			timestamp: function(time) { 
 				return moment(time).format('YYYY-MM-DD HH:mm:ss'); 
 			}
-		}),
-		new(winston.transports.File)({
-			filename: config.logging.filename,
-			maxsize: config.logging.maxlogfilesize,
-			level: config.logging.file_log_level,
-			levels: config.logging.logLevels.levels,
-			timestamp: function(time) { 
-				return moment(time).format('YYYY-MM-DD HH:mm:ss'); 
-			}
 		})
+		// new(winston.transports.File)({
+		// 	filename: config.logging.filename,
+		// 	maxsize: config.logging.maxlogfilesize,
+		// 	level: config.logging.file_log_level,
+		// 	levels: config.logging.logLevels.levels,
+		// 	timestamp: function(time) { 
+		// 		return moment(time).format('YYYY-MM-DD HH:mm:ss'); 
+		// 	}
+		// })
 	]
 });
 
