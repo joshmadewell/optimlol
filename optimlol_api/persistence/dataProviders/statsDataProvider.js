@@ -28,7 +28,11 @@ module.exports = function() {
 				optimlolChampion.kills = champion.stats.totalChampionKills;
 				optimlolChampion.deaths = champion.stats.totalDeathsPerSession;
 				optimlolChampion.assists = champion.stats.totalAssists;
-				optimlolChampion.kda = (champion.stats.totalChampionKills + champion.stats.totalAssists) / champion.stats.totalDeathsPerSession;
+				if (champion.stats.totalDeathsPerSession) {
+					optimlolChampion.kda = (champion.stats.totalChampionKills + champion.stats.totalAssists) / champion.stats.totalDeathsPerSession;
+				} else {
+					optimlolChampion.kda = (champion.stats.totalChampionKills + champion.stats.totalAssists);
+				}
 				optimlolChampion.gamesPlayed = champion.stats.totalSessionsPlayed;
 				optimlolChampion.performance = _calculatePerformance(champion.stats.totalSessionsWon, champion.stats.totalSessionsLost);
 				optimlolChampions.push(optimlolChampion);
