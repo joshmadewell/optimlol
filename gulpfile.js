@@ -30,7 +30,7 @@ gulp.task('web-app', function(cb) {
 			.pipe(gulp.dest('./build/img')),
 
 		gulp.src('./web/index.*')
-			.pipe(gulp.dest('./build'))
+			.pipe(gulp.dest('./build')),
 
 		gulp.src('./web/riot.txt')
 			.pipe(gulp.dest('./build'))
