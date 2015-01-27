@@ -1,22 +1,30 @@
 .search {
     text-align: center;
 
-    .clear-inputs {
-        line-height: 16px;
-    }
+    .search-container {
+        display: inline-flex;
 
-    .summoner-inputs {
-        i {
-            position: absolute;
-            margin-top: 6px;
-            margin-left: -20px;
+        .clear-inputs {
+            height: 21px;
+            padding: 5px;
+            line-height: 2px;
+            margin-top: 2px;
+            margin-left: 5px;
         }
 
-        .summoner-input-valid {
-            border-color: lightgreen;
-        }
-        .summoner-input-invalid {
-            border-color: red;
+        .summoner-inputs {
+            i {
+                position: absolute;
+                margin-top: 6px;
+                margin-left: -20px;
+            }
+
+            .summoner-input-valid {
+                border-color: lightgreen;
+            }
+            .summoner-input-invalid {
+                border-color: red;
+            }
         }
     }
 

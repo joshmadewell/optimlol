@@ -3,7 +3,7 @@
         <h2>Welcome to OptimLoL</h2>
         <div>Enter the Summoner Names of everyone in champion select:</div>
 
-        <div class="container">
+        <div class="search-container">
             <div class="summoner-inputs" data-bind="foreach: summonerInputs">
                 <span>
                     <input class='summoner-input' data-bind="value: summonerName, 
@@ -18,7 +18,7 @@
                     <i data-bind="visible: status() === 'validating'" class="fa fa-spinner fa-spin"></i>
                 </span>
             </div>
-            <button data-bind="click: clearSummonerInputs">Clear</button>
+            <button class="clear-inputs" data-bind="click: clearSummonerInputs">Clear</button>
         </div>
 
 

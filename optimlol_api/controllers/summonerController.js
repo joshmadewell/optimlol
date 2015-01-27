@@ -149,12 +149,11 @@ module.exports = function() {
 						} else {
 							allIndex = index;
 							championStat.championName = "All";
-							summoner.totalStats = championStat;
 						}
 					});
 
 					if (allIndex) {
-						championStats.champions.splice(allIndex, 1);
+						summoner.totalStats = championStats.champions.splice(allIndex, 1);
 					}
 
 					summoner.championStats = championStats.champions;

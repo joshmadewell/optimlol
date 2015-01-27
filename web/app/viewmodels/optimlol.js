@@ -175,8 +175,13 @@
 		self.chatText = ko.observable("");
 
 		self.clearSummonerInputs = function() {
-			self.summonerInputs = [];
-			_initializeSummonerInputs();
+			self.validSummoners.removeAll();
+			self.summonerInputs.forEach(function(input) {
+				input.summonerName("");
+				input.summonerId(null);
+				input.status("unset");
+				input.displayName = "";
+			})
 		};
 
 		self.activate = function() {
