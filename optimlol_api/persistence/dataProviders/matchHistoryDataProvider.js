@@ -39,15 +39,22 @@ module.exports = function() {
 					}
 				};
 
+				var bothCallsSucceeded = null;
 				results.forEach(function(matchHistory) {
 					if (matchHistory.state === 'fulfilled') {
+						if (matchHistory.success && bothCallsSucceeded === null) {
+							bothCallsSucceeded = true;
+						} else {
+							bothCallsSucceeded = false;
+						}
+
 						if (matchHistory.value.data.matches) {
 							fullMatchHistory.data.matches = fullMatchHistory.data.matches.concat(matchHistory.value.data.matches);
 						}
 					}
 				});
 
-				_mongoCache.set('matchHistory', { region: region, summonerId: summonerId, type: MATCH_HISTORY_TYPES[type] }, fullMatchHistory.data)
+				_mongoCache.set('matchHistory', { region: region, summonerId: summonerId, type: MATCH_HISTORY_TYPES[type] }, fullMatchHistory)
 					.then(function() {
 						deferred.resolve(fullMatchHistory);
 					})

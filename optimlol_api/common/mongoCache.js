@@ -7,7 +7,7 @@ module.exports = function() {
 	var Logger = require('./logger.js');
 	var _logger = new Logger();
 
-	var _returnData = function(cachedData) {
+	var _returnData = function(cachedData, collection) {
 		var returnData = {
 			success: true,
 			isExpired: null,
@@ -17,7 +17,7 @@ module.exports = function() {
 		if (cachedData) {
 			var cacheLastUpdated = moment().diff(cachedData.updated_at, 'minutes');
 
-			_logger.debug("Cached object is " + cacheLastUpdated + " minutes old.", "Expire time is", cachedData.expiredTimeMinutes);
+			_logger.debug("Cached " + collection + " object is " + cacheLastUpdated + " minutes old.", "Expire time is", cachedData.expiredTimeMinutes);
 			if (cacheLastUpdated < cachedData.expiredTimeMinutes || cachedData.expiredTimeMinutes === -1) {
 				returnData.isExpired = false;
 				returnData.data = cachedData.data;
@@ -41,7 +41,7 @@ module.exports = function() {
 		model.retrieve(identifiers)
 			.then(function(cachedResult) {
 				_logger.debug("Cache returned:", cachedResult ? "value" : "nothing");
-				deferred.resolve(_returnData(cachedResult));
+				deferred.resolve(_returnData(cachedResult, collection));
 			})
 			.fail(function(error) {
 				deferred.reject(error);
@@ -50,39 +50,43 @@ module.exports = function() {
 		return deferred.promise;
 	};
 
-	self.set = function(collection, identifiers, data) {
+	self.set = function(collection, identifiers, toCache) {
 		_logger.debug("Cache Set:", { "from": collection, "with": identifiers } );
 		var model = require('../persistence/mongoModels/' + collection + 'Model');
 
 		var deferred = q.defer();
-		model.retrieve(identifiers)
-			.then(function(cachedResult) {
-				if (cachedResult) {
-					cachedResult.data = data;
-					cachedResult.save(function(error, result) {
-						if (error) deferred.reject(error);
-						else {
-							deferred.resolve();
+		if (toCache.success) {
+			model.retrieve(identifiers)
+				.then(function(cachedResult) {
+					if (cachedResult) {
+						cachedResult.data = toCache.data;
+						cachedResult.save(function(error, result) {
+							if (error) deferred.reject(error);
+							else {
+								deferred.resolve();
+							}
+						});
+					} else {
+						var toSave = new model();
+						for(property in identifiers) {
+							toSave[property] = identifiers[property];
 						}
-					});
-				} else {
-					var toSave = new model();
-					for(property in identifiers) {
-						toSave[property] = identifiers[property];
+						toSave.data = toCache.data;
+						toSave.save(function(error, result) {
+							if (error) deferred.reject(error);
+							else {
+								deferred.resolve();
+							}
+						});
 					}
-					toSave.data = data;
-					toSave.save(function(error, result) {
-						if (error) deferred.reject(error);
-						else {
-							deferred.resolve();
-						}
-					});
-				}
-			})
-			.fail(function(error) {
-				_logger.warn("Error checking mongo for cache", { "from": collection, "with": identifiers });
-				deferred.reject(error);
-			});
+				})
+				.fail(function(error) {
+					_logger.warn("Error checking mongo for cache", { "from": collection, "with": identifiers });
+					deferred.reject(error);
+				});
+		} else {
+			deferred.resolve();
+		}
 
 		return deferred.promise;
 	};

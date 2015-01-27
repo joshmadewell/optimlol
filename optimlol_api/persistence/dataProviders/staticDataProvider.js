@@ -13,7 +13,7 @@ module.exports = function() {
 
 		_riotApi.makeRequest(staticDataPath)
 			.then(function(staticDataResult) {
-				_mongoCache.set('staticData', {region: region, staticType: staticType}, staticDataResult.data)
+				_mongoCache.set('staticData', {region: region, staticType: staticType}, staticDataResult)
 					.then(function() {
 						deferred.resolve(staticDataResult);
 					})
