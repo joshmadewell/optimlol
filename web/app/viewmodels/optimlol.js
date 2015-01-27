@@ -123,6 +123,17 @@
 			});
 		};
 
+		var _initializeSummonerInputs = function() {
+			for(var x = 0; x < 5; ++x) {
+				var summoner = new SummonerPresentationObject();
+				summoner.placeholder = "Summoner " + (x + 1);
+				summoner.summonerName.subscribe(_onSummonerNameEntered, summoner);
+				summoner.summonerId.subscribe(_onSummonerIdUpdated, summoner);
+				summoner.status.subscribe(_onSummonerStatusUpdated);
+				self.summonerInputs.push(summoner);
+			}
+		}
+
 		self.parseChatForPlayers  = function() {
 			var potentialSummoners = [];
 			var chatText = self.chatText();
@@ -163,15 +174,13 @@
 		self.validSummoners = ko.observableArray([]);
 		self.chatText = ko.observable("");
 
+		self.clearSummonerInputs = function() {
+			self.summonerInputs = [];
+			_initializeSummonerInputs();
+		};
+
 		self.activate = function() {
-			for(var x = 0; x < 5; ++x) {
-				var summoner = new SummonerPresentationObject();
-				summoner.placeholder = "Summoner " + (x + 1);
-				summoner.summonerName.subscribe(_onSummonerNameEntered, summoner);
-				summoner.summonerId.subscribe(_onSummonerIdUpdated, summoner);
-				summoner.status.subscribe(_onSummonerStatusUpdated);
-				self.summonerInputs.push(summoner);
-			}
+			_initializeSummonerInputs();
 		};
 	}
 });

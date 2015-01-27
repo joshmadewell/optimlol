@@ -1,6 +1,10 @@
 .search {
     text-align: center;
 
+    .clear-inputs {
+        line-height: 16px;
+    }
+
     .summoner-inputs {
         i {
             position: absolute;
