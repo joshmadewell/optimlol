@@ -32,14 +32,20 @@
 					.then(function(result) {
 						if (result.id) {
 							summoner.displayName = result.name;
+							if (result.championStats && result.championStats.length) {
+								sorter.sort(result.championStats, "performance", "descending");
+								summoner.championStats = result.championStats;
+							} else {
+								summoner.championStats = [];
+							}
 							if (result.recentHistory && result.recentHistory.champions) {
 								sorter.sort(result.recentHistory.champions, "count", "descending");
 							}
-							summoner.recentHistory = result.recentHistory;
-							if (result.championStats && result.championStats.length) {
-								sorter.sort(result.championStats, "performance", "descending");
+							if (summoner.championStats.length > 0) {
+								summoner.recentHistory = result.recentHistory;
+							} else {
+								summoner.recentHistory = [];
 							}
-							summoner.championStats = result.championStats;
 							summoner.totalStats = result.totalStats;
 							summoner.summonerId(result.id);
 							summoner.status(STATUS.VALID);

@@ -46,6 +46,10 @@
                 .best-performance {
                     width: 35%;
 
+                    .no-stats {
+                        margin-top: -6px;
+                    }
+
                     .champion-list {
                         min-width: 262px;
                         list-style-type: none;
