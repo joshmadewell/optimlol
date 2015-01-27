@@ -15,6 +15,8 @@ module.exports = function() {
 				dataToReturn.data = jsonResponse.body;
 				break;
 			case 404:
+				// riot uses 404 to tell us some things weren't found
+				// rather than just the url wasn't found....:(
 				_logger.riotApi("Riot:", jsonResponse.statusCode);
 				dataToReturn.success = true;
 				dataToReturn.data = null;
