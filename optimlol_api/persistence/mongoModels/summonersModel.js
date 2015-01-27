@@ -7,6 +7,7 @@ var SummonersSchema = new Schema({
 	summonerName: { type: String, required: true },
 	region: { type: String, required: true },
 	expiredTimeMinutes: { type: Number, default: -1 },
+	returnDataOnExpired: { type: Boolean, required: true, default: false },
 	data: Schema.Types.Mixed,
 	created_at: { type: Date },
 	updated_at: { type: Date }

@@ -7,24 +7,53 @@ module.exports = function() {
 	var _mongoCache = null;
 	var _logger = null;
 
+	var _sorter = require('../../common/sorter');
+
 	var MATCH_HISTORY_TYPES = {
-		"solo": "RANKED_SOLO_5x5",
-		"team": "RANKED_TEAM_5x5",
-		"tri": "RANKED_TEAM_3x3"
+		SOLO: "RANKED_SOLO_5x5",
+		FIVES: "RANKED_TEAM_5x5",
+		THREES: "RANKED_TEAM_3x3"
+	};
+
+	var _prepareMatchHistory = function(matchHistory) {
+		_sorter.sort(matchHistory.data.matches, 'matchCreation', 'descending');
+		return matchHistory;
 	};
 
 	var _getMatchHistoryApi = function(region, summonerId, type, deferred) {
-		var rankedMatchHitoryPath = region + "/" + _apiVersion + "/matchhistory/" + summonerId + "?rankedQueues=" + MATCH_HISTORY_TYPES[type];
-		
-		_riotApi.makeRequest(rankedMatchHitoryPath)
-			.then(function(matchHistoryResult) {
-				_mongoCache.set('matchHistory', { region: region, summonerId: summonerId, type: MATCH_HISTORY_TYPES[type] }, matchHistoryResult.data)
+		var matchHistoryPath = region + "/" + _apiVersion + "/matchhistory/" + summonerId + "?rankedQueues=" + MATCH_HISTORY_TYPES[type];
+		var firstHalfMatchHistory = matchHistoryPath + "&beginIndex=0&endIndex=15";
+		var secondHalfMatchHistory = matchHistoryPath + "&beginIndex=15&endIndex=30";
+	
+		var promises = [
+			_riotApi.makeRequest(firstHalfMatchHistory),
+			_riotApi.makeRequest(secondHalfMatchHistory)
+		];
+
+		q.allSettled(promises)
+			.then(function(results) {
+				var fullMatchHistory = {
+					success: true,
+					data: {
+						matches: []
+					}
+				};
+
+				results.forEach(function(matchHistory) {
+					if (matchHistory.state === 'fulfilled') {
+						if (matchHistory.value.data.matches) {
+							fullMatchHistory.data.matches = fullMatchHistory.data.matches.concat(matchHistory.value.data.matches);
+						}
+					}
+				});
+
+				_mongoCache.set('matchHistory', { region: region, summonerId: summonerId, type: MATCH_HISTORY_TYPES[type] }, fullMatchHistory.data)
 					.then(function() {
-						deferred.resolve(matchHistoryResult);
+						deferred.resolve(fullMatchHistory);
 					})
 					.fail(function() {
 						// if setting cache fails, don't worry, move on.
-						deferred.resolve(matchHistoryResult);
+						deferred.resolve(fullMatchHistory);
 					});
 			})
 			.fail(function(error) {
@@ -37,9 +66,9 @@ module.exports = function() {
 		var deferred = q.defer();
 		_mongoCache.get('matchHistory', {region: region, summonerId: summonerId, type: MATCH_HISTORY_TYPES[type]})
 			.then(function(cachedMatchHistory) {
-				if (cachedMatchHistory.data !== null) {
+				if (cachedMatchHistory.isExpired === false) {
 					_logger.debug("Using cached match history data");
-					deferred.resolve(cachedMatchHistory);
+					deferred.resolve(_prepareMatchHistory(cachedMatchHistory));
 				} else {
 					_getMatchHistoryApi(region, summonerId, type, deferred);
 				}

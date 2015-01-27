@@ -36,38 +36,10 @@ module.exports = function() {
 	};
 
 	var _getStats = function(region, summonerId) {
-		var promiseObject = {
-			STATS_INDEX: 0,
-			CHAMPS_INDEX: 1,
-			PRMOMISES: [
-				_statsDataProvider.getRankedStats(region, summonerId),
-				_staticDataProvider.getStaticData(region, 'champions')
-			]
-		};
 		var deferred = q.defer();
-		q.allSettled(promiseObject.PRMOMISES)
-			.then(function(results) {
-				var haveStats = true;
-				if (results[promiseObject.STATS_INDEX].state === 'fulfilled') {
-					var championStats = results[0].value;
-					if (championStats.data) {
-						championStats.data.champions.forEach(function(championStat, index) {
-							// we get data back with string id's le sigh....
-							var championIdString = championStat.id.toString();
-							if (championIdString !== "0") {
-								championStat.championKey = results[1].value.data.data[championIdString].key.toLowerCase();
-								championStat.championName = results[1].value.data.data[championIdString].name;
-								console.log(championStat);
-							} else {
-								championStats.allChampIndex = index;
-								championStat.championName = "All";
-							}
-						});
-					}
-					deferred.resolve(championStats);
-				} else {
-					deferred.resolve({ success: false, data: null });
-				}
+		_statsDataProvider.getRankedStats(region, summonerId)
+			.then(function(championStats) {
+				deferred.resolve(championStats.data);
 			})
 			.fail(function(error) {
 				deferred.reject(error);
@@ -76,21 +48,130 @@ module.exports = function() {
 		return deferred.promise;
 	};
 
-	var _getMatchHistory = function(region, summonerId, championId) {
+	var _getRecentStats = function(region, summonerId, type) {
+		var deferred = q.defer();
+		_matchHistoryDataProvider.getMatchHistory(region, summonerId, type)
+			.then(function(matchHistory) {
+				var recentStats = {
+					laneStats: { BOTTOM: 0, MIDDLE: 0, TOP: 0, JUNGLE: 0 },
+					champions: {},
+					matches: []
+				};
+				if (matchHistory.success && matchHistory.data) {
+					matchHistory.data.matches.forEach(function(match) {
+						var participants = match.participants[0];
+						if (recentStats.champions[participants.championId] === undefined) {
+							recentStats.champions[participants.championId] = {};
+							recentStats.champions[participants.championId].lanes = [participants.timeline.lane]
+							recentStats.champions[participants.championId].count = 1;
+							recentStats.champions[participants.championId].kills = participants.stats.kills;
+							recentStats.champions[participants.championId].deaths = participants.stats.deaths;
+							recentStats.champions[participants.championId].assists = participants.stats.assists;
 
+							if (participants.stats.winner) {
+								recentStats.champions[participants.championId].wins = 1;
+								recentStats.champions[participants.championId].losses = 0;
+							} else {
+								recentStats.champions[participants.championId].wins = 0;
+								recentStats.champions[participants.championId].losses = 1;
+							}
+						} else {
+							recentStats.champions[participants.championId].count++;
+							recentStats.champions[participants.championId].kills += participants.stats.kills;
+							recentStats.champions[participants.championId].deaths += participants.stats.deaths;
+							recentStats.champions[participants.championId].assists += participants.stats.assists;
+
+							if (participants.stats.winner) {
+								recentStats.champions[participants.championId].wins++;
+							} else {
+								recentStats.champions[participants.championId].losses++;
+							}
+
+							if (recentStats.champions[participants.championId].lanes.indexOf(participants.timeline.lane) === -1) {
+								recentStats.champions[participants.championId].lanes.push(participants.timeline.lane);
+							}
+						}
+						var optimlolMatchHistoryObject = {};
+						optimlolMatchHistoryObject.matchCreation = match.matchCreation;
+						recentStats.laneStats[participants.timeline.lane]++;
+						optimlolMatchHistoryObject.role = participants.timeline.lane;
+						optimlolMatchHistoryObject.championId = participants.championId;
+						optimlolMatchHistoryObject.winner = participants.stats.winner;
+						optimlolMatchHistoryObject.kills = participants.stats.kills;
+						optimlolMatchHistoryObject.deaths =participants.stats.deaths;
+						optimlolMatchHistoryObject.assists = participants.stats.assists;
+						optimlolMatchHistoryObject.champLevel = participants.stats.champLevel;
+						recentStats.matches.push(optimlolMatchHistoryObject);
+					});
+
+					deferred.resolve(recentStats);
+				} else {
+					deferred.resolve(null);
+				}
+			})
+			.fail(function(error) {
+				deferred.resolve(null);
+			});
+
+		return deferred.promise;
 	};
 
 	var _generatePerformanceData = function(region, summoner) {
+		var promiseObject = {
+			STATS_INDEX: 0,
+			RECENT_STATS_INDEX: 1,
+			CHAMPIONS_INDEX: 2,
+			PRMOMISES: [
+				_getStats(region, summoner.id),
+				_getRecentStats(region, summoner.id, "SOLO"),
+				_staticDataProvider.getStaticData(region, 'champions')
+			]
+		};
+
 		var deferred = q.defer();
-		_getStats(region, summoner.id)
-			.then(function(championStats) {
-				if (championStats.success) {
-					if (championStats.allChampIndex) {
-						summoner.totalStats = championStats.data.champions[championStats.allChampIndex];
-						championStats.data.champions.splice(championStats.allChampIndex, 1);
+		q.allSettled(promiseObject.PRMOMISES)
+			.then(function(results) {
+				var championStats = results[promiseObject.STATS_INDEX].state === 'fulfilled' ? results[promiseObject.STATS_INDEX].value : null;
+				var recentHistoryStats = results[promiseObject.RECENT_STATS_INDEX].state === 'fulfilled' ? results[promiseObject.RECENT_STATS_INDEX].value : null;
+				var champions = results[promiseObject.CHAMPIONS_INDEX].state === 'fulfilled' ? results[promiseObject.CHAMPIONS_INDEX].value : null;
+				
+				summoner.championStats = null;
+				summoner.recentHistory = null;
+
+				if (championStats) {
+					championStats.champions.forEach(function(championStat, index) {
+						// we get data back with string id's le sigh....
+						var championIdString = championStat.id.toString();
+						if (championIdString !== "0") {
+							championStat.championKey = champions.data.data[championIdString].key.toLowerCase();
+							championStat.championName = champions.data.data[championIdString].name;
+						} else {
+							championStats.allChampIndex = index;
+							championStat.championName = "All";
+						}
+					});
+
+					summoner.championStats = championStats.champions;
+				}
+
+				if (recentHistoryStats) {
+					var recentChampionsArray = [];
+					for(var champion in recentHistoryStats.champions) {
+						recentHistoryStats.champions[champion].id = champion;
+						recentHistoryStats.champions[champion].championKey = champions.data.data[champion].key.toLowerCase();
+						recentHistoryStats.champions[champion].championName = champions.data.data[champion].name;
+
+						recentChampionsArray.push(recentHistoryStats.champions[champion]);
 					}
 
-					summoner.championStats = championStats.data ? championStats.data.champions : null;
+					recentHistoryStats.matches.forEach(function(recentGameStat) {
+						var championIdString = recentGameStat.championId.toString();
+						recentGameStat.championKey = champions.data.data[championIdString].key.toLowerCase();
+						recentGameStat.championName = champions.data.data[championIdString].name;
+					});
+
+					recentHistoryStats.champions = recentChampionsArray;
+					summoner.recentHistory = recentHistoryStats;
 				}
 
 				deferred.resolve(summoner);
@@ -100,14 +181,6 @@ module.exports = function() {
 			});
 
 		return deferred.promise;
-		// var promises = [_getStats(region, summoner.id), _getMatchHistory(region, summoner.id)];
-		// var deferred = q.defer();
-		// q.allSettled(promises)
-		// 	.then(function(results) {
-		// 	})
-		// 	.fail(function(error) {
-		// 		deferred.reject(error);
-		// 	})
 	};
 
 	self.generateSummonerData = function(region, summonerName) {
@@ -145,5 +218,9 @@ module.exports = function() {
 		var StaticDataProvider = require('../persistence/dataProviders/staticDataProvider');
 		_staticDataProvider = new StaticDataProvider();
 		_staticDataProvider.init();
+
+		var MatchHistoryDataProvider = require('../persistence/dataProviders/matchHistoryDataProvider');
+		_matchHistoryDataProvider = new MatchHistoryDataProvider();
+		_matchHistoryDataProvider.init();
 	}
 };

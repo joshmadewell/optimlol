@@ -7,6 +7,7 @@ var StaticDataSchema = new Schema({
 	staticType: { type: String, required: true },
 	region: { type: String, required: true },
 	expiredTimeMinutes: { type: Number, default: 60 * 24 * 7 },
+	returnDataOnExpired: { type: Boolean, required: true, default: false },
 	data: Schema.Types.Mixed,
 	created_at: { type: Date },
 	updated_at: { type: Date }

@@ -33,7 +33,7 @@ module.exports = function() {
 		var deferred = q.defer();
 		_mongoCache.get('staticData', {region: region, staticType: staticType})
 			.then(function(cachedStaticData) {
-				if (cachedStaticData.data !== null) {
+				if (cachedStaticData.isExpired === false) {
 					_logger.debug("Using cached static data");
 					deferred.resolve(cachedStaticData);
 				} else {

@@ -10,6 +10,7 @@ module.exports = function() {
 	var _returnData = function(cachedData) {
 		var returnData = {
 			success: true,
+			isExpired: null,
 			data: null
 		}
 
@@ -17,9 +18,15 @@ module.exports = function() {
 			var cacheLastUpdated = moment().diff(cachedData.updated_at, 'minutes');
 
 			_logger.debug("Cached object is " + cacheLastUpdated + " minutes old.", "Expire time is", cachedData.expiredTimeMinutes);
-
 			if (cacheLastUpdated < cachedData.expiredTimeMinutes || cachedData.expiredTimeMinutes === -1) {
+				returnData.isExpired = false;
 				returnData.data = cachedData.data;
+			}  else {
+				returnData.isExpired = true;
+
+				if (cachedData.returnDataOnExpired) {
+					returnData.data = cachedData.data;
+				}
 			}
 		}
 

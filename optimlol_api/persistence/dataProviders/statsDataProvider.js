@@ -62,7 +62,7 @@ module.exports = function() {
 		var deferred = q.defer();
 		_mongoCache.get('stats', {region: region, summonerId: summonerId})
 			.then(function(cacheStatsResult) {
-				if (cacheStatsResult.data !== null) {
+				if (cacheStatsResult.isExpired === false) {
 					_logger.debug("Using cached stats.");
 					deferred.resolve(_prepareStats(cacheStatsResult));
 				} else {

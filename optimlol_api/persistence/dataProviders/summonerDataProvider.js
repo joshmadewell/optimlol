@@ -9,13 +9,13 @@ module.exports = function() {
 	var _riotApi = null;
 
 	var _prepareSummoner =function(summoner) {
-		var returnedSummoner = [];
+		var preparedSummoner = [];
 		for(var property in summoner.data) {
 			summoner.data[property].queriedName = property;
-			returnedSummoner.push(summoner.data[property]);
+			preparedSummoner.push(summoner.data[property]);
 		}
 
-		return returnedSummoner;
+		return preparedSummoner;
 	}
 
 	var _getSummonerByNameApi = function(region, summonerName, deferred) {
@@ -41,7 +41,7 @@ module.exports = function() {
 		_logger.debug("Getting summoner by name", summonerName);
 		_mongoCache.get('summoners', {region: region, summonerName: summonerName})
 			.then(function(cacheSummonerResult) {
-				if(cacheSummonerResult.data !== null) {
+				if(cacheSummonerResult.isExpired === false) {
 					_logger.debug("Using cached summoner.");
 					deferred.resolve(_prepareSummoner(cacheSummonerResult));
 				} else {
