@@ -6,9 +6,10 @@ To Run Code:
 1. ```npm install```
 2. Install foreman. ```gem install foreman``` https://github.com/ddollar/foreman
  - Optimlol runs off of Heroku which uses foreman and with Procfiles so that's how we test most things locally.
+3. You're going to need a mongo instance somewhere so either run one locally or get a free sandbox from www.mongolab.com
 3. Create ```.env``` file in ```optimlol``` directory.  
     ```  
-        MONGOLAB_URI='mongodb://username:password@url:port/riot_data'
+        MONGOLAB_URI='mongodb://username:password@url:port/riot_data' #this can be your local instance or mongolabs...
         
         RIOT_API_KEY='riot_api_key'
         
