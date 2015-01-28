@@ -14,7 +14,6 @@
 
         .summoner-inputs {
             i {
-                position: absolute;
                 margin-top: 6px;
                 margin-left: -20px;
             }
@@ -50,6 +49,32 @@
         tbody {
             tr {
                 border-bottom: 1px solid $darkgray;
+
+                .top,
+                .jungle,
+                .middle,
+                .support,
+                .marksman {
+                    padding: 0;
+                    font-size: 9px;
+                    width: 20px;
+                }
+                .top {
+                    background-color: #DBAE5A;
+                }
+                .jungle {
+                    background-color: #FF9100;
+                }
+                .middle {
+                    background-color: #4A66C9;
+                }
+                .support {
+                    background-color: #6BEEA2;
+                }
+                .marksman {
+                    font-size: 7px;
+                    background-color: #C73A3A;
+                }
 
                 .name {
                     width: 20%;
@@ -110,8 +135,6 @@
                 }
             }
         }
-
-        
     }
 
     .parse-chat {

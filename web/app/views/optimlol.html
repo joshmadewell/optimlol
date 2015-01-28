@@ -25,6 +25,7 @@
         <!-- ko if: validSummoners().length > 0 -->
         <table class="summoner-table">
             <thead>
+                <th></th>
                 <th class="name">Name</th>
                 <th class="recently-played">Recently Played</th>
                 <th class="best-performance">Best Performance</th>
@@ -32,7 +33,10 @@
                 <th class="img-link">op.gg</th>
             </thead>
             <tbody class="summoner-info" data-bind="foreach: validSummoners">
-                <td class="name" data-bind="text: displayName"></td>
+                <td data-bind="css: laneTag.toLowerCase(), foreach: laneTag">
+                    <span data-bind="text: $rawData[0]"/><br>
+                </td>
+                <td data-bind="text: displayName"></td>
                 <td class="recently-played">
                     <div class="no-stats" data-bind="visible: recentHistory.length === 0">No stats for this season.</div>
                     <ul class="champion-list" data-bind="foreach: recentHistory.champions">

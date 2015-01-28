@@ -1,4 +1,7 @@
 var _calculatePerformance = function(wins, losses, options) {
+	if (wins === 0 && losses === 0) {
+		return 0;
+	}
 	var withModifier = options ? options.withModifier || false : false;
 	var n = wins + losses;
 	var phat = wins / n;

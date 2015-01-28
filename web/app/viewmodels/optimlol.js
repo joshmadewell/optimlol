@@ -96,32 +96,35 @@
 			return promise;
 		};
 
-		var _onSummonerStatusUpdated = function() {
-			self.validSummoners.removeAll();
+		var _onSummonerStatusUpdated = function(data) {
+			if (data === STATUS.VALID) {
+				self.validSummoners.removeAll();
 
-			var _sortingComparator = function(a, b) {
-				if (!a.totalStats && b.totalStats) {
-					return 1;
-				} else if (a.totalStats && !b.totalStats) {
-					return -1;
-				} else if (!a.totalStats && !b.totalStats) {
-					return 0;
-				} else if (a.totalStats.performance < b.totalStats.performance) {
-					return 1;
-				} else if (a.totalStats.performance > b.totalStats.performance) {
-					return -1;
-				} else {
-					return 0;
-				}
-			};
+				var _sortingComparator = function(a, b) {
+					if (!a.totalStats && b.totalStats) {
+						return 1;
+					} else if (a.totalStats && !b.totalStats) {
+						return -1;
+					} else if (!a.totalStats && !b.totalStats) {
+						return 0;
+					} else if (a.totalStats.performance < b.totalStats.performance) {
+						return 1;
+					} else if (a.totalStats.performance > b.totalStats.performance) {
+						return -1;
+					} else {
+						return 0;
+					}
+				};
 
-			self.summonerInputs.sort(_sortingComparator);
+				self.summonerInputs.sort(_sortingComparator);
+				_tagLanes();
 
-			self.summonerInputs.forEach(function(summoner) {
-				if (summoner.status() === STATUS.VALID) {
-					self.validSummoners.push(summoner);
-				}
-			});
+				self.summonerInputs.forEach(function(summoner) {
+					if (summoner.status() === STATUS.VALID) {
+						self.validSummoners.push(summoner);
+					}
+				});
+			}
 		};
 
 		var _initializeSummonerInputs = function() {
@@ -133,7 +136,35 @@
 				summoner.status.subscribe(_onSummonerStatusUpdated);
 				self.summonerInputs.push(summoner);
 			}
-		}
+		};
+
+		var _tagLanes = function() {
+			var tagged = {
+				TOP: false,
+				JUNGLE: false,
+				MIDDLE: false,
+				SUPPORT: false,
+				MARKSMAN: false
+			}
+
+			// summonerinputs has been sorted by best performer on team
+			// so if we already found a match for a role...too bad for next guy
+			self.summonerInputs.forEach(function(summoner) {
+				var highestCount = 0;
+				var laneTag = "";
+				for(var lane in summoner.recentHistory.laneStats) {
+					var currentLane = summoner.recentHistory.laneStats[lane];
+					currentLane.performance = currentLane.performance || 0;
+					if (currentLane.performance > highestCount && tagged[lane] === false) {
+						highestCount = currentLane.performance;
+						laneTag = lane;
+					}
+				}
+
+				tagged[laneTag] = true;
+				summoner.laneTag = laneTag;
+			});
+		};
 
 		self.parseChatForPlayers  = function() {
 			var potentialSummoners = [];
@@ -179,9 +210,15 @@
 			self.validSummoners.removeAll();
 			self.summonerInputs.forEach(function(input) {
 				input.summonerName("");
+				input.displayName = "";
 				input.summonerId(null);
 				input.status("unset");
-				input.displayName = "";
+				input.lolKingUrl("");
+				input.naOpGgUrl("");
+				input.laneTag = "";
+				input.totalStats = {};
+				input.championStats = [],
+				input.recentHistory = []
 			})
 		};
 

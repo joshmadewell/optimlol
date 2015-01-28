@@ -167,7 +167,7 @@ module.exports = function() {
 					});
 
 					if (allIndex) {
-						summoner.totalStats = championStats.champions.splice(allIndex, 1);
+						summoner.totalStats = championStats.champions.splice(allIndex, 1)[0];
 					}
 
 					summoner.championStats = championStats.champions;

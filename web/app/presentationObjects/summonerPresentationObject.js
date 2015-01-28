@@ -8,8 +8,10 @@ define(['knockout'], function (ko) {
 			status: ko.observable("unset"),
 			lolKingUrl: ko.observable(""),
 			naOpGgUrl: ko.observable(""),
+			laneTag: "",
 			totalStats: {},
-			championStats: []
+			championStats: [],
+			recentHistory: []
 		}
 	}
 });
