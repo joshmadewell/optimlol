@@ -55,6 +55,7 @@ module.exports = function() {
 			role = champion.tags.indexOf("Marksman") === -1 ? "SUPPORT" : "MARKSMAN";
 		} 
 
+		recentStats[role].total++;
 		if (matchData.winner) {
 			recentStats[role].wins++;
 		} else {
@@ -175,11 +176,11 @@ module.exports = function() {
 				if (recentHistoryStats) {
 					var recentChampionsArray = [];
 					var laneStats = { 
-						MARKSMAN: {wins: 0, losses: 0}, 
-						SUPPORT: {wins: 0, losses: 0}, 
-						MIDDLE: {wins: 0, losses: 0}, 
-						TOP: {wins: 0, losses: 0}, 
-						JUNGLE: {wins: 0, losses: 0} 
+						MARKSMAN: {wins: 0, losses: 0, total: 0}, 
+						SUPPORT: {wins: 0, losses: 0, total: 0}, 
+						MIDDLE: {wins: 0, losses: 0, total: 0}, 
+						TOP: {wins: 0, losses: 0, total: 0}, 
+						JUNGLE: {wins: 0, losses: 0, total: 0} 
 					};
 
 					for(var champion in recentHistoryStats.champions) {
