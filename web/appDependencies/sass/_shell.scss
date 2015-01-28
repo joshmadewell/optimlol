@@ -12,3 +12,11 @@
 	float: right;
 	padding: 15px;
 }
+
+.navbar {
+	.navigation-item {
+		&:first-child {
+			display: none;
+		}
+	}
+}

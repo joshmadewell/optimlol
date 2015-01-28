@@ -23,7 +23,8 @@
 
         self.activate = function() {
             router.map([
-                { route: '', title:'', moduleId: 'viewmodels/optimlol', nav: true }
+                { route: '', title:'', moduleId: 'viewmodels/optimlol', nav: true, isActive: false },
+                { route: 'faq', title:'FAQ', moduleId: 'viewmodels/faq', nav: true }
             ]).buildNavigationModel();
             
             return router.activate();
