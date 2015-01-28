@@ -144,9 +144,9 @@
 				var laneTag = "";
 				for(var lane in summoner.recentHistory.laneStats) {
 					var currentLane = summoner.recentHistory.laneStats[lane];
-					currentLane.performance = currentLane.performance || 0;
-					if (currentLane.performance > highestCount) {
-						highestCount = currentLane.performance;
+					currentLane.total = currentLane.total || 0;
+					if (currentLane.total > highestCount) {
+						highestCount = currentLane.total;
 						laneTag = lane;
 					}
 				}
