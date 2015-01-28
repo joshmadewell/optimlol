@@ -4,6 +4,7 @@ module.exports = function() {
 	var self = this;
 	var _summonerDataProvider = null;
 	var _statsDataProvider = null;
+	var _perfomanceCalculator = require('../common/performanceCalculator');
 
 	var _verifySummoner = function(region, summonerName) {
 		var deferred = q.defer();
@@ -48,12 +49,26 @@ module.exports = function() {
 		return deferred.promise;
 	};
 
+	var _incrementLaneStats = function(recentStats, matchData, champion) {
+		var role = matchData.role;
+		if (role === "BOTTOM") {
+			role = champion.tags.indexOf("Marksman") === -1 ? "SUPPORT" : "MARKSMAN";
+		} 
+
+		if (matchData.winner) {
+			recentStats[role].wins++;
+		} else {
+			recentStats[role].losses++;
+		}
+
+		recentStats[role].performance = _perfomanceCalculator.calculate(recentStats[role].wins, recentStats[role].losses, {confidence: 1.00});
+	};
+
 	var _getRecentStats = function(region, summonerId, type) {
 		var deferred = q.defer();
 		_matchHistoryDataProvider.getMatchHistory(region, summonerId, type)
 			.then(function(matchHistory) {
 				var recentStats = {
-					laneStats: { BOTTOM: 0, MIDDLE: 0, TOP: 0, JUNGLE: 0 },
 					champions: {},
 					matches: []
 				};
@@ -67,7 +82,6 @@ module.exports = function() {
 							recentStats.champions[participants.championId].kills = participants.stats.kills;
 							recentStats.champions[participants.championId].deaths = participants.stats.deaths;
 							recentStats.champions[participants.championId].assists = participants.stats.assists;
-
 							if (participants.stats.winner) {
 								recentStats.champions[participants.championId].wins = 1;
 								recentStats.champions[participants.championId].losses = 0;
@@ -75,12 +89,12 @@ module.exports = function() {
 								recentStats.champions[participants.championId].wins = 0;
 								recentStats.champions[participants.championId].losses = 1;
 							}
+
 						} else {
 							recentStats.champions[participants.championId].count++;
 							recentStats.champions[participants.championId].kills += participants.stats.kills;
 							recentStats.champions[participants.championId].deaths += participants.stats.deaths;
 							recentStats.champions[participants.championId].assists += participants.stats.assists;
-
 							if (participants.stats.winner) {
 								recentStats.champions[participants.championId].wins++;
 							} else {
@@ -93,7 +107,6 @@ module.exports = function() {
 						}
 						var optimlolMatchHistoryObject = {};
 						optimlolMatchHistoryObject.matchCreation = match.matchCreation;
-						recentStats.laneStats[participants.timeline.lane]++;
 						optimlolMatchHistoryObject.role = participants.timeline.lane;
 						optimlolMatchHistoryObject.championId = participants.championId;
 						optimlolMatchHistoryObject.winner = participants.stats.winner;
@@ -161,11 +174,18 @@ module.exports = function() {
 
 				if (recentHistoryStats) {
 					var recentChampionsArray = [];
+					var laneStats = { 
+						MARKSMAN: {wins: 0, losses: 0}, 
+						SUPPORT: {wins: 0, losses: 0}, 
+						MIDDLE: {wins: 0, losses: 0}, 
+						TOP: {wins: 0, losses: 0}, 
+						JUNGLE: {wins: 0, losses: 0} 
+					};
+
 					for(var champion in recentHistoryStats.champions) {
 						recentHistoryStats.champions[champion].id = champion;
 						recentHistoryStats.champions[champion].championKey = champions.data.data[champion].key.toLowerCase();
 						recentHistoryStats.champions[champion].championName = champions.data.data[champion].name;
-
 						recentChampionsArray.push(recentHistoryStats.champions[champion]);
 					}
 
@@ -173,9 +193,12 @@ module.exports = function() {
 						var championIdString = recentGameStat.championId.toString();
 						recentGameStat.championKey = champions.data.data[championIdString].key.toLowerCase();
 						recentGameStat.championName = champions.data.data[championIdString].name;
+
+						_incrementLaneStats(laneStats, recentGameStat, champions.data.data[championIdString]);
 					});
 
 					recentHistoryStats.champions = recentChampionsArray;
+					recentHistoryStats.laneStats = laneStats;
 					summoner.recentHistory = recentHistoryStats;
 				}
 

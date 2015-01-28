@@ -41,6 +41,7 @@ module.exports = function() {
 	self.makeRequest = function(path) {
 		var apiKeyPrefix = path.indexOf('?') !== -1 ? "&api_key=" : "?api_key="; 
 		var fullUrl = _config.riot_api.url_prefix + path + apiKeyPrefix + process.env.RIOT_API_KEY;
+		console.log(fullUrl);
 		var deferred = q.defer();
 		request.get({url: fullUrl, json: true}, function(error, result) {
 			if (error) {

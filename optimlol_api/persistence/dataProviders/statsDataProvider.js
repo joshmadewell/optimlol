@@ -6,16 +6,7 @@ module.exports = function() {
 	var _riotApi = null;
 	var _mongoCache = null;
 	var _logger = null;
-
-	var _calculatePerformance = function(wins, losses) {
-		var n = wins + losses;
-		var phat = wins / n;
-		var z = 1.28; // 80% confidence
-		//var modifier = .0009*n; //custom modifier to pad scores.
-
-		var performance = (phat + z*z/(2*n) - z * Math.sqrt((phat*(1-phat)+z*z/(4*n))/n))/(1+z*z/n);// + modifier;
-		return performance.toFixed(2)/1;
-	};
+	var _performanceCalculator = require('../../common/performanceCalculator');
 
 	var _prepareStats = function(stats) {
 		if (stats.data) {
@@ -34,7 +25,7 @@ module.exports = function() {
 					optimlolChampion.kda = (champion.stats.totalChampionKills + champion.stats.totalAssists);
 				}
 				optimlolChampion.gamesPlayed = champion.stats.totalSessionsPlayed;
-				optimlolChampion.performance = _calculatePerformance(champion.stats.totalSessionsWon, champion.stats.totalSessionsLost);
+				optimlolChampion.performance = _performanceCalculator.calculate(champion.stats.totalSessionsWon, champion.stats.totalSessionsLost);
 				optimlolChampions.push(optimlolChampion);
 			});
 
@@ -53,7 +44,7 @@ module.exports = function() {
 						deferred.resolve(_prepareStats(statsResult));
 					})
 					.fail(function(error) {
-						_logger.warn("Some failure when setting cache", error);
+						_logger.warn("Some failure when setting stats cache", error);
 						deferred.resolve(_prepareStats(statsResult));
 					})
 			})
