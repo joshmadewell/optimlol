@@ -11,7 +11,7 @@ module.exports = function() {
 	var _getStaticDataApi = function(region, staticType, deferred) {
 		var staticDataPath = "static-data/" + region + "/" + _apiVersion + "/" + _config.riot_api.staticTypes[staticType];
 
-		_riotApi.makeRequest(staticDataPath)
+		_riotApi.makeGlobalRequest(region, staticDataPath)
 			.then(function(staticDataResult) {
 				_mongoCache.set('staticData', {region: region, staticType: staticType}, staticDataResult)
 					.then(function() {

@@ -38,9 +38,30 @@ module.exports = function() {
 		return dataToReturn;
 	}
 
-	self.makeRequest = function(path) {
+	self.makeGlobalRequest = function(region, path) {
 		var apiKeyPrefix = path.indexOf('?') !== -1 ? "&api_key=" : "?api_key="; 
-		var fullUrl = _config.riot_api.url_prefix + path + apiKeyPrefix + process.env.RIOT_API_KEY;
+		var fullUrl = _config.riot_api.url_prefix + "global" + _config.riot_api.url_midfix + path + apiKeyPrefix + process.env.RIOT_API_KEY;
+		console.log(fullUrl);
+		var deferred = q.defer();
+		request.get({url: fullUrl, json: true}, function(error, result) {
+			if (error) {
+				deferred.reject(error);
+			} else {
+				var handledResponse = _handleResponse(result.toJSON());
+				if (handledResponse.success) {
+					deferred.resolve(handledResponse);
+				} else {
+					deferred.reject(handledResponse);
+				}
+			}
+		});
+
+		return deferred.promise;
+	};
+
+	self.makeRequest = function(region, path) {
+		var apiKeyPrefix = path.indexOf('?') !== -1 ? "&api_key=" : "?api_key="; 
+		var fullUrl = _config.riot_api.url_prefix + region + _config.riot_api.url_midfix + path + apiKeyPrefix + process.env.RIOT_API_KEY;
 		console.log(fullUrl);
 		var deferred = q.defer();
 		request.get({url: fullUrl, json: true}, function(error, result) {

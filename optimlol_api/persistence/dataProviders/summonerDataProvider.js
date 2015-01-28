@@ -20,7 +20,7 @@ module.exports = function() {
 
 	var _getSummonerByNameApi = function(region, summonerName, deferred) {
 		var championsPath = region + "/" + _apiVersion + "/summoner/by-name/" + summonerName;
-		_riotApi.makeRequest(championsPath)
+		_riotApi.makeRequest(region, championsPath)
 			.then(function(summonerResult) {
 				_mongoCache.set('summoners', {region: region, summonerName: summonerName}, summonerResult)
 					.then(function() {
