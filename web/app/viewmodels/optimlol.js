@@ -139,29 +139,18 @@
 		};
 
 		var _tagLanes = function() {
-			var tagged = {
-				TOP: false,
-				JUNGLE: false,
-				MIDDLE: false,
-				SUPPORT: false,
-				MARKSMAN: false
-			}
-
-			// summonerinputs has been sorted by best performer on team
-			// so if we already found a match for a role...too bad for next guy
 			self.summonerInputs.forEach(function(summoner) {
 				var highestCount = 0;
 				var laneTag = "";
 				for(var lane in summoner.recentHistory.laneStats) {
 					var currentLane = summoner.recentHistory.laneStats[lane];
 					currentLane.performance = currentLane.performance || 0;
-					if (currentLane.performance > highestCount && tagged[lane] === false) {
+					if (currentLane.performance > highestCount) {
 						highestCount = currentLane.performance;
 						laneTag = lane;
 					}
 				}
 
-				tagged[laneTag] = true;
 				summoner.laneTag = laneTag;
 			});
 		};
