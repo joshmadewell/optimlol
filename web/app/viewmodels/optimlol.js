@@ -1,9 +1,10 @@
 ﻿define(['durandal/system', 
-	'knockout', 
+	'knockout',
+	'durandal/app',
 	'dataProviders/summonersDataProvider',
 	'presentationObjects/summonerPresentationObject',
 	'common/sort'], 
-	function (durandal, ko, SummonersDataProvider, SummonerPresentationObject, sorter) {
+	function (durandal, ko, app, SummonersDataProvider, SummonerPresentationObject, sorter) {
 	return function() {
 		var self = this;
 		var NUMBER_OF_SUMMONERS = 5;
@@ -186,6 +187,11 @@
 
 		self.activate = function() {
 			_initializeSummonerInputs();
+			app.on('regionUpdated')
+				.then(function(region) {
+					self.selectedRegion(region);
+					self.clearSummonerInputs();
+				});
 		};
 	}
 });

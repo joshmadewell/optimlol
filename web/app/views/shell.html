@@ -6,6 +6,13 @@
                 <span>OptimLoL</span>
             </a>
         </div>
+
+        <div class="region-selection">
+        	<label>Region: </label>
+        	<select data-bind="options: availableRegions,
+                				   		optionsText: 'region',
+                				   		value: selectedRegion"></select>
+        </div>
     </nav>
 
     <div class="page-host" data-bind="router: { transition:'entrance' }"></div>

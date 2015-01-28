@@ -1,17 +1,32 @@
-﻿define(['plugins/router', 'durandal/app'], function (router, app) {
-    return {
-        router: router,
-        search: function() {
-            //It's really easy to show a message box.
-            //You can add custom options too. Also, it returns a promise for the user's response.
-            app.showMessage('Search not yet implemented...');
-        },
-        activate: function () {
+﻿define(['plugins/router', 
+    'durandal/app', 
+    'knockout'], function (router, app, ko) {
+    return function() {
+        var self = this;
+
+        self.availableRegions = [
+            {
+                region: "North America",
+                key: "na"
+            },
+            {
+                region: "EU West",
+                key: "euw"
+            }
+        ];
+
+        self.selectedRegion = ko.observable();
+        self.selectedRegion.subscribe(function(data) {
+            app.trigger('regionUpdated', data.key);
+        });
+        self.router = router;
+
+        self.activate = function() {
             router.map([
                 { route: '', title:'', moduleId: 'viewmodels/optimlol', nav: true }
             ]).buildNavigationModel();
             
             return router.activate();
-        }
+        };
     };
 });
