@@ -35,12 +35,12 @@ module.exports = function() {
 
 	self.get = function(collection, identifiers) {
 		var model = require('../persistence/mongoModels/' + collection + 'Model');
-		_logger.debug("Cache Get:", { "from": collection, "with": identifiers } );
+		_logger.debug(collection + ": Cache Get:", { "from": collection, "with": identifiers } );
 
 		var deferred = q.defer();
 		model.retrieve(identifiers)
 			.then(function(cachedResult) {
-				_logger.debug("Cache returned:", cachedResult ? "value" : "nothing");
+				_logger.debug(collection + "cache returned:", cachedResult ? "value" : "nothing");
 				deferred.resolve(_returnData(cachedResult, collection));
 			})
 			.fail(function(error) {
@@ -51,7 +51,7 @@ module.exports = function() {
 	};
 
 	self.set = function(collection, identifiers, toCache) {
-		_logger.debug("Cache Set:", { "from": collection, "with": identifiers } );
+		_logger.debug(collection + ": Cache Set:", { "from": collection, "with": identifiers } );
 		var model = require('../persistence/mongoModels/' + collection + 'Model');
 
 		var deferred = q.defer();
