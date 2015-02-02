@@ -77,7 +77,13 @@ module.exports = function() {
 					_logger.debug("Using cached match history data");
 					deferred.resolve(_prepareMatchHistory(cachedMatchHistory));
 				} else {
-					_getMatchHistoryApi(region, summonerId, type, deferred);
+					_getMatchHistoryApi(region, summonerId, type)
+						.then(function() {
+
+						})
+						.fail(function(error) {
+
+						});
 				}
 			})
 			.fail(function(error) {

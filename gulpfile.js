@@ -23,8 +23,26 @@ gulp.task('web-app', function(cb) {
 		gulp.src('./web/app/**/*.html')
 			.pipe(gulp.dest('./build/js/app')),
 
-		gulp.src('./web/appDependencies/lib/**/*')
-			.pipe(gulp.dest('./build/lib')),
+		gulp.src('./web/appDependencies/lib/bootstrap/**/*min*')
+			.pipe(gulp.dest('./build/lib/bootstrap')),
+
+		gulp.src('./web/appDependencies/lib/font-awesome/css/*min*')
+			.pipe(gulp.dest('./build/lib/font-awesome/css')),
+
+		gulp.src('./web/appDependencies/lib/font-awesome/fonts/*')
+			.pipe(gulp.dest('./build/lib/font-awesome/fonts')),
+
+		gulp.src('./web/appDependencies/lib/jquery/*min*')
+			.pipe(gulp.dest('./build/lib/jquery')),
+
+		gulp.src('./web/appDependencies/lib/durandal/**/*')
+			.pipe(gulp.dest('./build/lib/durandal')),
+
+		gulp.src('./web/appDependencies/lib/knockout/**/*')
+			.pipe(gulp.dest('./build/lib/knockout')),
+
+		gulp.src('./web/appDependencies/lib/require/**/*')
+			.pipe(gulp.dest('./build/lib/require')),
 
 		gulp.src('./web/appDependencies/img/logo*')
 			.pipe(gulp.dest('./build/img')),

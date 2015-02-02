@@ -16,17 +16,13 @@ module.exports = function() {
 
 		if (cachedData) {
 			var cacheLastUpdated = moment().diff(cachedData.updated_at, 'minutes');
-
 			_logger.debug("Cached " + collection + " object is " + cacheLastUpdated + " minutes old.", "Expire time is", cachedData.expiredTimeMinutes);
+			
+			returnData.data = cachedData;
 			if (cacheLastUpdated < cachedData.expiredTimeMinutes || cachedData.expiredTimeMinutes === -1) {
 				returnData.isExpired = false;
-				returnData.data = cachedData.data;
 			}  else {
 				returnData.isExpired = true;
-
-				if (cachedData.returnDataOnExpired) {
-					returnData.data = cachedData.data;
-				}
 			}
 		}
 
