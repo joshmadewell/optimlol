@@ -2,20 +2,20 @@
     text-align: center;
 
     .search-container {
-        display: inline-flex;
-
         .clear-inputs {
-            height: 21px;
-            padding: 5px;
-            line-height: 2px;
-            margin-top: 2px;
-            margin-left: 5px;
+            margin-top: -3px;
         }
 
         .summoner-inputs {
+            display: inline-flex;
+
+            .summoner-input {
+                margin-right: 5px;
+            }
             i {
-                margin-top: 6px;
-                margin-left: -20px;
+                position: absolute;
+                margin-top: -24px;
+                margin-left: 67px;
             }
 
             .summoner-input-valid {
@@ -138,14 +138,13 @@
     }
 
     .parse-chat {
-        textarea {
-            margin-top: -8px;
+        line-height: 2px;
+        margin-top: 20px;
+
+        .chat-log {
+            margin: 0 auto 5px auto;
             height: 100px;
             width: 30%;
-        }
-
-        button {
-            line-height: 16px;
         }
     }
 }

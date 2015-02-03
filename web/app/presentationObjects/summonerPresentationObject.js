@@ -9,6 +9,7 @@ define(['knockout'], function (ko) {
 			lolKingUrl: ko.observable(""),
 			naOpGgUrl: ko.observable(""),
 			laneTag: "",
+			tooltipText: "",
 			totalStats: {},
 			championStats: [],
 			recentHistory: []

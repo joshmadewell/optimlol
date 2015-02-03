@@ -1,10 +1,11 @@
 ﻿define(['durandal/system', 
 	'knockout',
 	'durandal/app',
+	'jquery',
 	'dataProviders/summonersDataProvider',
 	'presentationObjects/summonerPresentationObject',
 	'common/sort'], 
-	function (durandal, ko, app, SummonersDataProvider, SummonerPresentationObject, sorter) {
+	function (durandal, ko, app, $, SummonersDataProvider, SummonerPresentationObject, sorter) {
 	return function() {
 		var self = this;
 		var NUMBER_OF_SUMMONERS = 5;
@@ -151,6 +152,9 @@
 					}
 				}
 
+				if (laneTag !== "") {
+					summoner.tooltipText = summoner.displayName + " has played " + laneTag + " " + highestCount + " in the last 30 games.";
+				}
 				summoner.laneTag = laneTag;
 			});
 		};
@@ -213,6 +217,7 @@
 
 		self.activate = function() {
 			_initializeSummonerInputs();
+
 			app.on('regionUpdated')
 				.then(function(region) {
 					self.selectedRegion(region);

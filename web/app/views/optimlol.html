@@ -5,8 +5,8 @@
 
         <div class="search-container">
             <div class="summoner-inputs" data-bind="foreach: summonerInputs">
-                <span>
-                    <input class='summoner-input' data-bind="value: summonerName, 
+                <span class="summoner-input">
+                    <input class='form-control' data-bind="value: summonerName, 
                                                             attr: {
                                                                 placeholder: placeholder
                                                             }, 
@@ -18,22 +18,21 @@
                     <i data-bind="visible: status() === 'validating'" class="fa fa-spinner fa-spin"></i>
                 </span>
             </div>
-            <button class="clear-inputs" data-bind="click: clearSummonerInputs">Clear</button>
+            <button class="btn btn-default clear-inputs" type="submit" data-bind="click: clearSummonerInputs">Clear</button>
         </div>
-
-
+        
         <!-- ko if: validSummoners().length > 0 -->
         <table class="summoner-table">
             <thead>
                 <th></th>
                 <th class="name">Name</th>
-                <th class="recently-played">Recently Played</th>
-                <th class="best-performance">Best Performance</th>
+                <th class="recently-played" data-bind="tooltip: 'This column contains the 5 champions each summoner has played the most in the last 30 games for each summoner. Ordered by total games played.'">Recently Played</th>
+                <th class="best-performance" data-bind="tooltip: 'This column contains the 5 champions each summoner performs best on. Ordered by performance.'">Best Performance</th>
                 <th class="img-link">LolKing</th>
                 <th class="img-link">op.gg</th>
             </thead>
             <tbody class="summoner-info" data-bind="foreach: validSummoners">
-                <td data-bind="css: laneTag.toLowerCase(), foreach: laneTag">
+                <td data-bind="css: laneTag.toLowerCase(), foreach: laneTag, tooltip: tooltipText">
                     <span data-bind="text: $rawData[0]"/><br>
                 </td>
                 <td data-bind="text: displayName"></td>
@@ -73,8 +72,12 @@
 
         <div class="parse-chat">
             <p>Or enter your chat logs below and we'll try to do the work for you!</p>
-            <textarea class="chatlog" data-bind="value: chatText"></textarea><br>
-            <button data-bind="click: parseChatForPlayers">Parse Chat Log</button>
+            <div>
+                <textarea class="form-control chat-log" data-bind="value: chatText"></textarea>
+            </div>
+            <button class="btn btn-default" data-bind="click: parseChatForPlayers">Parse Chat Log</button>
         </div>
     </div>
+
+
 </div>
