@@ -3,11 +3,14 @@ Champion Selection Optimization for League of Legends
 
 To Run Code:
 
-1. ```npm install```
+1. ```npm install``` && ```npm install -g gulp```
 2. Install foreman. ```gem install foreman``` https://github.com/ddollar/foreman
  - Optimlol runs off of Heroku which uses foreman and with Procfiles so that's how we test most things locally.
-3. You're going to need a mongo instance somewhere so either run one locally or get a free sandbox from www.mongolab.com
-3. Create ```.env``` file in ```optimlol``` directory.  
+3. You're going to need a mongo instance so either run one locally or get a free sandbox from [mongolab](www.mongolab.com)  
+  3a. If you sign up for mongolab once logged in click 'Create New' under MongoDB Deployments and choose the sandbox option.  
+  3b. Name your mongoDB 'riot_data'.  
+  3c. Click on your new database and create a user.
+4. Create ```.env``` file in ```optimlol``` directory.  
     ```  
         MONGOLAB_URI='mongodb://username:password@url:port/riot_data' #this can be your local instance or mongolabs...
         
@@ -15,9 +18,9 @@ To Run Code:
         
         PORT=8080 #local api port
     ```
-4. Run the optimlol_api. ```foreman start -e .env```
-5. In another command console, run gulp. ```gulp debug-web```
-6. Enjoy!
+5. Run the optimlol_api. ```foreman start -e .env```
+6. In another command console, run gulp. ```gulp debug-web```
+7. Enjoy!
 
 
 #License
