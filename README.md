@@ -3,7 +3,7 @@ Champion Selection Optimization for League of Legends
 
 To Run Code:
 
-1. ```npm install```
+1. ```npm install``` && ```npm install -g gulp```
 2. Install foreman. ```gem install foreman``` https://github.com/ddollar/foreman
  - Optimlol runs off of Heroku which uses foreman and with Procfiles so that's how we test most things locally.
 3. You're going to need a mongo instance so either run one locally or get a free sandbox from [mongolab](www.mongolab.com)  
