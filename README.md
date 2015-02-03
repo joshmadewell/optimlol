@@ -8,7 +8,7 @@ To Run Code:
  - Optimlol runs off of Heroku which uses foreman and with Procfiles so that's how we test most things locally.
 3. You're going to need a mongo instance so either run one locally or get a free sandbox from [mongolab](www.mongolab.com)  
   3a. If you sign up for mongolab once logged in click 'Create New' under MongoDB Deployments and choose the sandbox option.  
-  3b. Name your mongoDB 'riot_data'.
+  3b. Name your mongoDB 'riot_data'.  
   3c. Click on your new database and create a user.
 4. Create ```.env``` file in ```optimlol``` directory.  
     ```  
