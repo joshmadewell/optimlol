@@ -23,6 +23,9 @@ To Run Code:
 7. Enjoy!
 
 
+##Windows Dependency 
+Do this first https://github.com/TooTallNate/node-gyp/wiki/Visual-Studio-2010-Setup
+
 #License
 GNU General Public License Version 3
 http://www.gnu.org/licenses/gpl-3.0.txt
