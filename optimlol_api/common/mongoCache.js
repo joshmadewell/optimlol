@@ -17,8 +17,8 @@ module.exports = function() {
 		if (cachedData) {
 			var cacheLastUpdated = moment().diff(cachedData.updated_at, 'minutes');
 			_logger.debug("Cached " + collection + " object is " + cacheLastUpdated + " minutes old.", "Expire time is", cachedData.expiredTimeMinutes);
-			
-			returnData.data = cachedData;
+
+			returnData.data = cachedData.data;
 			if (cacheLastUpdated < cachedData.expiredTimeMinutes || cachedData.expiredTimeMinutes === -1) {
 				returnData.isExpired = false;
 			}  else {

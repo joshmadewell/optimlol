@@ -49,7 +49,7 @@ module.exports = function() {
 				}
 			})
 			.fail(function(error) {
-				_logger.warn("Some failure when setting cache", error);
+				_logger.warn("Some failure when setting summoner cache", error);
 				_getSummonerByNameApi(region, summonerName, deferred);
 			});
 

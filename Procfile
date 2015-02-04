@@ -1,1 +1,1 @@
-web: ./heroku/web
+web: bash ./heroku/web
