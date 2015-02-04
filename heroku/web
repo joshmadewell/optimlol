@@ -1,8 +1,8 @@
 #!/bin/bash
 
 if [ "$ENVIRONMENT" == "OPTIMLOL_UI_HEROKU" ] || [ "$ENVIRONMENT" == "OPTIMLOL_UI_LOCAL" ] ; then
-	gulp build-web
-  	node build/index.js
+    gulp build-web
+    node build/index.js
 else
-  	node optimlol_api/server.js
+    node optimlol_api/server.js
 fi

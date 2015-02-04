@@ -28,11 +28,22 @@ define(['durandal/system', 'durandal/app', 'durandal/viewLocator'],  function (s
 
         ko.bindingHandlers.tooltip = {
             init: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
-                $(element).attr("title", valueAccessor);
+                var tooltipConfig = valueAccessor();
+
+                if (typeof(tooltipConfig) === 'object') {
+                    if (tooltipConfig.position) {
+                        $(element).attr("data-placement", tooltipConfig.position);
+                    }
+
+                    if (tooltipConfig.text) {
+                        $(element).attr("title", tooltipConfig.text)
+                    }
+                } else {
+                    $(element).attr("title", valueAccessor);
+                }
+
                 $(element).attr("data-container", 'body');
-                $(element).tooltip({
-                    containter: 'body'
-                });
+                $(element).tooltip();
             }
         };
 
