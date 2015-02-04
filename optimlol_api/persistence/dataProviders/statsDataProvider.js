@@ -36,6 +36,9 @@ module.exports = function() {
 	};
 
 	var _getStatsApi = function(region, summonerId, deferred) {
+		if (deferred === undefined) {
+			deferred = q.defer();
+		}
 		var statsPath = region + "/" + _apiVersion + "/stats/by-summoner/" + summonerId + "/ranked";
 		_riotApi.makeRequest(region, statsPath)
 			.then(function(statsResult) {
@@ -51,6 +54,7 @@ module.exports = function() {
 			.fail(function(error) {
 				deferred.reject(error);
 			});
+		return deferred.promise;
 	};
 
 	self.getRankedStats = function(region, summonerId) {
@@ -59,9 +63,21 @@ module.exports = function() {
 			.then(function(cacheStatsResult) {
 				if (cacheStatsResult.isExpired === false) {
 					_logger.debug("Using cached stats.");
+					var statsResult = _prepareStats(cacheStatsResult);
+					statsResult.data.quality = "fresh"
 					deferred.resolve(_prepareStats(cacheStatsResult));
 				} else {
-					_getStatsApi(region, summonerId, deferred);
+					_getStatsApi(region, summonerId)
+						.then(function(statsResult) {
+							statsResult.data.quality = "fresh";
+							deferred.resolve(statsResult);
+						})
+						.fail(function(RiotFailure){
+							_logger.debug("Using cached stats. Because Riot is down");
+							var statsResult = _prepareStats(cacheStatsResult);
+							statsResult.data.quality = "stale"
+							deferred.resolve(statsResult);
+						});
 				}
 			})
 			.fail(function(cacheResult) {

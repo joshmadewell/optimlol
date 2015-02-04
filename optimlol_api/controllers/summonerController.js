@@ -53,7 +53,7 @@ module.exports = function() {
 		var role = matchData.role;
 		if (role === "BOTTOM") {
 			role = champion.tags.indexOf("Marksman") === -1 ? "SUPPORT" : "MARKSMAN";
-		} 
+		}
 
 		recentStats[role].total++;
 		if (matchData.winner) {
@@ -148,7 +148,12 @@ module.exports = function() {
 				var championStats = results[promiseObject.STATS_INDEX].state === 'fulfilled' ? results[promiseObject.STATS_INDEX].value : null;
 				var recentHistoryStats = results[promiseObject.RECENT_STATS_INDEX].state === 'fulfilled' ? results[promiseObject.RECENT_STATS_INDEX].value : null;
 				var champions = results[promiseObject.CHAMPIONS_INDEX].state === 'fulfilled' ? results[promiseObject.CHAMPIONS_INDEX].value : null;
-				
+
+				summoner.dataQuality = "fresh";
+				if(championStats.quality === "stale" || recentHistoryStats.quality === "stale" || champions.quality === "stale") {
+					summoner.dataQuality = "stale";
+				}
+
 				summoner.championStats = null;
 				summoner.recentHistory = null;
 
@@ -175,12 +180,12 @@ module.exports = function() {
 
 				if (recentHistoryStats) {
 					var recentChampionsArray = [];
-					var laneStats = { 
-						MARKSMAN: {wins: 0, losses: 0, total: 0}, 
-						SUPPORT: {wins: 0, losses: 0, total: 0}, 
-						MIDDLE: {wins: 0, losses: 0, total: 0}, 
-						TOP: {wins: 0, losses: 0, total: 0}, 
-						JUNGLE: {wins: 0, losses: 0, total: 0} 
+					var laneStats = {
+						MARKSMAN: {wins: 0, losses: 0, total: 0},
+						SUPPORT: {wins: 0, losses: 0, total: 0},
+						MIDDLE: {wins: 0, losses: 0, total: 0},
+						TOP: {wins: 0, losses: 0, total: 0},
+						JUNGLE: {wins: 0, losses: 0, total: 0}
 					};
 
 					for(var champion in recentHistoryStats.champions) {
