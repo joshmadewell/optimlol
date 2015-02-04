@@ -41,7 +41,7 @@
                     <ul class="champion-list" data-bind="foreach: recentHistory.champions">
                         <!-- ko if: $index() < 5 -->
                         <li class="champion-data">
-                            <div data-bind="css: 'icon-champion-large-' + championKey"/>
+                            <div data-bind="css: 'icon-champion-large-' + championKey, tooltip: championName "/>
                             <div data-bind="text: 'Games: ' + count"/>
                             <div><span class="wins" data-bind="text: wins"/> / <span class="losses" data-bind="text: losses"/></div>
                         </li>
@@ -53,7 +53,7 @@
                     <ul class="champion-list" data-bind="foreach: championStats">
                         <!-- ko if: $index() < 5 -->
                         <li class="champion-data">
-                            <div data-bind="css: 'icon-champion-large-' + championKey"/>
+                            <div data-bind="css: 'icon-champion-large-' + championKey, tooltip: championName "/>
                             <div data-bind="text: 'KDA: ' + kda.toFixed(2)"/>
                             <div><span class="wins" data-bind="text: wins"/> / <span class="losses" data-bind="text: losses"/></div>
                         </li>
