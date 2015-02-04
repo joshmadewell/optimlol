@@ -2,8 +2,9 @@ var q = require('q');
 
 module.exports = function() {
 	var self = this;
-	var _summonerDataProvider = null;
-	var _statsDataProvider = null;
+	var _championStatsFacade = null;
+	var _championDataFacade = null;
+	var _recentMatchStatsFacade = null;
 	var _perfomanceCalculator = require('../common/performanceCalculator');
 
 	var _verifySummoner = function(region, summonerName) {
@@ -38,7 +39,7 @@ module.exports = function() {
 
 	var _getStats = function(region, summonerId) {
 		var deferred = q.defer();
-		_statsDataProvider.getRankedStats(region, summonerId)
+		_championStatsFacade.getRankedStats(region, summonerId)
 			.then(function(championStats) {
 				deferred.resolve(championStats.data);
 			})
@@ -53,7 +54,7 @@ module.exports = function() {
 		var role = matchData.role;
 		if (role === "BOTTOM") {
 			role = champion.tags.indexOf("Marksman") === -1 ? "SUPPORT" : "MARKSMAN";
-		} 
+		}
 
 		recentStats[role].total++;
 		if (matchData.winner) {
@@ -148,7 +149,7 @@ module.exports = function() {
 				var championStats = results[promiseObject.STATS_INDEX].state === 'fulfilled' ? results[promiseObject.STATS_INDEX].value : null;
 				var recentHistoryStats = results[promiseObject.RECENT_STATS_INDEX].state === 'fulfilled' ? results[promiseObject.RECENT_STATS_INDEX].value : null;
 				var champions = results[promiseObject.CHAMPIONS_INDEX].state === 'fulfilled' ? results[promiseObject.CHAMPIONS_INDEX].value : null;
-				
+
 				summoner.championStats = null;
 				summoner.recentHistory = null;
 
@@ -175,12 +176,12 @@ module.exports = function() {
 
 				if (recentHistoryStats) {
 					var recentChampionsArray = [];
-					var laneStats = { 
-						MARKSMAN: {wins: 0, losses: 0, total: 0}, 
-						SUPPORT: {wins: 0, losses: 0, total: 0}, 
-						MIDDLE: {wins: 0, losses: 0, total: 0}, 
-						TOP: {wins: 0, losses: 0, total: 0}, 
-						JUNGLE: {wins: 0, losses: 0, total: 0} 
+					var laneStats = {
+						MARKSMAN: {wins: 0, losses: 0, total: 0},
+						SUPPORT: {wins: 0, losses: 0, total: 0},
+						MIDDLE: {wins: 0, losses: 0, total: 0},
+						TOP: {wins: 0, losses: 0, total: 0},
+						JUNGLE: {wins: 0, losses: 0, total: 0}
 					};
 
 					for(var champion in recentHistoryStats.champions) {
@@ -236,20 +237,16 @@ module.exports = function() {
 	};
 
 	self.init = function() {
-		var SummonerDataProvider = require('../persistence/dataProviders/summonerDataProvider');
-		_summonerDataProvider = new SummonerDataProvider();
-		_summonerDataProvider.init();
+		var ChampionStatsFacadeConstructor = require('../facades/championStatsFacade');
+		_championStatsFacade = new ChampionStatsFacadeConstructor();
+		_championStatsFacade.init();
 
-		var StatsDataProvider = require('../persistence/dataProviders/statsDataProvider');
-		_statsDataProvider = new StatsDataProvider();
-		_statsDataProvider.init();
+		var RecentMatchStatsFacadeConstructor = require('../facades/recentMatchStatsFacade');
+		_recentMatchStatsFacade = new RecentMatchStatsFacadeConstructor();
+		_recentMatchStatsFacade.init();
 
-		var StaticDataProvider = require('../persistence/dataProviders/staticDataProvider');
-		_staticDataProvider = new StaticDataProvider();
-		_staticDataProvider.init();
-
-		var MatchHistoryDataProvider = require('../persistence/dataProviders/matchHistoryDataProvider');
-		_matchHistoryDataProvider = new MatchHistoryDataProvider();
-		_matchHistoryDataProvider.init();
+		var ChampionDataFacadeConstructor = require('../facades/championDataFacade');
+		_championDataFacade = new ChampionDataFacadeConstructor();
+		_championDataFacade.init();
 	}
 };

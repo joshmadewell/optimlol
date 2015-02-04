@@ -11,7 +11,7 @@ mongo.init();
 var config = require('./config');
 
 var expressRouter = express.Router();
-var SummonerRoutes = require('./routes/summonerRoutes');
+var SummonerRoutes = require('./endpoints/routes/summonerRoutes');
 var summonerRoutes = new SummonerRoutes(expressRouter);
 summonerRoutes.init();
 
