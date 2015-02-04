@@ -1,18 +1,18 @@
 ﻿<div>
-    <div class="search"> 
+    <div class="search">
         <h2>Welcome to OptimLoL</h2>
         <div>Enter the Summoner Names of everyone in champion select:</div>
 
         <div class="search-container">
             <div class="summoner-inputs" data-bind="foreach: summonerInputs">
                 <span class="summoner-input">
-                    <input class='form-control' data-bind="value: summonerName, 
+                    <input class='form-control' data-bind="value: summonerName,
                                                             attr: {
                                                                 placeholder: placeholder
-                                                            }, 
+                                                            },
                                                             css : {
-                                                                'summoner-input-valid': status() === 'valid', 
-                                                                'summoner-input-invalid': status() === 'invalid', 
+                                                                'summoner-input-valid': status() === 'valid',
+                                                                'summoner-input-invalid': status() === 'invalid',
                                                                 'summoner-input': status() === 'unset'
                                                             }" maxlength="16">
                     <i data-bind="visible: status() === 'validating'" class="fa fa-spinner fa-spin"></i>
@@ -20,7 +20,7 @@
             </div>
             <button class="btn btn-default clear-inputs" type="submit" data-bind="click: clearSummonerInputs">Clear</button>
         </div>
-        
+
         <!-- ko if: validSummoners().length > 0 -->
         <table class="summoner-table">
             <thead>
@@ -32,7 +32,7 @@
                 <th class="img-link">op.gg</th>
             </thead>
             <tbody class="summoner-info" data-bind="foreach: validSummoners">
-                <td data-bind="css: laneTag.toLowerCase(), foreach: laneTag, tooltip: tooltipText">
+                <td data-bind="css: laneTag.toLowerCase(), foreach: laneTag, tooltip: { text: tooltipText, position: 'left' }">
                     <span data-bind="text: $rawData[0]"/><br>
                 </td>
                 <td data-bind="text: displayName"></td>
@@ -41,7 +41,7 @@
                     <ul class="champion-list" data-bind="foreach: recentHistory.champions">
                         <!-- ko if: $index() < 5 -->
                         <li class="champion-data">
-                            <div data-bind="css: 'icon-champion-large-' + championKey"/>
+                            <div data-bind="css: 'icon-champion-large-' + championKey, tooltip: championName "/>
                             <div data-bind="text: 'Games: ' + count"/>
                             <div><span class="wins" data-bind="text: wins"/> / <span class="losses" data-bind="text: losses"/></div>
                         </li>
@@ -53,7 +53,7 @@
                     <ul class="champion-list" data-bind="foreach: championStats">
                         <!-- ko if: $index() < 5 -->
                         <li class="champion-data">
-                            <div data-bind="css: 'icon-champion-large-' + championKey"/>
+                            <div data-bind="css: 'icon-champion-large-' + championKey, tooltip: championName "/>
                             <div data-bind="text: 'KDA: ' + kda.toFixed(2)"/>
                             <div><span class="wins" data-bind="text: wins"/> / <span class="losses" data-bind="text: losses"/></div>
                         </li>
