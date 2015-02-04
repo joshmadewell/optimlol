@@ -1,10 +1,10 @@
-﻿define(['durandal/system', 
+﻿define(['durandal/system',
 	'knockout',
 	'durandal/app',
 	'jquery',
 	'dataProviders/summonersDataProvider',
 	'presentationObjects/summonerPresentationObject',
-	'common/sort'], 
+	'common/sort'],
 	function (durandal, ko, app, $, SummonersDataProvider, SummonerPresentationObject, sorter) {
 	return function() {
 		var self = this;
@@ -153,7 +153,7 @@
 				}
 
 				if (laneTag !== "") {
-					summoner.tooltipText = summoner.displayName + " has played " + laneTag + " " + highestCount + " in the last 30 games.";
+					summoner.tooltipText = summoner.displayName + " has played " + laneTag + " " + highestCount + " of the last 30 games.";
 				}
 				summoner.laneTag = laneTag;
 			});
@@ -178,7 +178,7 @@
 						var playerName = line.split(delimeter)[0];
 						if (potentialSummoners.indexOf(playerName) === -1 && alreadyEnteredSummoners.indexOf(playerName) === -1) {
 							potentialSummoners.push(playerName);
-						} 
+						}
 					}
 				});
 			});
