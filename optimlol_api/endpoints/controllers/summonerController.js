@@ -5,7 +5,7 @@ module.exports = function() {
 	var _championStatsFacade = null;
 	var _championDataFacade = null;
 	var _recentMatchStatsFacade = null;
-	var _perfomanceCalculator = require('../common/performanceCalculator');
+	var _perfomanceCalculator = require('../../common/performanceCalculator');
 
 	var _verifySummoner = function(region, summonerName) {
 		var deferred = q.defer();
@@ -37,18 +37,18 @@ module.exports = function() {
 		return deferred.promise;
 	};
 
-	var _getStats = function(region, summonerId) {
-		var deferred = q.defer();
-		_championStatsFacade.getRankedStats(region, summonerId)
-			.then(function(championStats) {
-				deferred.resolve(championStats.data);
-			})
-			.fail(function(error) {
-				deferred.reject(error);
-			});
+	// var _getStats = function(region, summonerId) {
+	// 	var deferred = q.defer();
+	// 	_championStatsFacade.getRankedStats(region, summonerId)
+	// 		.then(function(championStats) {
+	// 			deferred.resolve(championStats.data);
+	// 		})
+	// 		.fail(function(error) {
+	// 			deferred.reject(error);
+	// 		});
 
-		return deferred.promise;
-	};
+	// 	return deferred.promise;
+	// };
 
 	var _incrementLaneStats = function(recentStats, matchData, champion) {
 		var role = matchData.role;
@@ -66,70 +66,70 @@ module.exports = function() {
 		recentStats[role].performance = _perfomanceCalculator.calculate(recentStats[role].wins, recentStats[role].losses, {confidence: 1.00});
 	};
 
-	var _getRecentStats = function(region, summonerId, type) {
-		var deferred = q.defer();
-		_matchHistoryDataProvider.getMatchHistory(region, summonerId, type)
-			.then(function(matchHistory) {
-				var recentStats = {
-					champions: {},
-					matches: []
-				};
-				if (matchHistory.success && matchHistory.data) {
-					matchHistory.data.matches.forEach(function(match) {
-						var participants = match.participants[0];
-						if (recentStats.champions[participants.championId] === undefined) {
-							recentStats.champions[participants.championId] = {};
-							recentStats.champions[participants.championId].lanes = [participants.timeline.lane]
-							recentStats.champions[participants.championId].count = 1;
-							recentStats.champions[participants.championId].kills = participants.stats.kills;
-							recentStats.champions[participants.championId].deaths = participants.stats.deaths;
-							recentStats.champions[participants.championId].assists = participants.stats.assists;
-							if (participants.stats.winner) {
-								recentStats.champions[participants.championId].wins = 1;
-								recentStats.champions[participants.championId].losses = 0;
-							} else {
-								recentStats.champions[participants.championId].wins = 0;
-								recentStats.champions[participants.championId].losses = 1;
-							}
+	// var _getRecentStats = function(region, summonerId, type) {
+	// 	var deferred = q.defer();
+	// 	_matchHistoryDataProvider.getMatchHistory(region, summonerId, type)
+	// 		.then(function(matchHistory) {
+	// 			var recentStats = {
+	// 				champions: {},
+	// 				matches: []
+	// 			};
+	// 			if (matchHistory.success && matchHistory.data) {
+	// 				matchHistory.data.matches.forEach(function(match) {
+	// 					var participants = match.participants[0];
+	// 					if (recentStats.champions[participants.championId] === undefined) {
+	// 						recentStats.champions[participants.championId] = {};
+	// 						recentStats.champions[participants.championId].lanes = [participants.timeline.lane]
+	// 						recentStats.champions[participants.championId].count = 1;
+	// 						recentStats.champions[participants.championId].kills = participants.stats.kills;
+	// 						recentStats.champions[participants.championId].deaths = participants.stats.deaths;
+	// 						recentStats.champions[participants.championId].assists = participants.stats.assists;
+	// 						if (participants.stats.winner) {
+	// 							recentStats.champions[participants.championId].wins = 1;
+	// 							recentStats.champions[participants.championId].losses = 0;
+	// 						} else {
+	// 							recentStats.champions[participants.championId].wins = 0;
+	// 							recentStats.champions[participants.championId].losses = 1;
+	// 						}
 
-						} else {
-							recentStats.champions[participants.championId].count++;
-							recentStats.champions[participants.championId].kills += participants.stats.kills;
-							recentStats.champions[participants.championId].deaths += participants.stats.deaths;
-							recentStats.champions[participants.championId].assists += participants.stats.assists;
-							if (participants.stats.winner) {
-								recentStats.champions[participants.championId].wins++;
-							} else {
-								recentStats.champions[participants.championId].losses++;
-							}
+	// 					} else {
+	// 						recentStats.champions[participants.championId].count++;
+	// 						recentStats.champions[participants.championId].kills += participants.stats.kills;
+	// 						recentStats.champions[participants.championId].deaths += participants.stats.deaths;
+	// 						recentStats.champions[participants.championId].assists += participants.stats.assists;
+	// 						if (participants.stats.winner) {
+	// 							recentStats.champions[participants.championId].wins++;
+	// 						} else {
+	// 							recentStats.champions[participants.championId].losses++;
+	// 						}
 
-							if (recentStats.champions[participants.championId].lanes.indexOf(participants.timeline.lane) === -1) {
-								recentStats.champions[participants.championId].lanes.push(participants.timeline.lane);
-							}
-						}
-						var optimlolMatchHistoryObject = {};
-						optimlolMatchHistoryObject.matchCreation = match.matchCreation;
-						optimlolMatchHistoryObject.role = participants.timeline.lane;
-						optimlolMatchHistoryObject.championId = participants.championId;
-						optimlolMatchHistoryObject.winner = participants.stats.winner;
-						optimlolMatchHistoryObject.kills = participants.stats.kills;
-						optimlolMatchHistoryObject.deaths =participants.stats.deaths;
-						optimlolMatchHistoryObject.assists = participants.stats.assists;
-						optimlolMatchHistoryObject.champLevel = participants.stats.champLevel;
-						recentStats.matches.push(optimlolMatchHistoryObject);
-					});
+	// 						if (recentStats.champions[participants.championId].lanes.indexOf(participants.timeline.lane) === -1) {
+	// 							recentStats.champions[participants.championId].lanes.push(participants.timeline.lane);
+	// 						}
+	// 					}
+	// 					var optimlolMatchHistoryObject = {};
+	// 					optimlolMatchHistoryObject.matchCreation = match.matchCreation;
+	// 					optimlolMatchHistoryObject.role = participants.timeline.lane;
+	// 					optimlolMatchHistoryObject.championId = participants.championId;
+	// 					optimlolMatchHistoryObject.winner = participants.stats.winner;
+	// 					optimlolMatchHistoryObject.kills = participants.stats.kills;
+	// 					optimlolMatchHistoryObject.deaths =participants.stats.deaths;
+	// 					optimlolMatchHistoryObject.assists = participants.stats.assists;
+	// 					optimlolMatchHistoryObject.champLevel = participants.stats.champLevel;
+	// 					recentStats.matches.push(optimlolMatchHistoryObject);
+	// 				});
 
-					deferred.resolve(recentStats);
-				} else {
-					deferred.resolve(null);
-				}
-			})
-			.fail(function(error) {
-				deferred.resolve(null);
-			});
+	// 				deferred.resolve(recentStats);
+	// 			} else {
+	// 				deferred.resolve(null);
+	// 			}
+	// 		})
+	// 		.fail(function(error) {
+	// 			deferred.resolve(null);
+	// 		});
 
-		return deferred.promise;
-	};
+	// 	return deferred.promise;
+	// };
 
 	var _generatePerformanceData = function(region, summoner) {
 		var promiseObject = {
@@ -137,15 +137,16 @@ module.exports = function() {
 			RECENT_STATS_INDEX: 1,
 			CHAMPIONS_INDEX: 2,
 			PRMOMISES: [
-				_getStats(region, summoner.id),
-				_getRecentStats(region, summoner.id, "SOLO"),
-				_staticDataProvider.getStaticData(region, 'champions')
+				_championStatsFacade.getRankedStats(region, summoner.id),
+				_recentMatchStatsFacade.getRecentStats(region, summoner.id, "SOLO"),
+				_championDataFacade.getChampionData(region)
 			]
 		};
 
 		var deferred = q.defer();
 		q.allSettled(promiseObject.PRMOMISES)
 			.then(function(results) {
+				console.log(results);
 				var championStats = results[promiseObject.STATS_INDEX].state === 'fulfilled' ? results[promiseObject.STATS_INDEX].value : null;
 				var recentHistoryStats = results[promiseObject.RECENT_STATS_INDEX].state === 'fulfilled' ? results[promiseObject.RECENT_STATS_INDEX].value : null;
 				var champions = results[promiseObject.CHAMPIONS_INDEX].state === 'fulfilled' ? results[promiseObject.CHAMPIONS_INDEX].value : null;
