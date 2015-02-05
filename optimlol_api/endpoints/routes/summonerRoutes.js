@@ -31,8 +31,8 @@ module.exports = function(router) {
 	});
 
 	self.init = function(router) {
-		var SummonerController = require('../controllers/summonerController');
-		_summonerController = new SummonerController();
+		var SummonerControllerConstructor = require('../controllers/summonerController');
+		_summonerController = new SummonerControllerConstructor();
 		_summonerController.init();
 	}
 }

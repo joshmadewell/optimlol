@@ -97,14 +97,14 @@ module.exports = function() {
 		var config = require('../../config');
 		_apiVersion = config.riot_api.versions.matchHistory;
 
-		var MongoCache = require('../../common/mongoCache');
-		_mongoCache = new MongoCache();
+		var MongoCacheConstructor = require('../../common/mongoCache');
+		_mongoCache = new MongoCacheConstructor();
 
-		var Logger = require('../../common/logger');
-		_logger = new Logger();
+		var LoggerConstructor = require('../../common/logger');
+		_logger = new LoggerConstructor();
 
-		var RiotApi = require('../../common/riotApi');
-		_riotApi = new RiotApi();
+		var RiotApiConstructor = require('../../common/riotApi');
+		_riotApi = new RiotApiConstructor();
 		_riotApi.init();
 	}
 };

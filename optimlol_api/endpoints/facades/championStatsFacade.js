@@ -33,11 +33,10 @@ var _getRankedStats = function(region, summonerId) {
     var deferred = q.defer();
     _statsDataProvider.getRankedStats(region, summonerId)
         .then(function(stats) {
-            console.log("stats!!!", stats);
             deferred.resolve(_prepareStats(stats));
         })
         .fail(function(error) {
-            _logger.warn("Got an error while getting stats", error);
+            _logger.warn("Some error while getting stats", error);
             deferred.reject(error);
         })
 
@@ -48,8 +47,8 @@ var _init = function() {
     var Logger = require('../../common/logger');
     _logger = new Logger();
 
-    var StatsDataProvider = require('../../persistence/dataProviders/statsDataProvider');
-    _statsDataProvider = new StatsDataProvider();
+    var StatsDataProviderConstructor = require('../../persistence/dataProviders/statsDataProvider');
+    _statsDataProvider = new StatsDataProviderConstructor();
     _statsDataProvider.init();
 };
 

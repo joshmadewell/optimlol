@@ -15,8 +15,8 @@ var _getChampionData = function(region) {
 }
 
 var _init = function() {
-	var StaticDataProvider = require('../../persistence/dataProviders/staticDataProvider');
-	_staticDataProvider = new StaticDataProvider();
+	var StaticDataProviderConstructor = require('../../persistence/dataProviders/staticDataProvider');
+	_staticDataProvider = new StaticDataProviderConstructor();
 	_staticDataProvider.init();
 }
 

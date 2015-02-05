@@ -98,7 +98,7 @@
 		};
 
 		var _onSummonerStatusUpdated = function(data) {
-			if (data === STATUS.VALID) {
+			if (data !== STATUS.VALIDATING) {
 				self.validSummoners.removeAll();
 
 				var _sortingComparator = function(a, b) {

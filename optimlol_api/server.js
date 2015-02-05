@@ -11,8 +11,8 @@ mongo.init();
 var config = require('./config');
 
 var expressRouter = express.Router();
-var SummonerRoutes = require('./endpoints/routes/summonerRoutes');
-var summonerRoutes = new SummonerRoutes(expressRouter);
+var SummonerRoutesConstructor = require('./endpoints/routes/summonerRoutes');
+var summonerRoutes = new SummonerRoutesConstructor(expressRouter);
 summonerRoutes.init();
 
 var crossOriginMiddleware = function(req, res, next) {

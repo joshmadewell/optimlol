@@ -38,17 +38,23 @@ module.exports = function() {
 		var deferred = q.defer();
 		q.allSettled(promiseObject.PRMOMISES)
 			.then(function(results) {
-				console.log(results);
+				// var perfomanceData = { quality: null, data: summoner }
 				var championStats = results[promiseObject.STATS_INDEX].state === 'fulfilled' ? results[promiseObject.STATS_INDEX].value : null;
 				var recentHistoryStats = results[promiseObject.RECENT_STATS_INDEX].state === 'fulfilled' ? results[promiseObject.RECENT_STATS_INDEX].value : null;
 				var champions = results[promiseObject.CHAMPIONS_INDEX].state === 'fulfilled' ? results[promiseObject.CHAMPIONS_INDEX].value : null;
 
+				// check champion stats & recent history stats here
+				// to see if the quality flag is stale or not and set
+				// performanceData.quality accordingly
+				// performanceData.quality = 'idk';
+
+				// shouldn't have to say performanceData.data.championStats because yavascript
 				summoner.championStats = null;
 				summoner.recentHistory = null;
 
-				if (championStats) {
+				if (championStats.data) {
 					var allIndex = null;
-					championStats.champions.forEach(function(championStat, index) {
+					championStats.data.champions.forEach(function(championStat, index) {
 						// we get data back with string id's le sigh....
 						var championIdString = championStat.id.toString();
 						if (championIdString !== "0") {
@@ -61,10 +67,10 @@ module.exports = function() {
 					});
 
 					if (allIndex) {
-						summoner.totalStats = championStats.champions.splice(allIndex, 1)[0];
+						summoner.totalStats = championStats.data.champions.splice(allIndex, 1)[0];
 					}
 
-					summoner.championStats = championStats.champions;
+					summoner.championStats = championStats.data.champions;
 				}
 
 				if (recentHistoryStats) {
@@ -77,19 +83,21 @@ module.exports = function() {
 						JUNGLE: {wins: 0, losses: 0, total: 0}
 					};
 
-					for(var champion in recentHistoryStats.champions) {
-						recentHistoryStats.champions[champion].id = champion;
-						recentHistoryStats.champions[champion].championKey = champions.data.data[champion].key.toLowerCase();
-						recentHistoryStats.champions[champion].championName = champions.data.data[champion].name;
-						recentChampionsArray.push(recentHistoryStats.champions[champion]);
+					var recentChamps = recentHistoryStats.champions;
+					for(var champion in recentChamps) {
+						recentChamps[champion].id = champion;
+						recentChamps[champion].championKey = champions.data.data[champion].key.toLowerCase();
+						recentChamps[champion].championName = champions.data.data[champion].name;
+						recentChampionsArray.push(recentChamps[champion]);
 					}
 
-					recentHistoryStats.matches.forEach(function(recentGameStat) {
-						var championIdString = recentGameStat.championId.toString();
-						recentGameStat.championKey = champions.data.data[championIdString].key.toLowerCase();
-						recentGameStat.championName = champions.data.data[championIdString].name;
+					var recentMatches = recentHistoryStats.matches;
+					recentMatches.forEach(function(recentMatchStats) {
+						var championIdString = recentMatchStats.championId.toString();
+						recentMatchStats.championKey = champions.data.data[championIdString].key.toLowerCase();
+						recentMatchStats.championName = champions.data.data[championIdString].name;
 
-						_incrementLaneStats(laneStats, recentGameStat, champions.data.data[championIdString]);
+						_incrementLaneStats(laneStats, recentMatchStats, champions.data.data[championIdString]);
 					});
 
 					recentHistoryStats.champions = recentChampionsArray;

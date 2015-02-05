@@ -70,8 +70,8 @@ var _getRecentStats = function(region, summonerId, type) {
 };
 
 var _init = function() {
-	var MatchHistoryDataProvider = require('../../persistence/dataProviders/matchHistoryDataProvider');
-    _matchHistoryDataProvider = new MatchHistoryDataProvider();
+	var MatchHistoryDataProviderConstructor = require('../../persistence/dataProviders/matchHistoryDataProvider');
+    _matchHistoryDataProvider = new MatchHistoryDataProviderConstructor();
     _matchHistoryDataProvider.init();
 };
 

@@ -7,7 +7,6 @@ var _verifySummoner = function(region, summonerName) {
 
 	_summonerDataProvider.getSummonerByName(region, summonerName)
 		.then(function(summonerResult) {
-			console.log(summonerResult);
 			var summonersArray = [];
 			var expectedResultFromRiot = summonerName.replace(/ /g, '').toLowerCase();
 
@@ -27,7 +26,6 @@ var _verifySummoner = function(region, summonerName) {
 					}
 				}
 
-				console.log(summonerVerificationObject);
 				deferred.resolve(summonerVerificationObject);
 			}
 		})
@@ -39,8 +37,8 @@ var _verifySummoner = function(region, summonerName) {
 }
 
 var _init = function() {
-	var SummonerDataProvider = require('../../persistence/dataProviders/summonerDataProvider');
-	_summonerDataProvider = new SummonerDataProvider();
+	var SummonerDataProviderConstructor = require('../../persistence/dataProviders/summonerDataProvider');
+	_summonerDataProvider = new SummonerDataProviderConstructor();
 	_summonerDataProvider.init();
 }
 
