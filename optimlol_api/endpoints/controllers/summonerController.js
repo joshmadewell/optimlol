@@ -7,35 +7,35 @@ module.exports = function() {
 	var _recentMatchStatsFacade = null;
 	var _perfomanceCalculator = require('../../common/performanceCalculator');
 
-	var _verifySummoner = function(region, summonerName) {
-		var deferred = q.defer();
-		_summonerDataProvider.getSummonerByName(region, summonerName)
-			.then(function(summonerResult) {
-				var resolvedObject = {
-					verified: false,
-					summoner: {}
-				}
+	// var _verifySummoner = function(region, summonerName) {
+	// 	var deferred = q.defer();
+	// 	_summonerFacade.verifySummoner(region, summonerName)
+	// 		.then(function(summonerResult) {
+	// 			var resolvedObject = {
+	// 				verified: false,
+	// 				summoner: {}
+	// 			}
 
-				if (summonerResult.length === 0) {
-					deferred.resolve(resolvedObject);
-				} else {
-					var summonerExists = false;
-					for(var x = 0; x < summonerResult.length; x++) {
-						if (summonerResult[x].queriedName === summonerName.replace(/ /g, '').toLowerCase()) {
-							resolvedObject.verified = true;
-							resolvedObject.summoner = summonerResult[x];
-						}
-					}
+	// 			if (summonerResult.length === 0) {
+	// 				deferred.resolve(resolvedObject);
+	// 			} else {
+	// 				var summonerExists = false;
+	// 				for(var x = 0; x < summonerResult.length; x++) {
+	// 					if (summonerResult[x].queriedName === summonerName.replace(/ /g, '').toLowerCase()) {
+	// 						resolvedObject.verified = true;
+	// 						resolvedObject.summoner = summonerResult[x];
+	// 					}
+	// 				}
 
-					deferred.resolve(resolvedObject);
-				}
-			})
-			.fail(function(error) {
-				deferred.reject(resolvedObject);
-			});
+	// 				deferred.resolve(resolvedObject);
+	// 			}
+	// 		})
+	// 		.fail(function(error) {
+	// 			deferred.reject(resolvedObject);
+	// 		});
 
-		return deferred.promise;
-	};
+	// 	return deferred.promise;
+	// };
 
 	// var _getStats = function(region, summonerId) {
 	// 	var deferred = q.defer();
@@ -216,7 +216,7 @@ module.exports = function() {
 
 	self.generateSummonerData = function(region, summonerName) {
 		var deferred = q.defer();
-		_verifySummoner(region, summonerName)
+		_summonerFacade.verifySummoner(region, summonerName)
 			.then(function(verifiedSummoner) {
 				if (verifiedSummoner.verified) {
 					_generatePerformanceData(region, verifiedSummoner.summoner)
@@ -238,6 +238,10 @@ module.exports = function() {
 	};
 
 	self.init = function() {
+		var SummonerFacadeConstuctor = require('../facades/summonerFacade');
+		_summonerFacade = new SummonerFacadeConstuctor();
+		_summonerFacade.init();
+
 		var ChampionStatsFacadeConstructor = require('../facades/championStatsFacade');
 		_championStatsFacade = new ChampionStatsFacadeConstructor();
 		_championStatsFacade.init();

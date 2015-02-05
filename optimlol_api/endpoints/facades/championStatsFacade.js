@@ -38,7 +38,7 @@ var _getRankedStats = function(region, summonerId) {
             _logger.warn("Got an error while getting stats", Error);
         })
 
-    return deferred;
+    return deferred.promise;
 };
 
 var _init = function() {

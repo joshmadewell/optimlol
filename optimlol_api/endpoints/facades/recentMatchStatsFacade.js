@@ -30,8 +30,7 @@ var _prepareStats = function(matchHistory) {
 			if (participants.stats.winner) {
 				recentStats.champions[participants.championId].wins++;
 			} else {
-				recentStats.c
-				hampions[participants.championId].losses++;
+				recentStats.champions[participants.championId].losses++;
 			}
 
 			if (recentStats.champions[participants.championId].lanes.indexOf(participants.timeline.lane) === -1) {

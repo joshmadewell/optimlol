@@ -8,27 +8,17 @@ module.exports = function() {
 	var _apiVersion = null;
 	var _riotApi = null;
 
-	var _prepareSummoner =function(summoner) {
-		var preparedSummoner = [];
-		for(var property in summoner.data) {
-			summoner.data[property].queriedName = property;
-			preparedSummoner.push(summoner.data[property]);
-		}
-
-		return preparedSummoner;
-	}
-
 	var _getSummonerByNameApi = function(region, summonerName, deferred) {
 		var championsPath = region + "/" + _apiVersion + "/summoner/by-name/" + summonerName;
 		_riotApi.makeRequest(region, championsPath)
 			.then(function(summonerResult) {
 				_mongoCache.set('summoners', {region: region, summonerName: summonerName}, summonerResult)
 					.then(function() {
-						deferred.resolve(_prepareSummoner(summonerResult));
+						deferred.resolve(summonerResult);
 					})
 					.fail(function() {
 						// if setting cache fails, don't worry, move on.
-						deferred.resolve(_prepareSummoner(summonerResult));
+						deferred.resolve(summonerResult);
 					});
 			})
 			.fail(function(error) {
@@ -42,8 +32,8 @@ module.exports = function() {
 		_mongoCache.get('summoners', {region: region, summonerName: summonerName})
 			.then(function(cacheSummonerResult) {
 				if(cacheSummonerResult.isExpired === false) {
-					_logger.debug("Using cached summoner.");
-					deferred.resolve(_prepareSummoner(cacheSummonerResult));
+					_logger.debug("Using cached summoner.", cacheSummonerResult);
+					deferred.resolve(cacheSummonerResult);
 				} else {
 					_getSummonerByNameApi(region, summonerName, deferred);
 				}
