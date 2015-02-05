@@ -1,5 +1,6 @@
 var q = require('q');
 var _statsDataProvider = null;
+var _performanceCalculator = require('../../common/performanceCalculator');
 
 var _prepareStats = function(stats) {
     if (stats.data) {
@@ -32,10 +33,12 @@ var _getRankedStats = function(region, summonerId) {
     var deferred = q.defer();
     _statsDataProvider.getRankedStats(region, summonerId)
         .then(function(stats) {
+            console.log("stats!!!", stats);
             deferred.resolve(_prepareStats(stats));
         })
         .fail(function(error) {
-            _logger.warn("Got an error while getting stats", Error);
+            _logger.warn("Got an error while getting stats", error);
+            deferred.reject(error);
         })
 
     return deferred.promise;

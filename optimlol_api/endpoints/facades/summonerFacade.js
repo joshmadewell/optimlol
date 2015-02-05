@@ -1,25 +1,11 @@
 var q = require('q')
 var _summonerDataProvider = null;
 
-var _getSummoner = function(region, summonerName) {
-	var deferred = q.defer();
-	_summonerDataProvider.getSummonerByName(region, summonerName)
-		.then(function(summonerResult) {
-			console.log("_getSummoner");
-			deferred.resolve(summonerResult);
-		})
-		.fail(function(error) {
-			deferred.reject(error);
-		});
-
-	return deferred.promise;
-};
-
 var _verifySummoner = function(region, summonerName) {
 	var deferred = q.defer();
 	var summonerVerificationObject = { verified: false, summoner: {} };
 
-	_getSummoner(region, summonerName)
+	_summonerDataProvider.getSummonerByName(region, summonerName)
 		.then(function(summonerResult) {
 			console.log(summonerResult);
 			var summonersArray = [];
