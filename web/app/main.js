@@ -14,7 +14,7 @@ define('jquery', function() { return jQuery });
 define(['durandal/system', 'durandal/app', 'durandal/viewLocator', 'configuration/knockoutConfiguration'],  function (system, app, viewLocator, knockoutConfiguration) {
     system.debug(false);
 
-    app.title = 'OptimLol | Champion Selection Optimization';
+    app.title = 'OptimLoL | Champion Selection Optimization';
 
     app.configurePlugins({
         router:true,
