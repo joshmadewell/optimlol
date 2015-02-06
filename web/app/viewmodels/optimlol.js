@@ -9,8 +9,8 @@
 	return function() {
 		var self = this;
 		var NUMBER_OF_SUMMONERS = 5;
-		var LOL_KING_URL = "http://www.lolking.net/summoner/na/summoner_id";
-		var NA_OP_GG_URL = "http://na.op.gg/summoner/userName=summoner_name";
+		var LOL_KING_URL = "http://www.lolking.net/summoner/{{region}}/{{summoner_id}}";
+		var NA_OP_GG_URL = "http://{{region}}.op.gg/summoner/userName={{summoner_name}}";
 		var STATUS = {
 			UNSET: "unset",
 			VALID: "valid",
@@ -72,14 +72,17 @@
 		};
 
 		var _onSummonerIdUpdated = function(summonerId) {
+			var region = self.selectedRegion();
+			var summonerName = this.summonerName();
+
 			var summoner = this;
 			if (summonerId === "" || summonerId === null || summonerId === undefined) {
 				summoner.lolKingUrl("");
 				summoner.naOpGgUrl("");
 				return;
 			} else {
-				summoner.lolKingUrl(LOL_KING_URL.replace('summoner_id', summonerId));
-				summoner.naOpGgUrl(NA_OP_GG_URL.replace('summoner_name', this.summonerName()));
+				summoner.lolKingUrl(LOL_KING_URL.replace('{{summoner_id}}', summonerId).replace('{{region}}', region));
+				summoner.naOpGgUrl(NA_OP_GG_URL.replace('{{summoner_name}}', summonerName).replace('{{region}}', region));
 			}
 		};
 

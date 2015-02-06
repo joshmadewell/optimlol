@@ -12,11 +12,12 @@
 
             .summoner-input {
                 margin-right: 5px;
-            }
-            i {
-                position: absolute;
-                margin-top: -24px;
-                margin-left: 78px;
+            
+                i {
+                    margin-top: -24px;
+                    margin-right: 6px;
+                    float: right;
+                }
             }
 
             .summoner-input-valid {

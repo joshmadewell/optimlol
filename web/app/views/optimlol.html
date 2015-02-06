@@ -5,7 +5,7 @@
 
         <div class="search-container">
             <div class="summoner-inputs" data-bind="foreach: summonerInputs">
-                <span class="summoner-input">
+                <div class="summoner-input">
                     <input class='form-control' data-bind="value: summonerName,
                                                             attr: {
                                                                 placeholder: placeholder
@@ -16,7 +16,7 @@
                                                                 'summoner-input': status() === 'unset'
                                                             }" maxlength="16">
                     <i data-bind="visible: status() === 'validating'" class="fa fa-spinner fa-spin"></i>
-                </span>
+                </div>
             </div>
             <button class="btn btn-default clear-inputs" type="submit" data-bind="click: clearSummonerInputs">Clear</button>
         </div>
