@@ -10,8 +10,36 @@
                 key: "na"
             },
             {
-                region: "EU West",
+                region: "Europe West",
                 key: "euw"
+            },
+            {
+                region: "Europe Nordic & East",
+                key: "eune"
+            },
+            {
+                region: "Brazil",
+                key: "br"
+            },
+            {
+                region: "Turkey",
+                key: "tr"
+            },
+            {
+                region: "Russia",
+                key: "ru"
+            },
+            {
+                region: "Latin America North",
+                key: "lan"
+            },
+            {
+                region: "Latin America South",
+                key: "las"
+            },
+            {
+                region: "Oceana",
+                key: "oce"
             }
         ];
 

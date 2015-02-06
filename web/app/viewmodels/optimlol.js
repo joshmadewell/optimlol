@@ -224,7 +224,14 @@
 			app.on('regionUpdated')
 				.then(function(region) {
 					self.selectedRegion(region);
-					self.clearSummonerInputs();
+					self.validSummoners.removeAll();
+
+					self.summonerInputs.forEach(function(input) {
+						var summonerName = input.summonerName();
+						if (summonerName !== null || summonerName !== undefined || summonerName !== "") {
+							input.summonerName.valueHasMutated();
+						}
+					});
 				});
 		};
 	}
