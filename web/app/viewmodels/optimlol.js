@@ -4,8 +4,8 @@
 	'jquery',
 	'dataProviders/summonersDataProvider',
 	'presentationObjects/summonerPresentationObject',
-	'common/sort'],
-	function (durandal, ko, app, $, SummonersDataProvider, SummonerPresentationObject, sorter) {
+	'common/collectionSorter'],
+	function (durandal, ko, app, $, SummonersDataProvider, SummonerPresentationObject, collectionSorter) {
 	return function() {
 		var self = this;
 		var NUMBER_OF_SUMMONERS = 5;
@@ -35,13 +35,17 @@
 						if (result.id) {
 							summoner.displayName = result.name;
 							if (result.championStats && result.championStats.length) {
-								sorter.sort(result.championStats, "performance", "descending");
+								collectionSorter.sort(result.championStats, "gamesPlayed", "descending");
 								summoner.championStats = result.championStats;
+
+								var fiveMostPlayed = result.championStats.slice(0, 5);
+								collectionSorter.sort(fiveMostPlayed, "performance", "descending");
+								summoner.bestPerformanceStats = fiveMostPlayed;
 							} else {
 								summoner.championStats = [];
 							}
 							if (result.recentHistory && result.recentHistory.champions) {
-								sorter.sort(result.recentHistory.champions, "count", "descending");
+								collectionSorter.sort(result.recentHistory.champions, "count", "descending");
 							}
 							if (summoner.championStats.length > 0) {
 								summoner.recentHistory = result.recentHistory;

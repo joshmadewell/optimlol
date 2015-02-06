@@ -50,7 +50,7 @@
                 </td>
                 <td class="best-performance">
                     <div class="no-stats" data-bind="visible: championStats.length === 0">No stats for this season.</div>
-                    <ul class="champion-list" data-bind="foreach: championStats">
+                    <ul class="champion-list" data-bind="foreach: bestPerformanceStats">
                         <!-- ko if: $index() < 5 -->
                         <li class="champion-data">
                             <div data-bind="css: 'icon-champion-large-' + championKey, tooltip: championName "/>
