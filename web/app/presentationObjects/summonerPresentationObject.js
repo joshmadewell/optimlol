@@ -12,7 +12,8 @@ define(['knockout'], function (ko) {
 			tooltipText: "",
 			totalStats: {},
 			championStats: [],
-			recentHistory: []
+			recentHistory: [],
+			bestPerformanceStats: []
 		}
 	}
 });
