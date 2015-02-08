@@ -4,8 +4,9 @@
 	'jquery',
 	'dataProviders/summonersDataProvider',
 	'presentationObjects/summonerPresentationObject',
-	'common/collectionSorter'],
-	function (durandal, ko, app, $, SummonersDataProvider, SummonerPresentationObject, collectionSorter) {
+	'common/collectionSorter',
+	'singleton/session'],
+	function (durandal, ko, app, $, SummonersDataProvider, SummonerPresentationObject, collectionSorter, session) {
 	return function() {
 		var self = this;
 		var NUMBER_OF_SUMMONERS = 5;
@@ -202,7 +203,7 @@
 		}
 
 		self.summonerInputs = [];
-		self.selectedRegion = ko.observable("na");
+		self.selectedRegion = ko.observable(session.get('region'));
 		self.validSummoners = ko.observableArray([]);
 		self.chatText = ko.observable("");
 

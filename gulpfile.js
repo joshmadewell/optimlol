@@ -32,7 +32,8 @@ gulp.task('web-app', function(cb) {
 		gulp.src('./web/appDependencies/lib/font-awesome/fonts/*')
 			.pipe(gulp.dest('./build/lib/font-awesome/fonts')),
 
-		gulp.src('./web/appDependencies/lib/jquery/*min*')
+		gulp.src(['./web/appDependencies/lib/jquery/*min*',
+			'./web/appDependencies/lib/jquery/jquery.cookie.js'])
 			.pipe(gulp.dest('./build/lib/jquery')),
 
 		gulp.src('./web/appDependencies/lib/durandal/**/*')

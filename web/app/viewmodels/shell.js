@@ -1,6 +1,6 @@
 ﻿define(['plugins/router', 
-    'durandal/app', 
-    'knockout'], function (router, app, ko) {
+    'durandal/app',
+    'singleton/session'], function (router, app, session) {
     return function() {
         var self = this;
 
@@ -45,11 +45,25 @@
 
         self.selectedRegion = ko.observable();
         self.selectedRegion.subscribe(function(data) {
+            session.set('region', data.key);
             app.trigger('regionUpdated', data.key);
         });
         self.router = router;
 
         self.activate = function() {
+            var storedRegion = session.get('region');
+
+            if (storedRegion) {
+                var regionKeys = self.availableRegions.map(function(availableRegion) {
+                    return availableRegion.key;
+                });
+
+                var regionIndex = regionKeys.indexOf(storedRegion);
+                self.selectedRegion(self.availableRegions[regionIndex]);
+            } else {
+                session.set('region', self.availableRegions[0].key);
+            }
+
             router.map([
                 { route: '', title:'', moduleId: 'viewmodels/optimlol', nav: true, isActive: false },
                 { route: 'support', title:'Support', moduleId: 'viewmodels/support', nav: true }

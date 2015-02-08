@@ -10,6 +10,9 @@
 
 define('knockout', ko);
 define('jquery', function() { return jQuery });
+define('singleton/session', ['common/session'], function(Session) {
+    return new Session();
+});
 
 define(['durandal/system', 'durandal/app', 'durandal/viewLocator', 'configuration/knockoutConfiguration'],  function (system, app, viewLocator, knockoutConfiguration) {
     system.debug(false);
