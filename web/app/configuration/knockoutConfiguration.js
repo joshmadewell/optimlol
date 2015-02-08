@@ -18,6 +18,10 @@ define([], function() {
 
                 $(element).attr("data-container", 'body');
                 $(element).tooltip();
+
+                ko.utils.domNodeDisposal.addDisposeCallback(element, function() {
+                    $(element).tooltip('destroy');
+                });
             }
         };
 	};
