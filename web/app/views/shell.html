@@ -1,23 +1,32 @@
 ﻿<div>
     <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="#">
-                <i class="fa fa-home"></i>
-                <span>OptimLoL</span>
-            </a>
-        </div>
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navigationbar">
+                    <span class="sr-only">Toggle Navigation</span>
+                    <span class="icon-bar"></span>
+                </button>
 
-        <ul class="nav navbar-nav" data-bind="foreach: router.navigationModel">
-            <li class="navigation-item">
-                <a data-bind="attr: { href: hash }, text: title"></a>
-            </li>
-        </ul>
+                <a class="navbar-brand" href="#">
+                    <i class="fa fa-home"></i>
+                    <span>OptimLoL</span>
+                </a>
+            </div>
 
-        <div class="region-selection">
-        	<label>Region: </label>
-        	<select data-bind="options: availableRegions,
-                				   		optionsText: 'region',
-                				   		value: selectedRegion"></select>
+            <div class="collapse navbar-collapse" id="navigationbar">
+                <ul class="nav navbar-nav" data-bind="foreach: router.navigationModel">
+                    <li class="navigation-item">
+                        <a data-bind="attr: { href: hash }, text: title" data-toggle="collapse" data-target="#navigationbar"></a>
+                    </li>
+                </ul>
+
+                 <div class="region-selection">
+                       <label>Region: </label>
+                       <select data-bind="options: availableRegions,
+                                                   optionsText: 'region',
+                                                   value: selectedRegion"></select>
+                </div>
+            </div>
         </div>
     </nav>
 
