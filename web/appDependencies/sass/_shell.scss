@@ -19,7 +19,6 @@ body {
 
 .navbar {
 	.navigation-item {
-		border-bottom: 1px solid $darkgray;
 		text-align: center;
 		&:first-child {
 			display: none;
@@ -36,6 +35,12 @@ and (max-device-width : 480px) {
 		float: none;
 		text-align: center;
 		padding: 6px 0 5px 0;
+	}
+
+	.navbar {
+		.navigation-item {
+			border-bottom: 1px solid $darkgray;
+		}
 	}
 /* Styles */
 }
