@@ -33,9 +33,9 @@
         font-size: 18px;
         margin-top: 10px;
         margin-bottom: 10px;
-        align: center;
         width: 66%;
-        margin-left: 17%;
+        margin-right: auto;
+        margin-left: auto;
 
         thead {
             background-color: $black;
@@ -172,6 +172,10 @@ and (max-device-width : 480px) {
 
         .parse-chat {
             display: none;
+        }
+
+        .summoner-table {
+            font-size: 14px;
         }
     }
 }
