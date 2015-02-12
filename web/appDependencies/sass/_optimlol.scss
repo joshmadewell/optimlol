@@ -151,3 +151,27 @@
         }
     }
 }
+
+/* Smartphones (portrait and landscape) ----------- */
+@media only screen
+and (min-device-width : 320px)
+and (max-device-width : 480px) {
+    .search {
+
+        .search-container {
+            .summoner-inputs {
+                margin: 0 auto 10px auto;
+                display: block;
+                width: 80%;
+
+                .summoner-input {
+                    margin-bottom: 5px;
+                }
+            }
+        }
+
+        .parse-chat {
+            display: none;
+        }
+    }
+}
