@@ -8,4 +8,11 @@
 	width: 48px;
 }
 
-@import "sprite_scss/champions.scss";
+.icon-champion-small {
+	@extend .icon-champion-full;
+	background-size: 360px;
+	height: 36px;
+	width: 36px;
+}
+
+@import "sprite_scss/champions_test.scss";
