@@ -7,7 +7,7 @@
         <th class="img-link">LolKing</th>
         <th class="img-link">op.gg</th>
     </thead>
-    <tbody class="summoner-info" data-bind="foreach: validSummoners">
+    <tbody class="summoner-info" data-bind="foreach: settings.validSummoners">
         <td data-bind="css: laneTag.toLowerCase(), foreach: laneTag, tooltip: { text: tooltipText, position: 'left' }">
             <span data-bind="text: $rawData[0]"/><br>
         </td>
