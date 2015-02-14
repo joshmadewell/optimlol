@@ -167,6 +167,11 @@
 			});
 		};
 
+		self.summonerInputs = [];
+		self.selectedRegion = ko.observable(session.get('region'));
+		self.validSummoners = ko.observableArray([]);
+		self.chatText = ko.observable("");
+
 		self.parseChatForPlayers  = function() {
 			var potentialSummoners = [];
 			var chatText = self.chatText();
@@ -201,11 +206,6 @@
 				}
 			});
 		}
-
-		self.summonerInputs = [];
-		self.selectedRegion = ko.observable(session.get('region'));
-		self.validSummoners = ko.observableArray([]);
-		self.chatText = ko.observable("");
 
 		self.clearSummonerInputs = function() {
 			self.validSummoners.removeAll();
