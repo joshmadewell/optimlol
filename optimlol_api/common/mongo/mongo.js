@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var config = require('../config');
+var config = require('../../config');
 
 module.exports = function() {
 	var self = this;
@@ -8,9 +8,9 @@ module.exports = function() {
 		mongoose.connect(process.env.MONGOLAB_URI);
 
 		var models = [
-			'../persistence/mongoModels/staticDataModel',
-			'../persistence/mongoModels/statsModel',
-			'../persistence/mongoModels/summonersModel'
+			'../../persistence/mongoModels/staticDataModel',
+			'../../persistence/mongoModels/statsModel',
+			'../../persistence/mongoModels/summonersModel'
 		];
 
 		models.forEach(function(model) {

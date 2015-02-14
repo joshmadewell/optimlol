@@ -72,11 +72,11 @@ module.exports = function() {
 			});
 		} else {
 			var error = {
-				statusCode = 429,
+				statusCode: 429,
 				data: null,
 
 			}
-			deferred.reject()
+			deferred.reject(error)
 		}
 
 		return deferred.promise;
@@ -87,10 +87,10 @@ module.exports = function() {
 	};
 
 	self.init = function() {
-		_config = require('../config')
+		_config = require('../../../config')
 		_apiStatus = require('./apiStatus');
 
-		var Logger = require('../common/logger');
+		var Logger = require('../common/logging/logger');
 		_logger = new Logger();
 	}
 };

@@ -44,7 +44,7 @@ var _getRankedStats = function(region, summonerId) {
 };
 
 var _init = function() {
-    var Logger = require('../../common/logger');
+    var Logger = require('../../common/logging/logger');
     _logger = new Logger();
 
     var StatsDataProviderConstructor = require('../../persistence/dataProviders/statsDataProvider');

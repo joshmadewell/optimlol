@@ -1,10 +1,10 @@
 var express = require('express');
 var moment = require('moment');
 
-var Logger = require('./common/logger');
+var Logger = require('./common/logging/logger');
 var logger = new Logger();
 
-var Mongo = require('./common/mongo');
+var Mongo = require('./common/mongo/mongo');
 var mongo = new Mongo();
 mongo.init();
 

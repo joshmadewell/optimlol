@@ -49,13 +49,13 @@ module.exports = function() {
 		var _config = require('../../config');
 		_apiVersion = _config.riot_api.versions.stats;
 
-		var LoggerConstructor = require('../../common/logger');
+		var LoggerConstructor = require('../../common/logging/logger');
 		_logger = new LoggerConstructor();
 
-		var MongoCacheConstructor = require('../../common/mongoCache');
+		var MongoCacheConstructor = require('../../common/mongo/mongoCache');
 		_mongoCache = new MongoCacheConstructor();
 
-		var RiotApiConstructor = require('../../common/riotApi');
+		var RiotApiConstructor = require('../../common/riotApi/riotApi');
 		_riotApi = new RiotApiConstructor();
 		_riotApi.init();
 	}

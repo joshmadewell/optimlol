@@ -3,8 +3,8 @@ var moment = require('moment');
 
 module.exports = function() {
 	var self = this;
-	var _config = require('../config');
-	var Logger = require('./logger.js');
+	var _config = require('../../config');
+	var Logger = require('../logging/logger.js');
 	var _logger = new Logger();
 
 	var _returnData = function(cachedData, collection) {

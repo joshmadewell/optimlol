@@ -1,6 +1,6 @@
 var winston = require('winston');
 var moment = require('moment');
-var config = require('../config');
+var config = require('../../config');
 
 var logger = new(winston.Logger)({
 	levels: config.logging.logLevels.levels,

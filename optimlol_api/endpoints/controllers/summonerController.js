@@ -5,7 +5,7 @@ module.exports = function() {
 	var _championStatsFacade = null;
 	var _championDataFacade = null;
 	var _recentMatchStatsFacade = null;
-	var _perfomanceCalculator = require('../../common/performanceCalculator');
+	var _perfomanceCalculator = require('../../common/utilities/performanceCalculator');
 
 	var _incrementLaneStats = function(recentStats, matchData, champion) {
 		var role = matchData.role;
