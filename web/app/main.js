@@ -21,7 +21,10 @@ define(['durandal/system', 'durandal/app', 'durandal/viewLocator', 'configuratio
 
     app.configurePlugins({
         router:true,
-        dialog: true
+        dialog: true,
+        widget: {
+            kinds: ['summonerTable']
+        }
     });
 
     app.start().then(function() {

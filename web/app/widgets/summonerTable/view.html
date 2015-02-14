@@ -1,0 +1,46 @@
+<table class="summoner-table">
+    <thead>
+        <th></th>
+        <th class="name">Name</th>
+        <th class="recently-played" data-bind="tooltip: 'This column contains the 5 champions each summoner has played the most in the last 30 games for each summoner. Ordered by total games played.'">Recently Played</th>
+        <th class="best-performance" data-bind="tooltip: 'This column contains the 5 champions each summoner performs best on. Ordered by performance.'">Best Performance</th>
+        <th class="img-link">LolKing</th>
+        <th class="img-link">op.gg</th>
+    </thead>
+    <tbody class="summoner-info" data-bind="foreach: validSummoners">
+        <td data-bind="css: laneTag.toLowerCase(), foreach: laneTag, tooltip: { text: tooltipText, position: 'left' }">
+            <span data-bind="text: $rawData[0]"/><br>
+        </td>
+        <td data-bind="text: displayName"></td>
+        <td class="recently-played">
+            <div class="no-stats" data-bind="visible: recentHistory.length === 0">No stats for this season.</div>
+            <ul class="champion-list" data-bind="foreach: recentHistory.champions">
+                <!-- ko if: $index() < 5 -->
+                <li class="champion-data">
+                    <div data-bind="css: 'icon-champion-large-' + championKey, tooltip: championName "/>
+                    <div data-bind="text: 'Games: ' + count"/>
+                    <div><span class="wins" data-bind="text: wins"/> / <span class="losses" data-bind="text: losses"/></div>
+                </li>
+                <!-- /ko -->
+            </ul>
+        </td>
+        <td class="best-performance">
+            <div class="no-stats" data-bind="visible: championStats.length === 0">No stats for this season.</div>
+            <ul class="champion-list" data-bind="foreach: bestPerformanceStats">
+                <!-- ko if: $index() < 5 -->
+                <li class="champion-data">
+                    <div data-bind="css: 'icon-champion-large-' + championKey, tooltip: championName "/>
+                    <div data-bind="text: 'KDA: ' + kda.toFixed(2)"/>
+                    <div><span class="wins" data-bind="text: wins"/> / <span class="losses" data-bind="text: losses"/></div>
+                </li>
+                <!-- /ko -->
+            </ul>
+        </td>
+        <td class="img-link">
+            <a data-bind="attr: { href: lolKingUrl }"><img class="icon" src="/img/logo_lolking.png"/></a>
+        </td>
+        <td class="img-link">
+            <a data-bind="attr: { href: naOpGgUrl }"><img class="icon" src="/img/logo_opgg.png"/></a>
+        </td>
+    </tbody>
+</table>
