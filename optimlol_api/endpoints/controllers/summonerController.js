@@ -116,7 +116,7 @@ module.exports = function() {
 
 	self.generateSummonerData = function(region, summonerName) {
 		var deferred = q.defer();
-		_summonerFacade.verifySummoner(region, summonerName)
+		_summonerFacade.verifySummonerByName(region, summonerName)
 			.then(function(verifiedSummoner) {
 				console.log("verifiedSummoner", verifiedSummoner);
 				if (verifiedSummoner.verified) {
@@ -138,9 +138,9 @@ module.exports = function() {
 		return deferred.promise;
 	};
 
-	self.getCurrentGameData = function(region, summonerName) {
+	self.getCurrentGameData = function(region, summonerId) {
 		var deferred = q.defer();
-		_summonerFacade.verifySummoner(region, summonerName)
+		_summonerFacade.verifySummonerById(region, summonerId)
 			.then(function(verifiedSummoner) {
 				if (verifiedSummoner.verified) {
 					_currentGameFacade.getCurrentGameData(region, verifiedSummoner.summoner.id)

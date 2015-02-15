@@ -11,7 +11,7 @@ module.exports = function() {
 
 	var _getStatsApi = function(region, summonerId, deferred) {
 		var statsPath = "api/lol/" + region + "/" + _apiVersion + "/stats/by-summoner/" + summonerId + "/ranked";
-		_riotApi.makeRequest(region, { path: statsPath })
+		_riotApi.makeRequest(region, statsPath)
 			.then(function(statsResult) {
 				_mongoCache.set('stats', {region: region, summonerId: summonerId}, statsResult)
 					.then(function() {

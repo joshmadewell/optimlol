@@ -30,15 +30,15 @@ module.exports = function(router) {
 			})
 	});
 
-	router.get('/:region/summoner/current-game/:summonerName', function(req, res) {
+	router.get('/:region/summoner/current-game/:summonerId', function(req, res) {
 		var region = req.params.region;
-		var summonerName = req.params.summonerName;
+		var summonerId = req.params.summonerId;
 		var result = {
 			status: 'failed',
 			data: null
 		}
 
-		_summonerController.getCurrentGameData(region, summonerName)
+		_summonerController.getCurrentGameData(region, summonerId)
 			.then(function(gameData) {
 				_handleResponse(res, 200, gameData);
 			})

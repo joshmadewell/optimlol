@@ -26,8 +26,8 @@ module.exports = function() {
 		var secondHalfMatchHistory = matchHistoryPath + "&beginIndex=15&endIndex=30";
 	
 		var promises = [
-			_riotApi.makeRequest(region, { path: firstHalfMatchHistory }),
-			_riotApi.makeRequest(region, { path: secondHalfMatchHistory })
+			_riotApi.makeRequest(region, firstHalfMatchHistory),
+			_riotApi.makeRequest(region, secondHalfMatchHistory)
 		];
 
 		q.allSettled(promises)

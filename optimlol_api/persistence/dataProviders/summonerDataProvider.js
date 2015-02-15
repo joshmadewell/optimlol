@@ -10,7 +10,7 @@ module.exports = function() {
 
 	var _getSummonerByNameApi = function(region, summonerName, deferred) {
 		var championsPath = "api/lol/" + region + "/" + _apiVersion + "/summoner/by-name/" + summonerName;
-		_riotApi.makeRequest(region, { path: championsPath })
+		_riotApi.makeRequest(region, championsPath)
 			.then(function(summonerResult) {
 				_mongoCache.set('summoners', {region: region, summonerName: summonerName}, summonerResult)
 					.then(function() {
@@ -24,6 +24,46 @@ module.exports = function() {
 			.fail(function(error) {
 				deferred.reject(error);
 			});
+	};
+
+	var _getSummonerByIdApi = function(region, summonerId, deferred) {
+		var championsPath = "api/lol/" + region + "/" + _apiVersion + "/summoner/" + summonerId;
+		_riotApi.makeRequest(region, championsPath)
+			.then(function(summonerResult) {
+				console.log("_getSummonerByIdApi", summonerResult);
+				_mongoCache.set('summoners', {region: region, summonerName: summonerResult}, summonerResult)
+					.then(function() {
+						deferred.resolve(summonerResult);
+					})
+					.fail(function() {
+						// if setting cache fails, don't worry, move on.
+						deferred.resolve(summonerResult);
+					});
+			})
+			.fail(function(error) {
+				deferred.reject(error);
+			});
+	};
+
+	self.getSummonerById = function(region, summonerId) {
+		var deferred = q.defer();
+		_logger.debug("Getting summoner by id", summonerId);
+		_mongoCache.get('summoners', {region: region, summonerId: summonerId})
+			.then(function(cacheSummonerResult) {
+				console.log(cacheSummonerResult);
+				if(cacheSummonerResult.isExpired === false) {
+					_logger.debug("Using cached summoner.", cacheSummonerResult);
+					deferred.resolve(cacheSummonerResult);
+				} else {
+					_getSummonerByIdApi(region, summonerId, deferred);
+				}
+			})
+			.fail(function(error) {
+				_logger.warn("Some failure when setting summoner cache", error);
+				_getSummonerByIdApi(region, summonerId, deferred);
+			});
+
+		return deferred.promise;
 	};
 
 	self.getSummonerByName = function(region, summonerName) {

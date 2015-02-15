@@ -5,6 +5,7 @@ var Schema = mongoose.Schema;
 
 var SummonersSchema = new Schema({
 	summonerName: { type: String, required: true },
+	summonerId: { type: Number, required: true },
 	region: { type: String, required: true },
 	expiredTimeMinutes: { type: Number, default: -1 },
 	returnDataOnExpired: { type: Boolean, required: true, default: false },
@@ -18,7 +19,10 @@ var SummonersSchema = new Schema({
 // most of the time...this isn't an issue so really, we're using retrieve 
 // so we can always have a promise :)
 SummonersSchema.statics.retrieve = function(identifiers) {
-	identifiers.summonerName = identifiers.summonerName.replace(/ /g, '').toLowerCase();
+	if (identifiers.summonerName) {
+		identifiers.summonerName = identifiers.summonerName.replace(/ /g, '').toLowerCase();
+	} 
+	
 	var deferred = q.defer();
 	this.model('summoners').findOne(identifiers, function(error, result) {
 		if (error) deferred.reject(error);
@@ -34,6 +38,7 @@ SummonersSchema.pre('save', function(next) {
 	var now = new Date();
 	this.updated_at = now;
 	this.summonerName = this.summonerName.replace(/ /g, '').toLowerCase();
+	this.summonerId = data[this.summonerName].id;
 	if (!this.created_at) {
 		this.created_at = now;
 	}
