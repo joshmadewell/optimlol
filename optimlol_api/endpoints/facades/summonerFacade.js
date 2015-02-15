@@ -27,7 +27,6 @@ var _verifySummoner = function(summonerObject) {
 var _verifySummonerById = function(region, summonerId) {
 	var deferred = q.defer();
 
-	console.log("verify by id", summonerId);
 	_summonerDataProvider.getSummonerById(region, summonerId)
 		.then(function(summonerResult) {
 			_verifySummoner(summonerResult);

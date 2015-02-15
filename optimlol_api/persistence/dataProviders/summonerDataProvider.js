@@ -9,8 +9,8 @@ module.exports = function() {
 	var _riotApi = null;
 
 	var _getSummonerByNameApi = function(region, summonerName, deferred) {
-		var championsPath = "api/lol/" + region + "/" + _apiVersion + "/summoner/by-name/" + summonerName;
-		_riotApi.makeRequest(region, championsPath)
+		var summonersPath = "api/lol/" + region + "/" + _apiVersion + "/summoner/by-name/" + summonerName;
+		_riotApi.makeRequest(region, summonersPath)
 			.then(function(summonerResult) {
 				_mongoCache.set('summoners', {region: region, summonerName: summonerName}, summonerResult)
 					.then(function() {
@@ -27,18 +27,27 @@ module.exports = function() {
 	};
 
 	var _getSummonerByIdApi = function(region, summonerId, deferred) {
-		var championsPath = "api/lol/" + region + "/" + _apiVersion + "/summoner/" + summonerId;
-		_riotApi.makeRequest(region, championsPath)
+		var summonersPath = "api/lol/" + region + "/" + _apiVersion + "/summoner/" + summonerId;
+		_riotApi.makeRequest(region, summonersPath)
 			.then(function(summonerResult) {
 				console.log("_getSummonerByIdApi", summonerResult);
-				_mongoCache.set('summoners', {region: region, summonerName: summonerResult}, summonerResult)
-					.then(function() {
-						deferred.resolve(summonerResult);
-					})
-					.fail(function() {
-						// if setting cache fails, don't worry, move on.
-						deferred.resolve(summonerResult);
-					});
+				// we have to set with summoner name because that's how
+				// we saved before adding the verify by id methods...
+				if (summonerResult.data) {
+					var dataToSave = {};
+					var summonerName = summonerResult.data[summonerId.toString()].name;
+					var queriedName = summonerName.replace(/ /g, '').toLowerCase();
+					dataToSave[queriedName] = summonerResult.data[summonerId.toString()];
+					summonerResult.data = dataToSave;
+					_mongoCache.set('summoners', {region: region, summonerName: summonerName}, summonerResult)
+						.then(function() {
+							deferred.resolve(summonerResult);
+						})
+						.fail(function() {
+							// if setting cache fails, don't worry, move on.
+							deferred.resolve(summonerResult);
+						});
+				}
 			})
 			.fail(function(error) {
 				deferred.reject(error);

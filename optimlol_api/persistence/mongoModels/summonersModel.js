@@ -22,7 +22,11 @@ SummonersSchema.statics.retrieve = function(identifiers) {
 	if (identifiers.summonerName) {
 		identifiers.summonerName = identifiers.summonerName.replace(/ /g, '').toLowerCase();
 	} 
-	
+
+	if (identifiers.summonerId) {
+		identifiers.summonerId = parseInt(identifiers.summonerId)
+	}
+
 	var deferred = q.defer();
 	this.model('summoners').findOne(identifiers, function(error, result) {
 		if (error) deferred.reject(error);
