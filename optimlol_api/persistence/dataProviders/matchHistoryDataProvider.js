@@ -21,13 +21,13 @@ module.exports = function() {
 	};
 
 	var _getMatchHistoryApi = function(region, summonerId, type, deferred) {
-		var matchHistoryPath = region + "/" + _apiVersion + "/matchhistory/" + summonerId + "?rankedQueues=" + MATCH_HISTORY_TYPES[type];
+		var matchHistoryPath = "api/lol/" + region + "/" + _apiVersion + "/matchhistory/" + summonerId + "?rankedQueues=" + MATCH_HISTORY_TYPES[type];
 		var firstHalfMatchHistory = matchHistoryPath + "&beginIndex=0&endIndex=15";
 		var secondHalfMatchHistory = matchHistoryPath + "&beginIndex=15&endIndex=30";
 	
 		var promises = [
-			_riotApi.makeRequest(region, firstHalfMatchHistory),
-			_riotApi.makeRequest(region, secondHalfMatchHistory)
+			_riotApi.makeRequest(region, { path: firstHalfMatchHistory }),
+			_riotApi.makeRequest(region, { path: secondHalfMatchHistory })
 		];
 
 		q.allSettled(promises)

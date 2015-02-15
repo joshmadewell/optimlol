@@ -118,6 +118,7 @@ module.exports = function() {
 		var deferred = q.defer();
 		_summonerFacade.verifySummoner(region, summonerName)
 			.then(function(verifiedSummoner) {
+				console.log("verifiedSummoner", verifiedSummoner);
 				if (verifiedSummoner.verified) {
 					_generatePerformanceData(region, verifiedSummoner.summoner)
 						.then(function(summonerWithPerformanceData) {
@@ -126,6 +127,29 @@ module.exports = function() {
 						.fail(function(error) {
 							deferred.reject(error);
 						});
+				} else {
+					deferred.resolve(verifiedSummoner);
+				}
+			})
+			.fail(function(error) {
+				deferred.reject(error);
+			});
+
+		return deferred.promise;
+	};
+
+	self.getCurrentGameData = function(region, summonerName) {
+		var deferred = q.defer();
+		_summonerFacade.verifySummoner(region, summonerName)
+			.then(function(verifiedSummoner) {
+				if (verifiedSummoner.verified) {
+					_currentGameFacade.getCurrentGameData(region, verifiedSummoner.summoner.id)
+						.then(function(currentGameData) {
+							deferred.resolve(currentGameData);
+						})
+						.fail(function(error) {
+							deferred.reject(error);
+						})
 				} else {
 					deferred.resolve(verifiedSummoner);
 				}
@@ -153,5 +177,9 @@ module.exports = function() {
 		var ChampionDataFacadeConstructor = require('../facades/championDataFacade');
 		_championDataFacade = new ChampionDataFacadeConstructor();
 		_championDataFacade.init();
+
+		var CurrentGameFacadeConstructor = require('../facades/currentGameFacade');
+		_currentGameFacade = new CurrentGameFacadeConstructor();
+		_currentGameFacade.init();
 	}
 };

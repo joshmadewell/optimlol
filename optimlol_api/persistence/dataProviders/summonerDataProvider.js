@@ -9,8 +9,8 @@ module.exports = function() {
 	var _riotApi = null;
 
 	var _getSummonerByNameApi = function(region, summonerName, deferred) {
-		var championsPath = region + "/" + _apiVersion + "/summoner/by-name/" + summonerName;
-		_riotApi.makeRequest(region, championsPath)
+		var championsPath = "api/lol/" + region + "/" + _apiVersion + "/summoner/by-name/" + summonerName;
+		_riotApi.makeRequest(region, { path: championsPath })
 			.then(function(summonerResult) {
 				_mongoCache.set('summoners', {region: region, summonerName: summonerName}, summonerResult)
 					.then(function() {
@@ -39,6 +39,7 @@ module.exports = function() {
 				}
 			})
 			.fail(function(error) {
+				console.log(error);
 				_logger.warn("Some failure when setting summoner cache", error);
 				_getSummonerByNameApi(region, summonerName, deferred);
 			});

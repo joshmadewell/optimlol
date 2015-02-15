@@ -30,6 +30,23 @@ module.exports = function(router) {
 			})
 	});
 
+	router.get('/:region/summoner/current-game/:summonerName', function(req, res) {
+		var region = req.params.region;
+		var summonerName = req.params.summonerName;
+		var result = {
+			status: 'failed',
+			data: null
+		}
+
+		_summonerController.getCurrentGameData(region, summonerName)
+			.then(function(gameData) {
+				_handleResponse(res, 200, gameData);
+			})
+			.fail(function(error) {
+				_handleResponse(res, 500);
+			});
+	});
+
 	self.init = function(router) {
 		var SummonerControllerConstructor = require('../controllers/summonerController');
 		_summonerController = new SummonerControllerConstructor();

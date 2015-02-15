@@ -9,7 +9,7 @@ module.exports = function() {
 	var _mongoCache = null;
 
 	var _getStaticDataApi = function(region, staticType, deferred) {
-		var staticDataPath = "static-data/" + region + "/" + _apiVersion + "/" + _config.riot_api.staticTypes[staticType];
+		var staticDataPath = "api/lol/static-data/" + region + "/" + _apiVersion + "/" + _config.riot_api.staticTypes[staticType];
 
 		_riotApi.makeGlobalRequest(region, staticDataPath)
 			.then(function(staticDataResult) {

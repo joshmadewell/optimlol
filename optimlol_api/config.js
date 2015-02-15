@@ -7,7 +7,7 @@ config.optimlol_api.expiredCacheMinutes = 20;
 // Riot API
 config.riot_api = {};
 config.riot_api.url_prefix = "https://";
-config.riot_api.url_midfix = ".api.pvp.net/api/lol/";
+config.riot_api.url_midfix = ".api.pvp.net/";
 config.riot_api.staticTypes = {
 	champions: "champion?dataById=true&champData=tags",
 	items: "item",
@@ -15,6 +15,19 @@ config.riot_api.staticTypes = {
 	runes: "rune",
 	summonerSpells: "summoner-spell"
 }
+config.riot_api.platformIds = {
+	"na": "na1",
+	"euw": "euw1",
+	"eune": "eun1",
+	"kr": "kr",
+	"oce": "oc1",
+	"br": "br1",
+	"lan": "la1",
+	"las": "la2",
+	"ru": "ru",
+	"tr": "tr1"
+}
+
 config.riot_api.versions = {
 	champions: "v1.2",
 	staticData: "v1.2",
