@@ -27,15 +27,15 @@ var _getCurrentGameData = function(region, summonerId) {
 					}
 
 					switch (participant.teamId) {
-						case 100: dataToReturn.BLUE.push(participantId); break;
-						case 200: dataToReturn.RED.push(participantId); break;
+						case 100: dataToReturn.BLUE.push(participant.summonerName); break;
+						case 200: dataToReturn.RED.push(participant.summonerName); break;
 					}
 				});
 			}
 
 			deferred.resolve(dataToReturn);
 		})
-		.then(function(error) {
+		.fail(function(error) {
 			deferred.reject(error);
 		});
 
