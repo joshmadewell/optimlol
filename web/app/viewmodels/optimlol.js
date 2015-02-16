@@ -3,10 +3,11 @@
 	'durandal/app',
 	'jquery',
 	'dataProviders/summonersDataProvider',
+	'dataProviders/currentGameDataProvider',
 	'presentationObjects/summonerPresentationObject',
 	'common/collectionSorter',
 	'singleton/session'],
-	function (durandal, ko, app, $, SummonersDataProvider, SummonerPresentationObject, collectionSorter, session) {
+	function (durandal, ko, app, $, SummonersDataProvider, CurrentGameDataProvider, SummonerPresentationObject, collectionSorter, session) {
 	return function() {
 		var self = this;
 		var NUMBER_OF_SUMMONERS = 5;
@@ -18,7 +19,15 @@
 			INVALID: "invalid",
 			VALIDATING: "validating"
 		}
+
+		var currentGamePolling = {
+			interval: null,
+			summonerId: null,
+			gameFound: false
+		};
+
 		var summonersDataProvider = new SummonersDataProvider();
+		var currentGameDataProvider = new CurrentGameDataProvider();
 
 		var lineDelimiters = [
 			":",
@@ -167,9 +176,58 @@
 			});
 		};
 
+		var _onValidSummonersUpdated = function() {
+			var validSummoners = self.validSummoners();
+			var region = self.selectedRegion();
+
+			if (validSummoners.length === 0) {
+				if (currentGamePolling.interval) {
+					clearInterval(currentGamePolling.interval);
+				}
+			} else if (validSummoners.length > 0) {
+				var pollingSummonerValidated = false;
+				validSummoners.forEach(function(summoner) {
+					if (summoner.summonerId() === currentGamePolling.summonerId) {
+						pollingSummonerValidated = true;
+					}
+				});
+
+				if (!pollingSummonerValidated) {
+					currentGamePolling.summonerId = validSummoners[0].summonerId();
+					if (currentGamePolling.interval) {
+						clearInterval(currentGamePolling.interval)
+					}
+
+					currentGamePolling.interval = setInterval(function() {
+						if (!currentGamePolling.gameFound) {
+							console.log("checking for game");
+							currentGameDataProvider.getCurrentGame(region, currentGamePolling.summonerId)
+								.then(function(currentGameData) {
+									console.log("checked for game", currentGameData);
+									if (currentGameData.playerInGame) {
+										clearInterval(currentGamePolling.interval);
+										self.currentGameFound(true);
+									}
+								})
+								.fail(function(error) {
+
+								});
+						} else {
+							clearInterval(currentGamePolling.interval);
+							self.currentGameFound(true);
+						}
+					}, 15000)
+				} else {
+					console.log("summoner already validating, still polling");
+				}
+			}
+		};
+
 		self.summonerInputs = [];
+		self.currentGameFound = ko.observable(false);
 		self.selectedRegion = ko.observable(session.get('region'));
 		self.validSummoners = ko.observableArray([]);
+		self.validSummoners.subscribe(_onValidSummonersUpdated);
 		self.chatText = ko.observable("");
 
 		self.parseChatForPlayers  = function() {
