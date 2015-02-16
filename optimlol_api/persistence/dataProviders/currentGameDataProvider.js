@@ -8,11 +8,11 @@ module.exports = function() {
 	var _mongoCache = null;
 	var _logger = null;
 
-	var _getCurrentGameApi = function(region, summonerId, deferred) {
+	self.getCurrentGame = function(region, summonerId) {
 		var platformId = _config.riot_api.platformIds[region.toLowerCase()];
-
 		var currentGamePath = "observer-mode/rest/consumer/getSpectatorGameInfo/" + platformId + "/" + summonerId;
 
+		var deferred = q.defer();
 		_riotApi.makeRequest(region, currentGamePath)
 			.then(function(currentGameData) {
 				deferred.resolve(currentGameData);
@@ -20,23 +20,6 @@ module.exports = function() {
 			.fail(function(error) {
 				deferred.reject(error);
 			});
-	};
-
-	self.getCurrentGame = function(region, summonerId) {
-		var deferred = q.defer();
-		_getCurrentGameApi(region, summonerId, deferred)
-		// _mongoCache.get('stats', {region: region, summonerId: summonerId})
-		// 	.then(function(cacheStatsResult) {
-		// 		if (cacheStatsResult.isExpired === false) {
-		// 			_logger.debug("Using cached stats.");
-		// 			deferred.resolve(cacheStatsResult);
-		// 		} else {
-		// 			_getCurrentGameApi(region, summonerId, deferred);
-		// 		}
-		// 	})
-		// 	.fail(function(cacheResult) {
-		// 		_getCurrentGameApi(region, summonerId, deferred);
-		// 	})
 
 		return deferred.promise;
 	}
