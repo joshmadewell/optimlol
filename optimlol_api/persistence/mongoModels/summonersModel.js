@@ -4,9 +4,9 @@ var q = require('q');
 var Schema = mongoose.Schema;
 
 var SummonersSchema = new Schema({
-	summonerName: { type: String, required: true },
-	summonerId: { type: Number, required: true },
-	region: { type: String, required: true },
+	summonerName: { type: String },
+	summonerId: { type: Number },
+	region: { type: String },
 	expiredTimeMinutes: { type: Number, default: -1 },
 	returnDataOnExpired: { type: Boolean, required: true, default: false },
 	data: Schema.Types.Mixed,
@@ -42,7 +42,8 @@ SummonersSchema.pre('save', function(next) {
 	var now = new Date();
 	this.updated_at = now;
 	this.summonerName = this.summonerName.replace(/ /g, '').toLowerCase();
-	this.summonerId = data[this.summonerName].id;
+	this.summonerId = this.data[this.summonerName].id;
+
 	if (!this.created_at) {
 		this.created_at = now;
 	}

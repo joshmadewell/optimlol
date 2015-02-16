@@ -118,7 +118,6 @@ module.exports = function() {
 		var deferred = q.defer();
 		_summonerFacade.verifySummonerByName(region, summonerName)
 			.then(function(verifiedSummoner) {
-				console.log("verifiedSummoner", verifiedSummoner);
 				if (verifiedSummoner.verified) {
 					_generatePerformanceData(region, verifiedSummoner.summoner)
 						.then(function(summonerWithPerformanceData) {

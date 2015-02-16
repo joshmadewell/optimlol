@@ -24,7 +24,6 @@ module.exports = function() {
 
 	self.getCurrentGame = function(region, summonerId) {
 		var deferred = q.defer();
-		console.log(region, summonerId);
 		_getCurrentGameApi(region, summonerId, deferred)
 		// _mongoCache.get('stats', {region: region, summonerId: summonerId})
 		// 	.then(function(cacheStatsResult) {

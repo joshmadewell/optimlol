@@ -16,16 +16,16 @@ config.riot_api.staticTypes = {
 	summonerSpells: "summoner-spell"
 }
 config.riot_api.platformIds = {
-	"na": "na1",
-	"euw": "euw1",
-	"eune": "eun1",
-	"kr": "kr",
-	"oce": "oc1",
-	"br": "br1",
-	"lan": "la1",
-	"las": "la2",
-	"ru": "ru",
-	"tr": "tr1"
+	"na": "NA1",
+	"euw": "EUW1",
+	"eune": "EUN1",
+	"kr": "KR",
+	"oce": "OC1",
+	"br": "BR1",
+	"lan": "LA1",
+	"las": "LA2",
+	"ru": "RU",
+	"tr": "TR1"
 }
 
 config.riot_api.versions = {

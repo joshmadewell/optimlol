@@ -30,7 +30,6 @@ module.exports = function() {
 		var summonersPath = "api/lol/" + region + "/" + _apiVersion + "/summoner/" + summonerId;
 		_riotApi.makeRequest(region, summonersPath)
 			.then(function(summonerResult) {
-				console.log("_getSummonerByIdApi", summonerResult);
 				// we have to set with summoner name because that's how
 				// we saved before adding the verify by id methods...
 				if (summonerResult.data) {
@@ -39,6 +38,7 @@ module.exports = function() {
 					var queriedName = summonerName.replace(/ /g, '').toLowerCase();
 					dataToSave[queriedName] = summonerResult.data[summonerId.toString()];
 					summonerResult.data = dataToSave;
+
 					_mongoCache.set('summoners', {region: region, summonerName: summonerName}, summonerResult)
 						.then(function() {
 							deferred.resolve(summonerResult);
@@ -59,7 +59,6 @@ module.exports = function() {
 		_logger.debug("Getting summoner by id", summonerId);
 		_mongoCache.get('summoners', {region: region, summonerId: summonerId})
 			.then(function(cacheSummonerResult) {
-				console.log(cacheSummonerResult);
 				if(cacheSummonerResult.isExpired === false) {
 					_logger.debug("Using cached summoner.", cacheSummonerResult);
 					deferred.resolve(cacheSummonerResult);
@@ -88,7 +87,6 @@ module.exports = function() {
 				}
 			})
 			.fail(function(error) {
-				console.log(error);
 				_logger.warn("Some failure when setting summoner cache", error);
 				_getSummonerByNameApi(region, summonerName, deferred);
 			});

@@ -30,11 +30,11 @@ module.exports = function() {
 	}
 
 	self.get = function(collection, identifiers) {
-		var model = require('../persistence/mongoModels/' + collection + 'Model');
+		var Model = require('../persistence/mongoModels/' + collection + 'Model');
 		_logger.debug(collection + ": Cache Get:", { "from": collection, "with": identifiers } );
 
 		var deferred = q.defer();
-		model.retrieve(identifiers)
+		Model.retrieve(identifiers)
 			.then(function(cachedResult) {
 				_logger.debug(collection + "cache returned:", cachedResult ? "value" : "nothing");
 				deferred.resolve(_returnData(cachedResult, collection));
@@ -48,11 +48,11 @@ module.exports = function() {
 
 	self.set = function(collection, identifiers, toCache) {
 		_logger.debug(collection + ": Cache Set:", { "from": collection, "with": identifiers } );
-		var model = require('../persistence/mongoModels/' + collection + 'Model');
+		var Model = require('../persistence/mongoModels/' + collection + 'Model');
 
 		var deferred = q.defer();
 		if (toCache.success && toCache.data) {
-			model.retrieve(identifiers)
+			Model.retrieve(identifiers)
 				.then(function(cachedResult) {
 					if (cachedResult) {
 						cachedResult.data = toCache.data;
@@ -63,7 +63,7 @@ module.exports = function() {
 							}
 						});
 					} else {
-						var toSave = new model();
+						var toSave = new Model();
 						for(property in identifiers) {
 							toSave[property] = identifiers[property];
 						}
