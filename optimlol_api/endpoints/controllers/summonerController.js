@@ -8,7 +8,7 @@ module.exports = function() {
 
 	var _perfomanceCalculator = require('../../common/utilities/performanceCalculator');
 
-	var PromiseFactoryConstructor = require('../common/utilities/promiseFactory');
+	var PromiseFactoryConstructor = require('../../common/utilities/promiseFactory');
 	var _promiseFactory = new PromiseFactoryConstructor();
 
 	var _incrementLaneStats = function(recentStats, matchData, champion) {

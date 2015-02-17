@@ -1,7 +1,7 @@
 var q = require('q');
 var _matchHistoryDataProvider = null;
 
-var PromiseFactoryConstructor = require('../common/utilities/promiseFactory');
+var PromiseFactoryConstructor = require('../../common/utilities/promiseFactory');
 var _promiseFactory = new PromiseFactoryConstructor();
 
 var _prepareStats = function(matchHistory) {

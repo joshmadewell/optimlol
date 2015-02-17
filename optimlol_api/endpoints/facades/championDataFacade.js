@@ -1,4 +1,3 @@
-var q = require('q');
 var _staticDataProvider = null;
 
 var PromiseFactoryConstructor = require('../common/utilities/promiseFactory');

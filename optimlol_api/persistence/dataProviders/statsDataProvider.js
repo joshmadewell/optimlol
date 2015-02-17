@@ -1,5 +1,3 @@
-var q = require('q');
-
 module.exports = function() {
 	var self = this;
 	var _apiVersion = null;

@@ -1,4 +1,3 @@
-var q = require('q');
 var moment = require('moment');
 
 module.exports = function() {

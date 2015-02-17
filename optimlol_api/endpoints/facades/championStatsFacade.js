@@ -1,8 +1,7 @@
-var q = require('q');
 var _statsDataProvider = null;
 var _performanceCalculator = require('../../common/utilities/performanceCalculator');
 
-var PromiseFactoryConstructor = require('../common/utilities/promiseFactory');
+var PromiseFactoryConstructor = require('../../common/utilities/promiseFactory');
 var _promiseFactory = new PromiseFactoryConstructor();
 
 var _prepareStats = function(stats) {
