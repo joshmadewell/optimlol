@@ -6,7 +6,7 @@ var _promiseFactory = new PromiseFactoryConstructor();
 
 var _getChampionData = function(region) {
 	return _promiseFactory.defer(function(deferredObject) {
-		_staticDataProvider.getStaticData({region: region, type: 'champions'})
+		_staticDataProvider.getStaticData({region: region, staticType: 'champions'})
 			.then(function(championData) {
 				deferredObject.resolve(championData);
 			})

@@ -7,47 +7,51 @@ module.exports = function() {
 	var _mongoCache = null;
 	var _logger = null;
 
-	var REQUIRED_PARAMETERS = ['region', 'summonerName'];
+	var REQUIRED_PARAMETERS = ['region', 'summonerId'];
 	var _parameterValidator = require('../../common/utilities/parameterValidator');
 
 	var PromiseFactoryConstructor = require('../../common/utilities/promiseFactory');
 	var _promiseFactory = new PromiseFactoryConstructor();
 
-	var _getStatsApi = function(region, summonerId, deferred) {
-		var statsPath = region + "/" + _apiVersion + "/stats/by-summoner/" + summonerId + "/ranked";
-		_riotApi.makeRequest(region, statsPath)
-			.then(function(statsResult) {
-				_mongoCache.set('stats', {region: region, summonerId: summonerId}, statsResult)
-					.then(function() {
-						deferred.resolve(statsResult);
-					})
-					.fail(function(error) {
-						_logger.warn("Some failure when setting stats cache", error);
-						deferred.resolve(statsResult);
-					})
-			})
-			.fail(function(error) {
-				deferred.reject(error);
-			});
+	self.getFromApi = function(parameters) {
+		if (_parameterValidator.validate(parameters, REQUIRED_PARAMETERS) === false) {
+			throw new Error("Invalid parameters for Stats Data Provider"); 
+		}
+
+		return _promiseFactory.defer(function(deferredObject) {
+			var statsPath = parameters.region + "/" + _apiVersion + "/stats/by-summoner/" + parameters.summonerId + "/ranked";
+			_riotApi.makeRequest(region, statsPath)
+				.then(function(statsResult) {
+					_mongoCache.set('stats', parameters, statsResult)
+						.then(function() {
+							deferred.resolve(statsResult);
+						})
+						.fail(function(error) {
+							_logger.warn("Some failure when setting stats cache", error);
+							deferred.resolve(statsResult);
+						})
+				})
+				.fail(function(error) {
+					deferred.reject(error);
+				});
+		});
 	};
 
-	self.getRankedStats = function(region, summonerId) {
-		var deferred = q.defer();
-		_mongoCache.get('stats', {region: region, summonerId: summonerId})
-			.then(function(cacheStatsResult) {
-				if (cacheStatsResult.isExpired === false) {
-					_logger.debug("Using cached stats.");
-					deferred.resolve(cacheStatsResult);
-				} else {
-					_getStatsApi(region, summonerId, deferred);
-				}
-			})
-			.fail(function(cacheResult) {
-				_getStatsApi(region, summonerId, deferred);
-			})
+	self.getFromCache = function(parameters) {
+		if (_parameterValidator.validate(parameters, REQUIRED_PARAMETERS) === false) {
+			throw new Error("Invalid parameters for Stats Data Provider"); 
+		}
 
-		return deferred.promise;
-	}
+		return _promiseFactory.defer(function(deferredObject) {
+			_mongoCache.get('stats', parameters)
+				.then(function(cacheStatsResult) {
+					deferredObject.resolve(cacheStatsResult);
+				})
+				.fail(function(error) {
+					deferredObject.reject(error);
+				})
+		});
+	};
 
 	self.init = function() {
 		var _config = require('../../config');
