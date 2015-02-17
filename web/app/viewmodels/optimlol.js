@@ -20,9 +20,12 @@
 			VALIDATING: "validating"
 		}
 
+		// object to maintain current game polling status
+		// using -1 for summoner id so we don't clash with
+		// null or undefined summonerIds
 		var currentGamePolling = {
 			interval: null,
-			summonerId: null,
+			summonerId: -1,
 			gameFound: false
 		};
 
