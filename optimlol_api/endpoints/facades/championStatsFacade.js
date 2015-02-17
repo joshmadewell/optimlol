@@ -1,6 +1,6 @@
 var q = require('q');
 var _statsDataProvider = null;
-var _performanceCalculator = require('../../common/performanceCalculator');
+var _performanceCalculator = require('../../common/utilities/performanceCalculator');
 
 var _prepareStats = function(stats) {
     if (stats.data) {

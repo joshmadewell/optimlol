@@ -30,7 +30,7 @@ module.exports = function() {
 	}
 
 	self.get = function(collection, identifiers) {
-		var model = require('../persistence/mongoModels/' + collection + 'Model');
+		var model = require('../../persistence/mongoModels/' + collection + 'Model');
 		_logger.debug(collection + ": Cache Get:", { "from": collection, "with": identifiers } );
 
 		var deferred = q.defer();
@@ -51,7 +51,7 @@ module.exports = function() {
 		var model = require('../persistence/mongoModels/' + collection + 'Model');
 
 		var deferred = q.defer();
-		if (toCache.success) {
+		if (toCache.success && toCache.data) {
 			model.retrieve(identifiers)
 				.then(function(cachedResult) {
 					if (cachedResult) {

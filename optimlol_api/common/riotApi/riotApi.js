@@ -8,6 +8,7 @@ module.exports = function() {
 	var _apiStatus = null;
 
 	var _handleResponse = function(jsonResponse) {
+		console.log("handling response!");
 		var deferred = q.defer();
 		_logger.riotApi("Riot:", jsonResponse.statusCode);
 
@@ -19,6 +20,7 @@ module.exports = function() {
 			case 200:
 				dataToReturn.success = true;
 				dataToReturn.data = jsonResponse.body;
+				_apiStatus.setRateLimitExceeded(false, 0);
 				break;
 			case 404:
 				// riot uses 404 to tell us some things weren't found
@@ -39,7 +41,8 @@ module.exports = function() {
 		}
 
 		if (jsonResponse.statusCode === 429) {
-
+			var retryAfter = parseInt(jsonResponse.headers['retry-after']);
+			_apiStatus.setRateLimitExceeded(true, retryAfter);
 		} else {
 			deferred.resolve(dataToReturn);
 		}
@@ -48,11 +51,12 @@ module.exports = function() {
 	}
 
 	self.makeRequest = function(region, path) {
+		var now = new Date();
 		var apiKeyPrefix = path.indexOf('?') !== -1 ? "&api_key=" : "?api_key="; 
 		var fullUrl = _config.riot_api.url_prefix + region + _config.riot_api.url_midfix + path + apiKeyPrefix + process.env.RIOT_API_KEY;
 
 		var deferred = q.defer();
-		if (_apiStatus.isRateLimitExceeded === false) {
+		if (now > _apiStatus.getNextApiCallTime) {
 			request.get({url: fullUrl, json: true}, function(error, result) {
 				if (error) {
 					deferred.reject(error);
@@ -71,12 +75,11 @@ module.exports = function() {
 				}
 			});
 		} else {
-			var error = {
-				statusCode: 429,
-				data: null,
-
-			}
-			deferred.reject(error)
+			deferred.reject({
+				success: false,
+				status: 429,
+				data: null
+			});
 		}
 
 		return deferred.promise;
@@ -87,10 +90,10 @@ module.exports = function() {
 	};
 
 	self.init = function() {
-		_config = require('../../../config')
+		_config = require('../../config')
 		_apiStatus = require('./apiStatus');
 
-		var Logger = require('../common/logging/logger');
+		var Logger = require('../logging/logger');
 		_logger = new Logger();
 	}
 };

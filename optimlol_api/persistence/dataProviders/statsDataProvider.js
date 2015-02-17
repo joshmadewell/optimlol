@@ -6,8 +6,6 @@ module.exports = function() {
 	var _riotApi = null;
 	var _mongoCache = null;
 	var _logger = null;
-	var _performanceCalculator = require('../../common/performanceCalculator');
-
 
 	var _getStatsApi = function(region, summonerId, deferred) {
 		var statsPath = region + "/" + _apiVersion + "/stats/by-summoner/" + summonerId + "/ranked";

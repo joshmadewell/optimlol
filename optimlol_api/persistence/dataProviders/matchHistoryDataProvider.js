@@ -7,7 +7,7 @@ module.exports = function() {
 	var _mongoCache = null;
 	var _logger = null;
 
-	var _sorter = require('../../common/sorter');
+	var _sorter = require('../../common/utilities/sorter');
 
 	var MATCH_HISTORY_TYPES = {
 		SOLO: "RANKED_SOLO_5x5",

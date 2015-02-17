@@ -1,7 +1,7 @@
 var apiStatusSingleton = function apiStatusSingleton(){
 	//defining a var instead of this (works for variable & function) will create a private definition
 	var _rateLimitExceeded = false;
-	var _rateLimitTimeout = 0;
+	var _nextApiCallTime = new Date();
 
 	this.isRateLimitExceeded = function() {
 		return _rateLimitExceeded;
@@ -9,11 +9,12 @@ var apiStatusSingleton = function apiStatusSingleton(){
 
 	this.setRateLimitExceeded = function(isExceeded, timeout) {
 		_rateLimitExceeded = isExceeded;
-		_rateLimitTimeout = timeout;
+		_nextApiCallTime = new Date();
+		_nextApiCallTime.setSeconds(_nextApiCallTime.getSeconds() + timeout);
 	};
 
-	this.getTimeUntilNextCall = function() {
-		return _rateLimitTimeout;
+	this.getNextApiCallTime = function() {
+		return _nextApiCallTime;
 	}
 
 	this.isApiDown = function() {
