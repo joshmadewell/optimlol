@@ -5,7 +5,11 @@ module.exports = function() {
 	var _championStatsFacade = null;
 	var _championDataFacade = null;
 	var _recentMatchStatsFacade = null;
+
 	var _perfomanceCalculator = require('../../common/utilities/performanceCalculator');
+
+	var PromiseFactoryConstructor = require('../common/utilities/promiseFactory');
+	var _promiseFactory = new PromiseFactoryConstructor();
 
 	var _incrementLaneStats = function(recentStats, matchData, champion) {
 		var role = matchData.role;
@@ -35,83 +39,76 @@ module.exports = function() {
 			]
 		};
 
-		var deferred = q.defer();
-		q.allSettled(promiseObject.PRMOMISES)
-			.then(function(results) {
-				// var perfomanceData = { quality: null, data: summoner }
-				var championStats = results[promiseObject.STATS_INDEX].state === 'fulfilled' ? results[promiseObject.STATS_INDEX].value : null;
-				var recentHistoryStats = results[promiseObject.RECENT_STATS_INDEX].state === 'fulfilled' ? results[promiseObject.RECENT_STATS_INDEX].value : null;
-				var champions = results[promiseObject.CHAMPIONS_INDEX].state === 'fulfilled' ? results[promiseObject.CHAMPIONS_INDEX].value : null;
+		return _promiseFactory.defer(function(deferredObject) {
+			_promiseFactory.wait(promiseObject.PRMOMISES)
+				.then(function(results) {
+					var championStats = results[promiseObject.STATS_INDEX].state === 'fulfilled' ? results[promiseObject.STATS_INDEX].value : null;
+					var recentHistoryStats = results[promiseObject.RECENT_STATS_INDEX].state === 'fulfilled' ? results[promiseObject.RECENT_STATS_INDEX].value : null;
+					var champions = results[promiseObject.CHAMPIONS_INDEX].state === 'fulfilled' ? results[promiseObject.CHAMPIONS_INDEX].value : null;
 
-				// check champion stats & recent history stats here
-				// to see if the quality flag is stale or not and set
-				// performanceData.quality accordingly
-				// performanceData.quality = 'idk';
+					// shouldn't have to say performanceData.data.championStats because yavascript
+					summoner.championStats = null;
+					summoner.recentHistory = null;
 
-				// shouldn't have to say performanceData.data.championStats because yavascript
-				summoner.championStats = null;
-				summoner.recentHistory = null;
+					if (championStats.data) {
+						var allIndex = null;
+						championStats.data.champions.forEach(function(championStat, index) {
+							// we get data back with string id's le sigh....
+							var championIdString = championStat.id.toString();
+							if (championIdString !== "0") {
+								championStat.championKey = champions.data.data[championIdString].key.toLowerCase();
+								championStat.championName = champions.data.data[championIdString].name;
+							} else {
+								allIndex = index;
+								championStat.championName = "All";
+							}
+						});
 
-				if (championStats.data) {
-					var allIndex = null;
-					championStats.data.champions.forEach(function(championStat, index) {
-						// we get data back with string id's le sigh....
-						var championIdString = championStat.id.toString();
-						if (championIdString !== "0") {
-							championStat.championKey = champions.data.data[championIdString].key.toLowerCase();
-							championStat.championName = champions.data.data[championIdString].name;
-						} else {
-							allIndex = index;
-							championStat.championName = "All";
+						if (allIndex) {
+							summoner.totalStats = championStats.data.champions.splice(allIndex, 1)[0];
 						}
-					});
 
-					if (allIndex) {
-						summoner.totalStats = championStats.data.champions.splice(allIndex, 1)[0];
+						summoner.championStats = championStats.data.champions;
 					}
 
-					summoner.championStats = championStats.data.champions;
-				}
+					if (recentHistoryStats) {
+						var recentChampionsArray = [];
+						var laneStats = {
+							MARKSMAN: {wins: 0, losses: 0, total: 0},
+							SUPPORT: {wins: 0, losses: 0, total: 0},
+							MIDDLE: {wins: 0, losses: 0, total: 0},
+							TOP: {wins: 0, losses: 0, total: 0},
+							JUNGLE: {wins: 0, losses: 0, total: 0}
+						};
 
-				if (recentHistoryStats) {
-					var recentChampionsArray = [];
-					var laneStats = {
-						MARKSMAN: {wins: 0, losses: 0, total: 0},
-						SUPPORT: {wins: 0, losses: 0, total: 0},
-						MIDDLE: {wins: 0, losses: 0, total: 0},
-						TOP: {wins: 0, losses: 0, total: 0},
-						JUNGLE: {wins: 0, losses: 0, total: 0}
-					};
+						var recentChamps = recentHistoryStats.champions;
+						for(var champion in recentChamps) {
+							recentChamps[champion].id = champion;
+							recentChamps[champion].championKey = champions.data.data[champion].key.toLowerCase();
+							recentChamps[champion].championName = champions.data.data[champion].name;
+							recentChampionsArray.push(recentChamps[champion]);
+						}
 
-					var recentChamps = recentHistoryStats.champions;
-					for(var champion in recentChamps) {
-						recentChamps[champion].id = champion;
-						recentChamps[champion].championKey = champions.data.data[champion].key.toLowerCase();
-						recentChamps[champion].championName = champions.data.data[champion].name;
-						recentChampionsArray.push(recentChamps[champion]);
+						var recentMatches = recentHistoryStats.matches;
+						recentMatches.forEach(function(recentMatchStats) {
+							var championIdString = recentMatchStats.championId.toString();
+							recentMatchStats.championKey = champions.data.data[championIdString].key.toLowerCase();
+							recentMatchStats.championName = champions.data.data[championIdString].name;
+
+							_incrementLaneStats(laneStats, recentMatchStats, champions.data.data[championIdString]);
+						});
+
+						recentHistoryStats.champions = recentChampionsArray;
+						recentHistoryStats.laneStats = laneStats;
+						summoner.recentHistory = recentHistoryStats;
 					}
 
-					var recentMatches = recentHistoryStats.matches;
-					recentMatches.forEach(function(recentMatchStats) {
-						var championIdString = recentMatchStats.championId.toString();
-						recentMatchStats.championKey = champions.data.data[championIdString].key.toLowerCase();
-						recentMatchStats.championName = champions.data.data[championIdString].name;
-
-						_incrementLaneStats(laneStats, recentMatchStats, champions.data.data[championIdString]);
-					});
-
-					recentHistoryStats.champions = recentChampionsArray;
-					recentHistoryStats.laneStats = laneStats;
-					summoner.recentHistory = recentHistoryStats;
-				}
-
-				deferred.resolve(summoner);
-			})
-			.fail(function(error) {
-				deferred.reject(error);
-			});
-
-		return deferred.promise;
+					deferred.resolve(summoner);
+				})
+				.fail(function(error) {
+					deferred.reject(error);
+				});
+		});
 	};
 
 	self.generateSummonerData = function(region, summonerName) {
