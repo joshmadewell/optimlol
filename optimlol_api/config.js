@@ -3,11 +3,13 @@ var config = {};
 // Optimlol API
 config.optimlol_api = {};
 config.optimlol_api.expiredCacheMinutes = 20;
+config.optimlol_api.matchHistoryLookBackCount = 30;
 
 // Riot API
 config.riot_api = {};
 config.riot_api.url_prefix = "https://";
 config.riot_api.url_midfix = ".api.pvp.net/api/lol/";
+config.riot_api.maxMatchHistoryGamesCount = 15;
 config.riot_api.staticTypes = {
 	champions: "champion?dataById=true&champData=tags",
 	items: "item",

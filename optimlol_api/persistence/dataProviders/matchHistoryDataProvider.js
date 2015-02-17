@@ -2,99 +2,93 @@ var q = require('q');
 
 module.exports = function() {
 	var self = this;
+	var _config = null;
 	var _apiVersion = null;
 	var _riotApi = null;
 	var _mongoCache = null;
 	var _logger = null;
 
+	var _parameterValidator = require('../../common/utilities/parameterValidator');
 	var _sorter = require('../../common/utilities/sorter');
 
-	var MATCH_HISTORY_TYPES = {
-		SOLO: "RANKED_SOLO_5x5",
-		FIVES: "RANKED_TEAM_5x5",
-		THREES: "RANKED_TEAM_3x3"
-	};
+	var PromiseFactoryConstructor = require('../utilities/promiseFactory');
+	var _promiseFactory = new PromiseFactoryConstructor();
+
+	var MATCH_HISTORY_TYPES = { SOLO: "RANKED_SOLO_5x5", FIVES: "RANKED_TEAM_5x5", THREES: "RANKED_TEAM_3x3" };
+	var REQUIRED_PARAMETERS = ['region', 'summonerId', 'type'];
+	var LOOKBACK_GAMES_COUNT = 30;
 
 	var _prepareMatchHistory = function(matchHistory) {
 		_sorter.sort(matchHistory.data.matches, 'matchCreation', 'descending');
 		return matchHistory;
 	};
 
-	var _getMatchHistoryApi = function(region, summonerId, type, deferred) {
-		var matchHistoryPath = region + "/" + _apiVersion + "/matchhistory/" + summonerId + "?rankedQueues=" + MATCH_HISTORY_TYPES[type];
-		var firstHalfMatchHistory = matchHistoryPath + "&beginIndex=0&endIndex=15";
-		var secondHalfMatchHistory = matchHistoryPath + "&beginIndex=15&endIndex=30";
-	
-		var promises = [
-			_riotApi.makeRequest(region, firstHalfMatchHistory),
-			_riotApi.makeRequest(region, secondHalfMatchHistory)
-		];
+	self.getFromApi = function(parameters) {
+		if (_parameterValidator.validate(parameters, REQUIRED_PARAMETERS) === false) {
+			throw new Error("Invalid parameters for Match History Data Provider"); 
+		} 
 
-		q.allSettled(promises)
-			.then(function(results) {
-				var fullMatchHistory = {
-					success: true,
-					data: {
-						matches: []
-					}
-				};
+		return _promiseFactory.defer(function(deferredObject) {
+			var matchHistoryLookBackCount = _config.optimlol_api.matchHistoryLookBackCount
+			var maxMatchHistoryGamesCount = _config.riot_api.maxMatchHistoryGamesCount
+			var matchHistoryPath = region + "/" + _apiVersion + "/matchhistory/" + summonerId + "?rankedQueues=" + MATCH_HISTORY_TYPES[type];
+			var promises = [];
+			for(var x = 0; x < matchHistoryLookBackCount/maxMatchHistoryGamesCount; x++) {
+				var beginIndex = x * maxMatchHistoryGamesCount;
+				var endIndex = beginIndex + maxMatchHistoryGamesCount;
+				var requestPath = matchHistoryPath + "&beginIndex=" + beginIndex + "&endIndex=" + endIndex;
+				promises.push(_riotApi.makeRequest(parameters.region, requestPath));
+			}
 
-				var bothCallsSucceeded = null;
-				results.forEach(function(matchHistory) {
-					if (matchHistory.state === 'fulfilled') {
-						if (matchHistory.success && bothCallsSucceeded === null) {
-							bothCallsSucceeded = true;
-						} else {
-							bothCallsSucceeded = false;
+			_promiseFactory.wait(promises)
+				.then(function(results) {
+					var dataProviderResult = null;
+					results.forEach(function(matchHistoryApiResult) {
+						if (matchHistoryApiResult.state === 'fulfilled') {
+							var currentMatchHistorySet = matchHistoryApiResult.value;
+							if (currentMatchHistorySet.data && currentMatchHistorySet.data.matches) {
+								if (dataProviderResult) {
+									dataProviderResult.data.matches.concat(matchHistoryApiResult.value.data.matches);
+								} else {
+									dataProviderResult = matchHistoryApiResult.value;
+								}
+							}
 						}
-
-						if (matchHistory.value.data.matches) {
-							fullMatchHistory.data.matches = fullMatchHistory.data.matches.concat(matchHistory.value.data.matches);
-						}
-					}
-				});
-
-				_mongoCache.set('matchHistory', { region: region, summonerId: summonerId, type: MATCH_HISTORY_TYPES[type] }, fullMatchHistory)
-					.then(function() {
-						deferred.resolve(fullMatchHistory);
-					})
-					.fail(function() {
-						// if setting cache fails, don't worry, move on.
-						deferred.resolve(fullMatchHistory);
 					});
-			})
-			.fail(function(error) {
-				deferred.reject(error);
-			});
-	}
 
-	self.getMatchHistory = function(region, summonerId, type) {
-		_logger.debug("Getting ranked match history data", summonerId, MATCH_HISTORY_TYPES[type]);
-		var deferred = q.defer();
-		_mongoCache.get('matchHistory', {region: region, summonerId: summonerId, type: MATCH_HISTORY_TYPES[type]})
-			.then(function(cachedMatchHistory) {
-				if (cachedMatchHistory.isExpired === false) {
-					_logger.debug("Using cached match history data");
-					deferred.resolve(_prepareMatchHistory(cachedMatchHistory));
-				} else {
-					_getMatchHistoryApi(region, summonerId, type)
+					_mongoCache.set('matchHistory', parameters, dataProviderResult)
 						.then(function() {
-
+							deferredObject.resolve(dataProviderResult);
 						})
-						.fail(function(error) {
-
+						.fail(function() {
+							_logger.warn("Some error when setting Match History Cache");
+							deferredObject.resolve(dataProviderResult);
 						});
-				}
-			})
-			.fail(function(error) {
-				_getMatchHistoryApi(region, summonerId, type, deferred);
-			});
+				})
+				.fail(function(error) {
+					deferredObject.reject(error);
+				});
+		});
+	};
 
-		return deferred.promise;
+	self.getFromCache = function(parameters) {
+		if (_parameterValidator.validate(parameters, REQUIRED_PARAMETERS) === false) {
+			throw new Error("Invalid parameters for Match History Data Provider"); 
+		} 
+
+		return _promiseFactory.defer(function(deferredObject) {
+			_mongoCache.get('matchHistory', parameters)
+				.then(function(cachedMatchHistory) {
+					deferredObject.resolve(cachedMatchHistory);
+				})
+				.fail(function(error) {
+					deferredObject.reject(error);
+				});
+		});
 	};
 
 	self.init = function() {
-		var config = require('../../config');
+		_config = require('../../config');
 		_apiVersion = config.riot_api.versions.matchHistory;
 
 		var MongoCacheConstructor = require('../../common/mongo/mongoCache');
