@@ -5,29 +5,25 @@ var _verifySummoner = function(region, summonerName) {
 	var deferred = q.defer();
 	var summonerVerificationObject = { verified: false, summoner: {} };
 
-	_summonerDataProvider.getSummonerByName(region, summonerName)
+	_dataProvider.getData('summoner', {region: region, summonerName: summonerName})
 		.then(function(summonerResult) {
 			var summonersArray = [];
-			var expectedResultFromRiot = summonerName.replace(/ /g, '').toLowerCase();
 
 			for (var property in summonerResult.data) {
 				summonerResult.data[property].queriedName = property;
 				summonersArray.push(summonerResult.data[property]);
 			}
 
-			if (summonersArray.length === 0) {
-				deferred.resolve(summonerVerificationObject);
-			} else {
-				var summonerExists = false;
-				for(var x = 0; x < summonersArray.length; x++) {
-					if (summonersArray[x].queriedName === expectedResultFromRiot) {
-						summonerVerificationObject.verified = true;
-						summonerVerificationObject.summoner = summonersArray[x];
-					}
+			if (summonersArray.length) {
+				var summonerObject = summonersArray[0];
+				var uniqueName = summonerName.replace(/ /g, '').toLowerCase();
+				if (summonerObject.queriedName === uniqueName) {
+					summonerVerificationObject.verified = true;
+					summonerVerificationObject.summoner = summonersArray[0];
 				}
-
-				deferred.resolve(summonerVerificationObject);
 			}
+			
+			deferred.resolve(summonerVerificationObject);
 		})
 		.fail(function(error) {
 			deferred.reject(summonerVerificationObject);
@@ -37,9 +33,9 @@ var _verifySummoner = function(region, summonerName) {
 }
 
 var _init = function() {
-	var SummonerDataProviderConstructor = require('../../persistence/dataProviders/summonerDataProvider');
-	_summonerDataProvider = new SummonerDataProviderConstructor();
-	_summonerDataProvider.init();
+	var DataProviderConstructor = require('../../persistence/dataProvider');
+	_dataProvider = new DataProviderConstructor();
+	_dataProvider.init();
 }
 
 module.exports = function() {

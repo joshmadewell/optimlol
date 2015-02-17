@@ -11,7 +11,7 @@ module.exports = function() {
 	var _parameterValidator = require('../../common/utilities/parameterValidator');
 	var _sorter = require('../../common/utilities/sorter');
 
-	var PromiseFactoryConstructor = require('../utilities/promiseFactory');
+	var PromiseFactoryConstructor = require('../../common/utilities/promiseFactory');
 	var _promiseFactory = new PromiseFactoryConstructor();
 
 	var MATCH_HISTORY_TYPES = { SOLO: "RANKED_SOLO_5x5", FIVES: "RANKED_TEAM_5x5", THREES: "RANKED_TEAM_3x3" };
@@ -31,7 +31,7 @@ module.exports = function() {
 		return _promiseFactory.defer(function(deferredObject) {
 			var matchHistoryLookBackCount = _config.optimlol_api.matchHistoryLookBackCount
 			var maxMatchHistoryGamesCount = _config.riot_api.maxMatchHistoryGamesCount
-			var matchHistoryPath = region + "/" + _apiVersion + "/matchhistory/" + summonerId + "?rankedQueues=" + MATCH_HISTORY_TYPES[type];
+			var matchHistoryPath = parameters.region + "/" + _apiVersion + "/matchhistory/" + summonerId + "?rankedQueues=" + MATCH_HISTORY_TYPES[type];
 			var promises = [];
 			for(var x = 0; x < matchHistoryLookBackCount/maxMatchHistoryGamesCount; x++) {
 				var beginIndex = x * maxMatchHistoryGamesCount;
@@ -89,7 +89,7 @@ module.exports = function() {
 
 	self.init = function() {
 		_config = require('../../config');
-		_apiVersion = config.riot_api.versions.matchHistory;
+		_apiVersion = _config.riot_api.versions.matchHistory;
 
 		var MongoCacheConstructor = require('../../common/mongo/mongoCache');
 		_mongoCache = new MongoCacheConstructor();

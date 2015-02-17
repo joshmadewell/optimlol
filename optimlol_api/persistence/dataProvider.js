@@ -1,4 +1,4 @@
-var PromiseFactoryConstructor = require('../utilities/promiseFactory');
+var PromiseFactoryConstructor = require('../common/utilities/promiseFactory');
 var _promiseFactory = new PromiseFactoryConstructor();
 
 var _dataProviders = {
@@ -23,9 +23,9 @@ var DataProviderResponseObject = function() {
 
 var _getData = function(dataProvider, parameters) {
 	return _promiseFactory.defer(function(deferredObject) {
-		var dataResponse = new DataResponseObject();
+		var dataResponse = new DataProviderResponseObject();
 
-		_logger.info("Attempting to get data from cache", parameters);
+		_logger.debug("Attempting to get " + dataProvider + " data from cache", parameters);
 		_dataProviders[dataProvider].getFromCache(parameters)
 			.then(function(cachedData) {
 				if (cachedData.isExpired) {
@@ -90,7 +90,7 @@ var _init = function() {
 	_dataProviders.matchHistory = new MatchHistoryDataProvider();
 	_dataProviders.matchHistory.init();
 
-	var StaticDatProvider = require('./dataProviders/staticDatProvider');
+	var StaticDatProvider = require('./dataProviders/staticDataProvider');
 	_dataProviders.static = new StaticDatProvider();
 	_dataProviders.static.init();
 

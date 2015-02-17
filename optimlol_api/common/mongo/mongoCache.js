@@ -24,16 +24,18 @@ module.exports = function() {
 			var model = require('../../persistence/mongoModels/' + collection + 'Model');
 			model.retrieve(parameters)
 				.then(function(cachedResult) {
-					if (cachedResult && cachedData.data) {
+					if (cachedResult && cachedResult.data) {
 						var cacheLastUpdated = moment().diff(cachedResult.updated_at, 'minutes');
-						_logger.debug("Cached " + collection + " object is " + cacheLastUpdated + " minutes old. Expire time is", cachedData.expiredTimeMinutes);
+						_logger.debug("Cached " + collection + " object is " + cacheLastUpdated + " minutes old. Expire time is", cachedResult.expiredTimeMinutes);
 
-						responseObject.data = cachedData.data;
-						if (cacheLastUpdated < cachedData.expiredTimeMinutes || cachedData.expiredTimeMinutes === -1) {
+						responseObject.data = cachedResult.data;
+						if (cacheLastUpdated < cachedResult.expiredTimeMinutes || cachedResult.expiredTimeMinutes === -1) {
 							responseObject.isExpired = false;
 						} else {
 							responseObject.isExpired = true;
 						}
+
+						deferredObject.resolve(responseObject);
 					} else {
 						deferredObject.resolve(responseObject);
 					}

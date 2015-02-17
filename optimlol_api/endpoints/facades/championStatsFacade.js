@@ -31,7 +31,7 @@ var _prepareStats = function(stats) {
 
 var _getRankedStats = function(region, summonerId) {
     var deferred = q.defer();
-    _statsDataProvider.getRankedStats(region, summonerId)
+    _statsDataProvider.getRankedStats({region: region, summonerId: summonerId})
         .then(function(stats) {
             deferred.resolve(_prepareStats(stats));
         })

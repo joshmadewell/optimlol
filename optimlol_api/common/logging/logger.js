@@ -7,7 +7,7 @@ var logger = new(winston.Logger)({
 	transports: [
 		new (winston.transports.Console)({
 			level: config.logging.log_level,
-			prettyPrint: false,
+			prettyPrint: true,
 			levels: config.logging.logLevels.levels,
 			colorize: true,
 			silent: config.logging.silent,

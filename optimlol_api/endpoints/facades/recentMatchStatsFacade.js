@@ -54,7 +54,7 @@ var _prepareStats = function(matchHistory) {
 
 var _getRecentStats = function(region, summonerId, type) {
 	var deferred = q.defer();
-	_matchHistoryDataProvider.getMatchHistory(region, summonerId, type)
+	_matchHistoryDataProvider.getMatchHistory({region: region, summonerId: summonerId, type: type})
 		.then(function(matchHistory) {
 			if (matchHistory.success && matchHistory.data) {
 				deferred.resolve(_prepareStats(matchHistory));

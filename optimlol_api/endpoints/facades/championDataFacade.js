@@ -3,7 +3,7 @@ var _staticDataProvider = null;
 
 var _getChampionData = function(region) {
 	var deferred = q.defer();
-	_staticDataProvider.getStaticData(region, 'champions')
+	_staticDataProvider.getStaticData({region: region, type: 'champions'})
 		.then(function(championData) {
 			deferred.resolve(championData);
 		})

@@ -14,7 +14,7 @@ module.exports = function() {
 				deferredFunction(deferred);
 			}
 		} catch(exception) {
-			deferred.reject(error);
+			deferred.reject(exception);
 		}
 
 		return deferred.promise;

@@ -119,6 +119,7 @@ module.exports = function() {
 		_summonerFacade.verifySummoner(region, summonerName)
 			.then(function(verifiedSummoner) {
 				if (verifiedSummoner.verified) {
+					console.log("VERIFIED!!!");
 					_generatePerformanceData(region, verifiedSummoner.summoner)
 						.then(function(summonerWithPerformanceData) {
 							deferred.resolve(summonerWithPerformanceData);
