@@ -1,6 +1,9 @@
 var q = require('q');
 var _matchHistoryDataProvider = null;
 
+var PromiseFactoryConstructor = require('../common/utilities/promiseFactory');
+var _promiseFactory = new PromiseFactoryConstructor();
+
 var _prepareStats = function(matchHistory) {
 	var recentStats = { champions: {}, matches: [] };
 	var matches = matchHistory.data.matches;
@@ -49,30 +52,30 @@ var _prepareStats = function(matchHistory) {
 		recentStats.matches.push(optimlolMatchHistoryObject);
 	});
 
-	return recentStats;
+	matchHistory.data = recentStats;
 };
 
 var _getRecentStats = function(region, summonerId, type) {
-	var deferred = q.defer();
-	_matchHistoryDataProvider.getMatchHistory({region: region, summonerId: summonerId, type: type})
-		.then(function(matchHistory) {
-			if (matchHistory.success && matchHistory.data) {
-				deferred.resolve(_prepareStats(matchHistory));
-			} else {
-				deferred.resolve(null);
-			}
-		})
-		.fail(function(error) {
-			deferred.resolve(null);
-		});
-
-	return deferred.promise;
+	return _promiseFactory.defer(function(deferredObject) {
+		_dataProvider.getData('matchHistory', {region: region, summonerId: summonerId, type: type})
+			.then(function(matchHistory) {
+				if (matchHistory.data && matchHistory.data.matches) {
+					_prepareStats(matchHistory);
+					deferredObject.resolve(matchHistory);
+				} else {
+					deferredObject.resolve(matchHistory);
+				}
+			})
+			.fail(function(error) {
+				deferredObject.resolve(error);
+			});
+	});
 };
 
 var _init = function() {
-	var MatchHistoryDataProviderConstructor = require('../../persistence/dataProviders/matchHistoryDataProvider');
-    _matchHistoryDataProvider = new MatchHistoryDataProviderConstructor();
-    _matchHistoryDataProvider.init();
+	var DataProviderConstructor = require('../../persistence/dataProvider');
+    _dataProvider = new DataProviderConstructor();
+    _dataProvider.init();
 };
 
 module.exports = function() {

@@ -7,6 +7,12 @@ module.exports = function() {
 	var _mongoCache = null;
 	var _logger = null;
 
+	var REQUIRED_PARAMETERS = ['region', 'summonerName'];
+	var _parameterValidator = require('../../common/utilities/parameterValidator');
+
+	var PromiseFactoryConstructor = require('../../common/utilities/promiseFactory');
+	var _promiseFactory = new PromiseFactoryConstructor();
+
 	var _getStatsApi = function(region, summonerId, deferred) {
 		var statsPath = region + "/" + _apiVersion + "/stats/by-summoner/" + summonerId + "/ranked";
 		_riotApi.makeRequest(region, statsPath)

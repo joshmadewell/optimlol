@@ -2,6 +2,9 @@ var q = require('q');
 var _statsDataProvider = null;
 var _performanceCalculator = require('../../common/utilities/performanceCalculator');
 
+var PromiseFactoryConstructor = require('../common/utilities/promiseFactory');
+var _promiseFactory = new PromiseFactoryConstructor();
+
 var _prepareStats = function(stats) {
     if (stats.data) {
         var optimlolChampions = [];
@@ -30,26 +33,25 @@ var _prepareStats = function(stats) {
 };
 
 var _getRankedStats = function(region, summonerId) {
-    var deferred = q.defer();
-    _statsDataProvider.getRankedStats({region: region, summonerId: summonerId})
-        .then(function(stats) {
-            deferred.resolve(_prepareStats(stats));
-        })
-        .fail(function(error) {
-            _logger.warn("Some error while getting stats", error);
-            deferred.reject(error);
-        })
-
-    return deferred.promise;
+    return _promiseFactory.defer(function(deferredObject) {
+        _dataProvider.getData('stats', {region: region, summonerId: summonerId})
+            .then(function(stats) {
+                deferredObject.resolve(_prepareStats(stats));
+            })
+            .fail(function(error) {
+                _logger.warn("Some error while getting stats", error);
+                deferredObject.reject(error);
+            })
+    });
 };
 
 var _init = function() {
     var Logger = require('../../common/logging/logger');
     _logger = new Logger();
 
-    var StatsDataProviderConstructor = require('../../persistence/dataProviders/statsDataProvider');
-    _statsDataProvider = new StatsDataProviderConstructor();
-    _statsDataProvider.init();
+    var DataProviderConstructor = require('../../persistence/dataProviders/statsDataProvider');
+    _dataProvider = new DataProviderConstructor();
+    _dataProvider.init();
 };
 
 module.exports = function() {

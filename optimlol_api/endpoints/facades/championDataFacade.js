@@ -1,17 +1,19 @@
 var q = require('q');
 var _staticDataProvider = null;
 
-var _getChampionData = function(region) {
-	var deferred = q.defer();
-	_staticDataProvider.getStaticData({region: region, type: 'champions'})
-		.then(function(championData) {
-			deferred.resolve(championData);
-		})
-		.then(function(error) {
-			deferred.reject(error);
-		});
+var PromiseFactoryConstructor = require('../common/utilities/promiseFactory');
+var _promiseFactory = new PromiseFactoryConstructor();
 
-	return deferred.promise;
+var _getChampionData = function(region) {
+	return _promiseFactory.defer(function(deferredObject) {
+		_staticDataProvider.getStaticData({region: region, type: 'champions'})
+			.then(function(championData) {
+				deferredObject.resolve(championData);
+			})
+			.then(function(error) {
+				deferredObject.reject(error);
+			});
+	});
 }
 
 var _init = function() {
