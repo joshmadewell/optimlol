@@ -4,14 +4,14 @@
 	width: 65%;
 
 	.faq-container {
-		// padding: 9px 14px;
-		// margin-bottom: 14px;
-		// background-color: #f7f7f9;
-		// border: 1px solid #e1e1e8;
-		// border-radius: 4px;
-
 		.question-group {
+			margin-bottom: 10px;
 			div {
+				.collapse {
+					float: right;
+					margin: 2px 4px 0 -4px;
+				}
+				
 				margin-right: 0;
 				margin-left: 0;
 				background-color: #fff;
