@@ -19,6 +19,7 @@ module.exports = function() {
 		} 
 
 		return _promiseFactory.defer(function(deferredObject) {
+			_logger.debug("summoner data provider, getFromApi");
 			var championsPath = region + "/" + _apiVersion + "/summoner/by-name/" + parameters.summonerName;
 			_riotApi.makeRequest(parameters.region, championsPath)
 				.then(function(summonerResult) {
@@ -43,7 +44,7 @@ module.exports = function() {
 		} 
 
 		return _promiseFactory.defer(function(deferredObject) {
-			_logger.debug("Getting summoner by name", parameters);
+			_logger.debug("summoner data provider, getFromCache");
 			_mongoCache.get('summoners', parameters)
 				.then(function(cacheSummonerResult) {
 					deferredObject.resolve(cacheSummonerResult);

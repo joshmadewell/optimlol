@@ -7,7 +7,7 @@ var MatchHistorySchema = new Schema({
 	summonerId: { type: Number, required: true },
 	region: { type: String, required: true },
 	type: { type: String, required: true },
-	expiredTimeMinutes: { type: Number, required: true, default: 45 },
+	expiredTimeMinutes: { type: Number, required: true, default: 60 },
 	returnDataOnExpired: { type: Boolean, required: true, default: true },
 	data: Schema.Types.Mixed,
 	created_at: { type: Date },

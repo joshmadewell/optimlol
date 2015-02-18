@@ -1,4 +1,4 @@
-var _summonerDataProvider = null;
+var _dataProvider = null;
 
 var PromiseFactoryConstructor = require('../../common/utilities/promiseFactory');
 var _promiseFactory = new PromiseFactoryConstructor();

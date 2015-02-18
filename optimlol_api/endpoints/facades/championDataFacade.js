@@ -1,11 +1,11 @@
-var _staticDataProvider = null;
+var _dataProvider = null;
 
-var PromiseFactoryConstructor = require('../common/utilities/promiseFactory');
+var PromiseFactoryConstructor = require('../../common/utilities/promiseFactory');
 var _promiseFactory = new PromiseFactoryConstructor();
 
 var _getChampionData = function(region) {
 	return _promiseFactory.defer(function(deferredObject) {
-		_staticDataProvider.getStaticData({region: region, staticType: 'champions'})
+		_dataProvider.getData('static', {region: region, staticType: 'champions'})
 			.then(function(championData) {
 				deferredObject.resolve(championData);
 			})
@@ -16,9 +16,9 @@ var _getChampionData = function(region) {
 }
 
 var _init = function() {
-	var StaticDataProviderConstructor = require('../../persistence/dataProviders/staticDataProvider');
-	_staticDataProvider = new StaticDataProviderConstructor();
-	_staticDataProvider.init();
+	var DataProviderConstructor = require('../../persistence/dataProvider');
+	_dataProvider = new DataProviderConstructor();
+	_dataProvider.init();
 }
 
 module.exports = function() {

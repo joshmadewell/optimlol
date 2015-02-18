@@ -27,9 +27,10 @@ module.exports = function() {
 		} 
 
 		return _promiseFactory.defer(function(deferredObject) {
+			_logger.debug("match history data provider, getFromApi");
 			var matchHistoryLookBackCount = _config.optimlol_api.matchHistoryLookBackCount
 			var maxMatchHistoryGamesCount = _config.riot_api.maxMatchHistoryGamesCount
-			var matchHistoryPath = parameters.region + "/" + _apiVersion + "/matchhistory/" + summonerId + "?rankedQueues=" + MATCH_HISTORY_TYPES[type];
+			var matchHistoryPath = parameters.region + "/" + _apiVersion + "/matchhistory/" + parameters.summonerId + "?rankedQueues=" + MATCH_HISTORY_TYPES[parameters.type];
 			var promises = [];
 			for(var x = 0; x < matchHistoryLookBackCount/maxMatchHistoryGamesCount; x++) {
 				var beginIndex = x * maxMatchHistoryGamesCount;
@@ -46,7 +47,7 @@ module.exports = function() {
 							var currentMatchHistorySet = matchHistoryApiResult.value;
 							if (currentMatchHistorySet.data && currentMatchHistorySet.data.matches) {
 								if (dataProviderResult) {
-									dataProviderResult.data.matches.concat(matchHistoryApiResult.value.data.matches);
+									dataProviderResult.data.matches = dataProviderResult.data.matches.concat(currentMatchHistorySet.data.matches);
 								} else {
 									dataProviderResult = matchHistoryApiResult.value;
 								}
@@ -58,8 +59,8 @@ module.exports = function() {
 						.then(function() {
 							deferredObject.resolve(dataProviderResult);
 						})
-						.fail(function() {
-							_logger.warn("Some error when setting Match History Cache");
+						.fail(function(error) {
+							_logger.warn("Some error when setting Match History Cache", error);
 							deferredObject.resolve(dataProviderResult);
 						});
 				})
@@ -75,6 +76,7 @@ module.exports = function() {
 		} 
 
 		return _promiseFactory.defer(function(deferredObject) {
+			_logger.debug("match history data provider, getFromCache");
 			_mongoCache.get('matchHistory', parameters)
 				.then(function(cachedMatchHistory) {
 					deferredObject.resolve(cachedMatchHistory);

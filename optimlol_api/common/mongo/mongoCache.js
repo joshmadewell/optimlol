@@ -49,7 +49,7 @@ module.exports = function() {
 	self.set = function(collection, parameters, toCache) {
 		return _promiseFactory.defer(function(deferredObject) {
 			_logger.debug(collection + ": Cache Set:", parameters);
-			var model = require('../persistence/mongoModels/' + collection + 'Model');
+			var model = require('../../persistence/mongoModels/' + collection + 'Model');
 			
 			if (toCache.success && toCache.data) {
 				model.retrieve(parameters)

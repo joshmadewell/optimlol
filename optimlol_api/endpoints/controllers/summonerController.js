@@ -11,6 +11,12 @@ module.exports = function() {
 	var PromiseFactoryConstructor = require('../../common/utilities/promiseFactory');
 	var _promiseFactory = new PromiseFactoryConstructor();
 
+	var SummonerWithPerformanceDataResponseObject = function() {
+		this.quality = null;
+		this.data = null;
+		this.message = null;
+	}
+
 	var _incrementLaneStats = function(recentStats, matchData, champion) {
 		var role = matchData.role;
 		if (role === "BOTTOM") {
@@ -33,20 +39,32 @@ module.exports = function() {
 			RECENT_STATS_INDEX: 1,
 			CHAMPIONS_INDEX: 2,
 			PRMOMISES: [
-				_championStatsFacade.getRankedStats(region, summoner.id),
+				_rankedStatsFacade.getRankedStats(region, summoner.id),
 				_recentMatchStatsFacade.getRecentStats(region, summoner.id, "SOLO"),
 				_championDataFacade.getChampionData(region)
 			]
 		};
 
 		return _promiseFactory.defer(function(deferredObject) {
+			var responseObject = new SummonerWithPerformanceDataResponseObject();
 			_promiseFactory.wait(promiseObject.PRMOMISES)
 				.then(function(results) {
 					var championStats = results[promiseObject.STATS_INDEX].state === 'fulfilled' ? results[promiseObject.STATS_INDEX].value : null;
 					var recentHistoryStats = results[promiseObject.RECENT_STATS_INDEX].state === 'fulfilled' ? results[promiseObject.RECENT_STATS_INDEX].value : null;
 					var champions = results[promiseObject.CHAMPIONS_INDEX].state === 'fulfilled' ? results[promiseObject.CHAMPIONS_INDEX].value : null;
 
-					// shouldn't have to say performanceData.data.championStats because yavascript
+					responseObject.quality = 'fresh';
+					results.forEach(function(result) {
+						var worstQuality = null;
+						if (result.state === 'fulfilled') {
+							if (result.value.quality && result.value.quality === 'stale') {
+								resonseObject.quality = responseObject.quality === 'unknown' ? 'unknown' : 'stale';
+							} else if (result.value.quality && result.value.quality === 'unkown') {
+								responseObject.quality = 'unknown';
+							}
+						}
+					});
+
 					summoner.championStats = null;
 					summoner.recentHistory = null;
 
@@ -71,7 +89,8 @@ module.exports = function() {
 						summoner.championStats = championStats.data.champions;
 					}
 
-					if (recentHistoryStats) {
+					if (recentHistoryStats.data) {
+						var recentHistoryObject = {};
 						var recentChampionsArray = [];
 						var laneStats = {
 							MARKSMAN: {wins: 0, losses: 0, total: 0},
@@ -81,7 +100,7 @@ module.exports = function() {
 							JUNGLE: {wins: 0, losses: 0, total: 0}
 						};
 
-						var recentChamps = recentHistoryStats.champions;
+						var recentChamps = recentHistoryStats.data.champions;
 						for(var champion in recentChamps) {
 							recentChamps[champion].id = champion;
 							recentChamps[champion].championKey = champions.data.data[champion].key.toLowerCase();
@@ -89,7 +108,7 @@ module.exports = function() {
 							recentChampionsArray.push(recentChamps[champion]);
 						}
 
-						var recentMatches = recentHistoryStats.matches;
+						var recentMatches = recentHistoryStats.data.matches;
 						recentMatches.forEach(function(recentMatchStats) {
 							var championIdString = recentMatchStats.championId.toString();
 							recentMatchStats.championKey = champions.data.data[championIdString].key.toLowerCase();
@@ -98,15 +117,17 @@ module.exports = function() {
 							_incrementLaneStats(laneStats, recentMatchStats, champions.data.data[championIdString]);
 						});
 
-						recentHistoryStats.champions = recentChampionsArray;
-						recentHistoryStats.laneStats = laneStats;
-						summoner.recentHistory = recentHistoryStats;
+						recentHistoryObject.champions = recentChampionsArray;
+						recentHistoryObject.laneStats = laneStats;
+						summoner.recentHistory = recentHistoryObject;
 					}
 
-					deferred.resolve(summoner);
+					responseObject.data = summoner;
+
+					deferredObject.resolve(responseObject);
 				})
 				.fail(function(error) {
-					deferred.reject(error);
+					deferredObject.reject(error);
 				});
 		});
 	};
@@ -116,7 +137,6 @@ module.exports = function() {
 		_summonerFacade.verifySummoner(region, summonerName)
 			.then(function(verifiedSummoner) {
 				if (verifiedSummoner.verified) {
-					console.log("VERIFIED!!!");
 					_generatePerformanceData(region, verifiedSummoner.summoner)
 						.then(function(summonerWithPerformanceData) {
 							deferred.resolve(summonerWithPerformanceData);
@@ -140,9 +160,9 @@ module.exports = function() {
 		_summonerFacade = new SummonerFacadeConstuctor();
 		_summonerFacade.init();
 
-		var ChampionStatsFacadeConstructor = require('../facades/championStatsFacade');
-		_championStatsFacade = new ChampionStatsFacadeConstructor();
-		_championStatsFacade.init();
+		var RankedStatsFacadeConstructor = require('../facades/rankedStatsFacade');
+		_rankedStatsFacade = new RankedStatsFacadeConstructor();
+		_rankedStatsFacade.init();
 
 		var RecentMatchStatsFacadeConstructor = require('../facades/recentMatchStatsFacade');
 		_recentMatchStatsFacade = new RecentMatchStatsFacadeConstructor();

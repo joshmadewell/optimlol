@@ -17,8 +17,9 @@ module.exports = function() {
 		}
 
 		return _promiseFactory.defer(function(deferredObject) {
+			_logger.debug("stats data provider, getFromApi");
 			var statsPath = parameters.region + "/" + _apiVersion + "/stats/by-summoner/" + parameters.summonerId + "/ranked";
-			_riotApi.makeRequest(region, statsPath)
+			_riotApi.makeRequest(parameters.region, statsPath)
 				.then(function(statsResult) {
 					_mongoCache.set('stats', parameters, statsResult)
 						.then(function() {
@@ -41,6 +42,7 @@ module.exports = function() {
 		}
 
 		return _promiseFactory.defer(function(deferredObject) {
+			_logger.debug("stats data provider, getFromCache");
 			_mongoCache.get('stats', parameters)
 				.then(function(cacheStatsResult) {
 					deferredObject.resolve(cacheStatsResult);

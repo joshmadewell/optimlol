@@ -4,7 +4,7 @@ var _promiseFactory = new PromiseFactoryConstructor();
 var _dataProviders = {
 	matchHistory: null,
 	static: null,
-	stats: null,
+	rankedStats: null,
 	summoner: null
 };
 
@@ -25,12 +25,12 @@ var _getData = function(dataProvider, parameters) {
 	return _promiseFactory.defer(function(deferredObject) {
 		var dataResponse = new DataProviderResponseObject();
 
-		_logger.debug("Attempting to get " + dataProvider + " data from cache", parameters);
+		_logger.debug("Attempting to get " + dataProvider + " data from cache");
 		_dataProviders[dataProvider].getFromCache(parameters)
 			.then(function(cachedData) {
-				if (cachedData.isExpired) {
-					_logger.info("Data expired, or unset, attempting to refresh", parameters);
-					_dataProviders[dataProvider].getFromApi(dataProvider, parameters)
+				if (cachedData.isExpired === true || cachedData.isExpired === null) {
+					_logger.info(dataProvider + " data expired, or unset, attempting to refresh", parameters);
+					_dataProviders[dataProvider].getFromApi(parameters)
 						.then(function(apiData) {
 							if (apiData.success) {
 								dataResponse.success = true;
@@ -94,9 +94,9 @@ var _init = function() {
 	_dataProviders.static = new StaticDatProvider();
 	_dataProviders.static.init();
 
-	var StatsDataProvider = require('./dataProviders/statsDataProvider');
-	_dataProviders.stats = new StatsDataProvider();
-	_dataProviders.stats.init();
+	var RankedStatsDataProvider = require('./dataProviders/rankedStatsDataProvider');
+	_dataProviders.rankedStats = new RankedStatsDataProvider();
+	_dataProviders.rankedStats.init();
 
 	var SummonerDataProvider = require('./dataProviders/summonerDataProvider');
 	_dataProviders.summoner = new SummonerDataProvider();

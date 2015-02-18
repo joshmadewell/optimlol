@@ -18,6 +18,7 @@ module.exports = function() {
 		}
 
 		return _promiseFactory.defer(function(deferredObject) {
+			_logger.debug("static data provider, getFromApi");
 			var staticDataPath = "static-data/" + parameters.region + "/" + _apiVersion + "/" + _config.riot_api.staticTypes[parameters.staticType];
 			_riotApi.makeGlobalRequest(region, staticDataPath)
 				.then(function(staticDataResult) {
@@ -43,6 +44,7 @@ module.exports = function() {
 		}
 
 		return _promiseFactory.defer(function(deferredObject) {
+			_logger.debug("static data provider, getFromCache");
 			_mongoCache.get('staticData', parameters)
 				.then(function(cachedStaticData) {
 					deferredObject.resolve(cachedStaticData);

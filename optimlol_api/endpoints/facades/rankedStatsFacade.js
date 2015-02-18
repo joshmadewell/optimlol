@@ -1,4 +1,4 @@
-var _statsDataProvider = null;
+var _dataProvider = null;
 var _performanceCalculator = require('../../common/utilities/performanceCalculator');
 
 var PromiseFactoryConstructor = require('../../common/utilities/promiseFactory');
@@ -33,7 +33,7 @@ var _prepareStats = function(stats) {
 
 var _getRankedStats = function(region, summonerId) {
     return _promiseFactory.defer(function(deferredObject) {
-        _dataProvider.getData('stats', {region: region, summonerId: summonerId})
+        _dataProvider.getData('rankedStats', {region: region, summonerId: summonerId})
             .then(function(stats) {
                 deferredObject.resolve(_prepareStats(stats));
             })
@@ -48,7 +48,7 @@ var _init = function() {
     var Logger = require('../../common/logging/logger');
     _logger = new Logger();
 
-    var DataProviderConstructor = require('../../persistence/dataProviders/statsDataProvider');
+    var DataProviderConstructor = require('../../persistence/dataProvider');
     _dataProvider = new DataProviderConstructor();
     _dataProvider.init();
 };

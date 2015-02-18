@@ -54,7 +54,7 @@ module.exports = function() {
 				if (error) {
 					deferredObject.reject(error);
 				} else {
-					_setResponseObject(responseObject, jsonResponse);
+					_setResponseObject(responseObject, result.toJSON());
 					deferredObject.resolve(responseObject);
 				}
 			});
