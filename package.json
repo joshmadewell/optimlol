@@ -4,6 +4,7 @@
   "description": "Champion Selection Optimization for League Of Legends",
   "main": "gulpfile.js",
   "dependencies": {
+    "compression": "^1.4.1",
     "css-sprite": "^0.9.0",
     "del": "^1.1.1",
     "event-stream": "^3.2.1",
