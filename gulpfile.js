@@ -16,6 +16,10 @@ gulp.task('clean', function(cb) {
 	del(['./build'], cb);
 });
 
+gulp.task('clean-build-app', function(cb) {
+	del(['./build/js/app'], cb);
+});
+
 gulp.task('web-app', function(cb) {
 	es.concat(
 		gulp.src('./web/app/**/*.js')
@@ -114,7 +118,7 @@ gulp.task('webserver', function() {
 });
 
 gulp.task('durandal', function() {
-	return durandal({
+ 	return durandal({
 		baseDir: 'build/js/app',
 		main: 'main.js',
 		minify: true,
@@ -130,7 +134,7 @@ gulp.task('watch', function() {
 
 // Default Task
 gulp.task('build-web', function() {
-	runSequence('clean', ['web-app', 'settings', 'sprites', 'sass'], 'durandal');
+	runSequence('clean', ['web-app', 'settings', 'sprites', 'sass'], 'durandal', 'clean-build-app');
 });
 
 gulp.task('debug-web', function() {
