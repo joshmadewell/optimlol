@@ -4,6 +4,7 @@ define([], function() {
 
 		self.faqs = ko.observableArray([
 			{
+				whatIsThis: true,
 				question: "What is OptimLoL?",
 				answer: "OptimLoL is a website created for ranked solo/duo players to quickly see stats of " + 
 						"all the players in champion select so that they can determine who would fit each lane the best.",
@@ -11,6 +12,7 @@ define([], function() {
 				chevronClass: ko.observable('fa fa-chevron-up collapse')
 			},
 			{
+				whatIsThis: true,
 				question: "How does this work?",
 				answer: "You have two options when you get to OptimLoL.com. You can either type in all five summoner " +
 						"names of the players in champion select or you can copy/paste the chat log from your champion " + 
@@ -22,6 +24,7 @@ define([], function() {
 				chevronClass: ko.observable('fa fa-chevron-up collapse')
 			},
 			{
+				whatIsThis: false,
 				question: "Why does it say there are two junglers on my team?",
 				answer: "The lane tags (currently) only represent what each player has played the most in their last thirty " +
 						"ranked games. As such, if you have two players on your team that have played jungle sixteen of the last " +
@@ -30,6 +33,7 @@ define([], function() {
 				chevronClass: ko.observable('fa fa-chevron-up collapse')
 			},
 			{
+				whatIsThis: false,
 				question: "I don't main top but OptimLoL says I do. Help!?",
 				answer: "It is important to note that the lane tags are NOT suggestions of what to play. They are simply " +
 						"just a tag that represents what you have been playing. If you have played top lane the most in the last " +
@@ -38,6 +42,7 @@ define([], function() {
 				chevronClass: ko.observable('fa fa-chevron-up collapse')
 			},
 			{
+				whatIsThis: false,
 				question: "How are you determining champions best performance?",
 				answer: "I am using an adaptation of the <a href=\"http://en.wikipedia.org/wiki/Binomial_proportion_confidence_interval#Wilson_score_interval\">" +
 						"Wilson Score Interval.</a> This basically takes into consideration the amount of games you've played and the amount " +
@@ -50,6 +55,7 @@ define([], function() {
 				chevronClass: ko.observable('fa fa-chevron-up collapse')
 			},
 			{
+				whatIsThis: false,
 				question: "Are you going to add lane suggestions?",
 				answer: "I plan on adding lane suggestions at some point but have, unfortunately, not gotten around to it. " +
 						"Determining who would be the best fit is not as simple as it sounds. I used to have this feature but often " +
@@ -59,6 +65,7 @@ define([], function() {
 				chevronClass: ko.observable('fa fa-chevron-up collapse')
 			},
 			{
+				whatIsThis: false,
 				question: "Where are you getting this data from?",
 				answer: "Riot has an Application Program Interface (API) which provides all the data that I am showing on " +
 						"the page. They have documentation on the API <a href=\"https://developer.riotgames.com/api/methods\">here</a>.",
@@ -66,6 +73,7 @@ define([], function() {
 				chevronClass: ko.observable('fa fa-chevron-up collapse')
 			},
 			{
+				whatIsThis: false,
 				question: "Why does your website look so lame?",
 				answer: "Funny you should ask!!! I'm actually looking for a web-designer and working with someone to get a logo " +
 						"created. If you're interested in helping or have any suggestions shoot me an <a mailto:\"optimloldotcom@gmail.com\">email</a>!",
@@ -84,8 +92,15 @@ define([], function() {
 			}
 		}
 
-		self.activate = function() {
-
+		self.activate = function(fromWhatIsThis) {
+			if (fromWhatIsThis === 'explain') {
+				self.faqs().forEach(function(faq) {
+					if (faq.whatIsThis) {
+						faq.isVisible(true);
+						faq.chevronClass('fa fa-chevron-down collapse');
+					}
+				})
+			};
 		};
 	};
 });
