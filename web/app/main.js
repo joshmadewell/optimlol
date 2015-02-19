@@ -9,7 +9,7 @@
 });
 
 define('knockout', ko);
-define('jquery', function() { return jQuery });
+define('jquery', function() { return jQuery; });
 define('singleton/session', ['common/session'], function(Session) {
     return new Session();
 });

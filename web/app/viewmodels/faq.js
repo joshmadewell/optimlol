@@ -93,6 +93,10 @@ define([], function() {
 		}
 
 		self.activate = function(fromWhatIsThis) {
+			if (window.ga && typeof window.ga === 'function') {
+				window.ga('send', 'pageview', '/support');
+			}
+
 			if (fromWhatIsThis === 'explain') {
 				self.faqs().forEach(function(faq) {
 					if (faq.whatIsThis) {
