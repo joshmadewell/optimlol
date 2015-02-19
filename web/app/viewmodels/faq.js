@@ -6,7 +6,7 @@ define([], function() {
 			{
 				whatIsThis: true,
 				question: "What is OptimLoL?",
-				answer: "OptimLoL is a website created for ranked solo/duo players to quickly see stats of " + 
+				answer: "OptimLoL is a website created for ranked solo/duo players to quickly see stats of " +
 						"all the players in champion select so that they can determine who would fit each lane the best.",
 				isVisible: ko.observable(false),
 				chevronClass: ko.observable('fa fa-chevron-up collapse')
@@ -15,9 +15,9 @@ define([], function() {
 				whatIsThis: true,
 				question: "How does this work?",
 				answer: "You have two options when you get to OptimLoL.com. You can either type in all five summoner " +
-						"names of the players in champion select or you can copy/paste the chat log from your champion " + 
-						"selection screen and hit the \"Parse Chat Log\" button. The second option is usually the quickest " + 
-						"but sometimes, you won't have a message that contains summoner names so you'll have to type all " + 
+						"names of the players in champion select or you can copy/paste the chat log from your champion " +
+						"selection screen and hit the \"Parse Chat Log\" button. The second option is usually the quickest " +
+						"but sometimes, you won't have a message that contains summoner names so you'll have to type all " +
 						"the names in. I still find this much faster than opening five tabs in my browser and searching " +
 						"individually on LoLKing.",
 				isVisible: ko.observable(false),

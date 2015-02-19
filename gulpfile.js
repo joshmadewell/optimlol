@@ -1,5 +1,5 @@
 // Include gulp
-var gulp = require('gulp'); 
+var gulp = require('gulp');
 
 // Include Our Plugins
 var del = require('del');
@@ -127,9 +127,13 @@ gulp.task('durandal', function() {
 	.pipe(gulp.dest('./build/js/'));
 });
 
+gulp.task('js-watch', function() {
+	runSequence('web-app', 'durandal');
+});
+
 gulp.task('watch', function() {
 	gulp.watch('./web/appDependencies/sass/**/*.scss', ['sass']);
-	gulp.watch('./web/app/**/*', ['web-app']);
+	gulp.watch('./web/app/**/*', ['js-watch']);
 });
 
 // Default Task
