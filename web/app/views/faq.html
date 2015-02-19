@@ -1,0 +1,10 @@
+<div class="info">
+	<div class="faq-container" data-bind="foreach: faqs">
+		<div class="question-group">
+			<div class="question"><!--ko text: question--><!--/ko-->
+				<span data-bind="css: chevronClass, click: $parent.toggleCollapse"></span>
+			</div>
+			<p class="answer" data-bind="html: answer, visible: isVisible"></p>
+		</div>
+	</div>
+</div>

@@ -1,12 +1,10 @@
 ﻿define(['durandal/system',
-	'knockout',
 	'durandal/app',
-	'jquery',
 	'dataProviders/summonersDataProvider',
 	'presentationObjects/summonerPresentationObject',
 	'common/collectionSorter',
 	'singleton/session'],
-	function (durandal, ko, app, $, SummonersDataProvider, SummonerPresentationObject, collectionSorter, session) {
+	function (durandal, app, SummonersDataProvider, SummonerPresentationObject, collectionSorter, session) {
 	return function() {
 		var self = this;
 		var NUMBER_OF_SUMMONERS = 5;

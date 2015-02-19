@@ -1,5 +1,5 @@
 // Include gulp
-var gulp = require('gulp'); 
+var gulp = require('gulp');
 
 // Include Our Plugins
 var del = require('del');
@@ -10,9 +10,14 @@ var es = require('event-stream');
 var runSequence = require('run-sequence');
 var sprite = require('css-sprite').stream;
 var rename = require('gulp-rename');
+var durandal = require('gulp-durandal');
 
 gulp.task('clean', function(cb) {
 	del(['./build'], cb);
+});
+
+gulp.task('clean-build-app', function(cb) {
+	del(['./build/js/app'], cb);
 });
 
 gulp.task('web-app', function(cb) {
@@ -111,16 +116,31 @@ gulp.task('webserver', function() {
 		port: 9001
 	});
 });
+
+gulp.task('durandal', function() {
+ 	return durandal({
+		baseDir: 'build/js/app',
+		main: 'main.js',
+		minify: true,
+		almond: true
+	})
+	.pipe(gulp.dest('./build/js/'));
+});
+
+gulp.task('js-watch', function() {
+	runSequence('web-app', 'durandal');
+});
+
 gulp.task('watch', function() {
 	gulp.watch('./web/appDependencies/sass/**/*.scss', ['sass']);
-	gulp.watch('./web/app/**/*', ['web-app']);
+	gulp.watch('./web/app/**/*', ['js-watch']);
 });
 
 // Default Task
 gulp.task('build-web', function() {
-	runSequence('clean', ['web-app', 'settings', 'sprites', 'sass']);
+	runSequence('clean', ['web-app', 'settings', 'sprites', 'sass'], 'durandal', 'clean-build-app');
 });
 
 gulp.task('debug-web', function() {
-	runSequence('clean', 'sprites', ['web-app', 'settings', 'sass', 'watch', 'webserver']);
+	runSequence('clean', 'sprites', ['web-app', 'settings', 'sass'], 'durandal', ['watch', 'webserver']);
 });

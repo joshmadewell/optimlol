@@ -1,4 +1,4 @@
-﻿define(['plugins/router', 
+﻿define(['plugins/router',
     'durandal/app',
     'singleton/session'], function (router, app, session) {
     return function() {
@@ -50,6 +50,13 @@
         });
         self.router = router;
 
+        self.onNavigationClicked= function(navigationItem) {
+            router.navigate(navigationItem.hash);
+            if($('.navbar-header .navbar-toggle').css('display') !='none'){
+                $(".navbar-header .navbar-toggle").trigger( "click" );
+            }
+        };
+
         self.activate = function() {
             var storedRegion = session.get('region');
 
@@ -65,10 +72,27 @@
             }
 
             router.map([
-                { route: '', title:'', moduleId: 'viewmodels/optimlol', nav: true, isActive: false },
-                { route: 'support', title:'Support', moduleId: 'viewmodels/support', nav: true }
+                {
+                    route: '',
+                    title:'',
+                    moduleId: 'viewmodels/optimlol',
+                    nav: true
+                },
+                {
+                    route: 'faq(/:fromWhatIsThis)',
+                    title: 'FAQ',
+                    moduleId: 'viewmodels/faq',
+                    hash: "#faq",
+                    nav: true
+                },
+                {
+                    route: 'support',
+                    title:'Support',
+                    moduleId: 'viewmodels/support',
+                    nav: true
+                }
             ]).buildNavigationModel();
-            
+
             return router.activate();
         };
     };

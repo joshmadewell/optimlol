@@ -1,9 +1,5 @@
-// FOR THE LOVE OF GOD REFACTOR THIS GARBAGE
-
 var request = require('request');
 var fs = require('fs');
-var q = require('q');
-var config = require('../optimlol_api/config');
 
 var envContent = fs.readFileSync(__dirname + '/../.env', 'utf8');
 var envArray = envContent.split('\n');
@@ -13,80 +9,12 @@ envArray.forEach(function(variable) {
 	env[splitVariable[0]] = splitVariable[1].replace(/'/g, '');
 });
 
-var RIOT_SPRITE_LOCATION = "http://ddragon.leagueoflegends.com/cdn/{{version}}/img/sprite/{{file_name}}";
-var SPRITE_SAVE_PATH = __dirname + "/../web/appDependencies/sass/sprite_scss/";
-var generationConfig = [
-	{
-		name: "champions",
-		spriteName: "champions.png",
-		prefix: "icon-champion-large-",
-		extend: "icon-champion-large",
-		riot_url: "https://na.api.pvp.net/api/lol/static-data/na/" + config.riot_api.versions.staticData + "/champion?champData=image&api_key=",
-		xAxis: function(x, set) { return x * -1; }
-		yAxis: function(y, set) { return set === 4 ? 0 : y * -1 - 48 - (144*set)}
-	},
-	{
-		name: "summonerSpells",
-		spriteName: "spells",
-		prefix: "icon-summoner-spell-small-",
-		extend: "icon-summoner-spell-small",
-		riot_url: "https://na.api.pvp.net/api/lol/static-data/na/" + config.riot_api.versions.staticData + "/summoner-spell?spellData=image&api_key="
-	}
-]
-
-var _sortComparator = function(a, b) {
-	if (a.name < b.name) {
-		return -1;
-	} else if (a.name > b.name) {
-		return 1;
-	} else {
-		return 0;
-	}
-};
-
-var doWork = function() {
-	var _version = null;
-	var _filesToDownload = [];
-	var _promises = [];
-
-	generationConfig.forEach(function(spriteToGenerate) {
-		var deferred = q.defer();
-		request.get(spriteToGenerate.riot_url, function(error, result) {
-			var spriteData = JSON.parse(result.body).data;
-			var dataToWriteToFile = [];
-
-			for (dataSet in spriteData) {
-				var dataNeeded = {};
-				var currentDataSet = spriteData[dataSet];
-
-				dataNeeded.name = dataSet.key.toLowerCase();
-				dataNeeded.sprite = dataSet.image.sprite;
-				dataNeeded.x = dataSet.image.x;
-				dataNeeded.y = dataSet.image.y;
-
-				if (_sprites.indexOf(dataSet.image.sprite) === -1) {
-					_filesToDownload.push(dataSet.image.sprite);
-				}
-
-				dataToWriteToFile.push(dataNeeded);
-			}
-
-			dataToWriteToFile.sort(_sortComparator);
-
-			deferred.resolve();
-		});
-
-		_promises.push(deferred.promise);
-	});
-
-	q.allSettled(_promises)
-		.then(function() {
-			// download files
-		});
-}
-
+var _version = null;
 var _champions = [];
 var _sprites = [];
+var versionUrl = "https://na.api.pvp.net/api/lol/static-data/na/v1.2/versions?api_key=" + env.RIOT_API_KEY;
+var imagesUrl = "https://na.api.pvp.net/api/lol/static-data/na/v1.2/champion?champData=image&api_key=" + env.RIOT_API_KEY;
+var binaryImage = "http://ddragon.leagueoflegends.com/cdn/{{version}}/img/sprite/{{file}}";
 
 var _writeScssFile = function() {
 	_champions.forEach(function(champion) {
@@ -105,7 +33,8 @@ var _writeScssFile = function() {
 		}
 
 		var data = ".icon-champion-large-" + champion.name +' {\n\t@extend .icon-champion-large;\n\tbackground-position: ' + x + "px " + y + "px;\n}\n";
-		fs.appendFileSync(__dirname + '/../web/appDependencies/sass/champions.scss', data);
+		data += ".icon-champion-small-" + champion.name +' {\n\t@extend .icon-champion-small;\n\tbackground-position: ' + x*.75 + "px " + y*.75 + "px;\n}\n";
+		fs.appendFileSync(__dirname + '/../web/appDependencies/sass/sprite_scss/champions.scss', data);
 	});
 }
 
@@ -160,6 +89,6 @@ request.get(versionUrl, function(error, result) {
 
 
 		_writeScssFile();
-		_downloadImages();
+		//_downloadImages();
 	});
 });
