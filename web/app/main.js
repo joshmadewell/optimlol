@@ -3,8 +3,7 @@
     paths: {
         'text': '../../lib/require/text',
         'durandal':'../../lib/durandal/js',
-        'plugins' : '../../lib/durandal/js/plugins',
-        'transitions' : '../../lib/durandal/js/transitions',
+        'plugins' : '../../lib/durandal/js/plugins'
     }
 });
 

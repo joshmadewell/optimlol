@@ -11,6 +11,7 @@ var runSequence = require('run-sequence');
 var sprite = require('css-sprite').stream;
 var rename = require('gulp-rename');
 var durandal = require('gulp-durandal');
+var uglify = require('gulp-uglify');
 
 gulp.task('clean', function(cb) {
 	del(['./build'], cb);
@@ -22,12 +23,18 @@ gulp.task('clean-build-app', function(cb) {
 
 gulp.task('web-app', function(cb) {
 	es.concat(
+		/* WEB APP */
 		gulp.src('./web/app/**/*.js')
 			.pipe(gulp.dest('./build/js/app')),
 
 		gulp.src('./web/app/**/*.html')
 			.pipe(gulp.dest('./build/js/app')),
 
+		gulp.src('./web/index.*')
+			.pipe(gulp.dest('./build')),
+		/* WEB APP */
+
+		/* APP DEPENDENCIES */
 		gulp.src('./web/appDependencies/lib/bootstrap/**/*min*')
 			.pipe(gulp.dest('./build/lib/bootstrap')),
 
@@ -37,27 +44,27 @@ gulp.task('web-app', function(cb) {
 		gulp.src('./web/appDependencies/lib/font-awesome/fonts/*')
 			.pipe(gulp.dest('./build/lib/font-awesome/fonts')),
 
-		gulp.src(['./web/appDependencies/lib/jquery/*min*',
-			'./web/appDependencies/lib/jquery/jquery.cookie.js'])
+		gulp.src('./web/appDependencies/lib/jquery/*min*')
 			.pipe(gulp.dest('./build/lib/jquery')),
-
-		gulp.src('./web/appDependencies/lib/durandal/**/*')
-			.pipe(gulp.dest('./build/lib/durandal')),
 
 		gulp.src('./web/appDependencies/lib/knockout/**/*')
 			.pipe(gulp.dest('./build/lib/knockout')),
 
-		gulp.src('./web/appDependencies/lib/require/**/*')
-			.pipe(gulp.dest('./build/lib/require')),
-
 		gulp.src('./web/appDependencies/img/logo*')
 			.pipe(gulp.dest('./build/img')),
 
-		gulp.src('./web/index.*')
-			.pipe(gulp.dest('./build')),
+		gulp.src('./web/appDependencies/lib/jquery/jquery.cookie.js')
+			.pipe(uglify())
+			.pipe(gulp.dest('./build/lib/jquery')),
 
-		gulp.src('./web/riot.txt')
-			.pipe(gulp.dest('./build'))
+		gulp.src('./web/appDependencies/lib/durandal/**/*.js')
+			.pipe(uglify())
+			.pipe(gulp.dest('./build/lib/durandal')),
+
+		gulp.src('./web/appDependencies/lib/require/**/*')
+			.pipe(uglify())
+			.pipe(gulp.dest('./build/lib/require'))
+		/* APP DEPENDENCIES */
 	).on('end', cb);
 });
 
