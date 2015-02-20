@@ -222,8 +222,8 @@
 		};
 
 		self.activate = function() {
-			if (window.ga && typeof window.ga === 'function') {
-				window.ga('set', 'page', '/');
+			if (window.__gaTracker && typeof window.__gaTracker === 'function') {
+				window.__gaTracker('send', 'pageview', '/');
 			}
 			_initializeSummonerInputs();
 

@@ -93,8 +93,8 @@ define([], function() {
 		}
 
 		self.activate = function(fromWhatIsThis) {
-			if (window.ga && typeof window.ga === 'function') {
-				window.ga('send', 'pageview', '/faq');
+			if (window.__gaTracker && typeof window.__gaTracker === 'function') {
+				window.__gaTracker('send', 'pageview', '/faq');
 			}
 
 			if (fromWhatIsThis === 'explain') {
