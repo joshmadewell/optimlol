@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
-var q = require('q');
+var PromiseFactoryConstructor = require('../../common/utilities/promiseFactory');
+var _promiseFactory = new PromiseFactoryConstructor();
 
 var Schema = mongoose.Schema;
 
@@ -16,18 +17,17 @@ var MatchHistorySchema = new Schema({
 
 // every model should have a retrieve function that does any
 // special things necessary to get the proper data.
-// most of the time...this isn't an issue so really, we're using retrieve 
+// most of the time...this isn't an issue so really, we're using retrieve
 // so we can always have a promise :)
 MatchHistorySchema.statics.retrieve = function(identifiers) {
-	var deferred = q.defer();
-	this.model('match_history').findOne(identifiers, function(error, result) {
-		if (error) deferred.reject(error);
-		else {
-			deferred.resolve(result);
-		}
+	return _promiseFactory.defer(function(deferredObject) {
+		this.model('match_history').findOne(identifiers, function(error, result) {
+			if (error) deferredObject.reject(error);
+			else {
+				deferredObject.resolve(result);
+			}
+		});
 	});
-
-	return deferred.promise;
 }
 
 MatchHistorySchema.pre('save', function(next) {

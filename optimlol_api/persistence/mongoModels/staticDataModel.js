@@ -1,7 +1,8 @@
 var mongoose = require('mongoose');
-var q = require('q');
-
 var Schema = mongoose.Schema;
+
+var PromiseFactoryConstructor = require('../../common/utilities/promiseFactory');
+var _promiseFactory = new PromiseFactoryConstructor();
 
 var StaticDataSchema = new Schema({
 	staticType: { type: String, required: true },
@@ -15,18 +16,17 @@ var StaticDataSchema = new Schema({
 
 // every model should have a retrieve function that does any
 // special things necessary to get the proper data.
-// most of the time...this isn't an issue so really, we're using retrieve 
+// most of the time...this isn't an issue so really, we're using retrieve
 // so we can always have a promise :)
 StaticDataSchema.statics.retrieve = function(identifiers) {
-	var deferred = q.defer();
-	this.model('static_data').findOne(identifiers, function(error, result) {
-		if (error) deferred.reject(error);
-		else {
-			deferred.resolve(result);
-		}
+	return _promiseFactory.defer(function(deferredObject) {
+		this.model('static_data').findOne(identifiers, function(error, result) {
+			if (error) deferred.reject(error);
+			else {
+				deferred.resolve(result);
+			}
+		});
 	});
-
-	return deferred.promise;
 }
 
 StaticDataSchema.pre('save', function(next) {

@@ -1,7 +1,8 @@
 var mongoose = require('mongoose');
-var q = require('q');
-
 var Schema = mongoose.Schema;
+
+var PromiseFactoryConstructor = require('../../common/utilities/promiseFactory');
+var _promiseFactory = new PromiseFactoryConstructor();
 
 var SummonersSchema = new Schema({
 	summonerName: { type: String, required: true },
@@ -15,19 +16,18 @@ var SummonersSchema = new Schema({
 
 // every model should have a retrieve function that does any
 // special things necessary to get the proper data.
-// most of the time...this isn't an issue so really, we're using retrieve 
+// most of the time...this isn't an issue so really, we're using retrieve
 // so we can always have a promise :)
 SummonersSchema.statics.retrieve = function(identifiers) {
-	identifiers.summonerName = identifiers.summonerName.replace(/ /g, '').toLowerCase();
-	var deferred = q.defer();
-	this.model('summoners').findOne(identifiers, function(error, result) {
-		if (error) deferred.reject(error);
-		else {
-			deferred.resolve(result);
-		}
+	return _promiseFactory.defer(function(deferredObject) {
+		identifiers.summonerName = identifiers.summonerName.replace(/ /g, '').toLowerCase();
+		this.model('summoners').findOne(identifiers, function(error, result) {
+			if (error) deferred.reject(error);
+			else {
+				deferred.resolve(result);
+			}
+		});
 	});
-
-	return deferred.promise;
 }
 
 SummonersSchema.pre('save', function(next) {

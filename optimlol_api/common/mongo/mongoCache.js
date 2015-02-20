@@ -1,10 +1,9 @@
-var q = require('q');
 var moment = require('moment');
 
 module.exports = function() {
 	var self = this;
 	var _config = require('../../config');
-	
+
 	var Logger = require('../logging/logger.js');
 	var _logger = new Logger();
 
@@ -50,7 +49,7 @@ module.exports = function() {
 		return _promiseFactory.defer(function(deferredObject) {
 			_logger.debug(collection + ": Cache Set:", parameters);
 			var model = require('../../persistence/mongoModels/' + collection + 'Model');
-			
+
 			if (toCache.success && toCache.data) {
 				model.retrieve(parameters)
 					.then(function(cachedResult) {

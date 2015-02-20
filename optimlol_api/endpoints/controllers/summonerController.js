@@ -1,5 +1,3 @@
-var q = require('q');
-
 module.exports = function() {
 	var self = this;
 	var _championStatsFacade = null;
@@ -133,26 +131,25 @@ module.exports = function() {
 	};
 
 	self.generateSummonerData = function(region, summonerName) {
-		var deferred = q.defer();
-		_summonerFacade.verifySummoner(region, summonerName)
-			.then(function(verifiedSummoner) {
-				if (verifiedSummoner.verified) {
-					_generatePerformanceData(region, verifiedSummoner.summoner)
-						.then(function(summonerWithPerformanceData) {
-							deferred.resolve(summonerWithPerformanceData);
-						})
-						.fail(function(error) {
-							deferred.reject(error);
-						});
-				} else {
-					deferred.resolve(verifiedSummoner);
-				}
-			})
-			.fail(function(error) {
-				deferred.reject(error);
-			});
-
-		return deferred.promise;
+		return _promiseFactory.defer(function(deferredObject) {
+			_summonerFacade.verifySummoner(region, summonerName)
+				.then(function(verifiedSummoner) {
+					if (verifiedSummoner.verified) {
+						_generatePerformanceData(region, verifiedSummoner.summoner)
+							.then(function(summonerWithPerformanceData) {
+								deferredObject.resolve(summonerWithPerformanceData);
+							})
+							.fail(function(error) {
+								deferredObject.reject(error);
+							});
+					} else {
+						deferredObject.resolve(verifiedSummoner);
+					}
+				})
+				.fail(function(error) {
+					deferredObject.reject(error);
+				});
+		});
 	};
 
 	self.init = function() {
