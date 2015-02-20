@@ -38,6 +38,10 @@ and (max-device-width : 480px) {
 	}
 
 	.navbar {
+		.navbar-brand {
+
+		}
+
 		.navigation-item {
 			border-bottom: 1px solid $darkgray;
 		}

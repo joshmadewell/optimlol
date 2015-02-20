@@ -50,8 +50,8 @@ gulp.task('web-app', function(cb) {
 		gulp.src('./web/appDependencies/lib/knockout/**/*')
 			.pipe(gulp.dest('./build/lib/knockout')),
 
-		gulp.src('./web/appDependencies/img/logo*')
-			.pipe(gulp.dest('./build/img')),
+		gulp.src('./web/appDependencies/img/favicon.png')
+			.pipe(gulp.dest('./build/img/')),
 
 		gulp.src('./web/appDependencies/lib/jquery/jquery.cookie.js')
 			.pipe(uglify())
@@ -98,6 +98,13 @@ gulp.task('sprites', function(cb) {
 		gulp.src('./web/appDependencies/img/spell*.png')
 			.pipe(sprite({
 				name: 'summonerSpells',
+				margin: 0
+			}))
+			.pipe(gulp.dest('./build/img/')),
+
+		gulp.src('./web/appDependencies/img/logo*.png')
+			.pipe(sprite({
+				name: 'logos',
 				margin: 0
 			}))
 			.pipe(gulp.dest('./build/img/'))

@@ -1,0 +1,38 @@
+.logo {
+	background-image: url('/img/logos.png');
+}
+
+.logo-optimlol-small {
+	@extend .logo;
+	height: 55px;
+	width: 145px;
+	background-position: 0px -80px;
+}
+
+.logo-optimlol-medium {
+	@extend .logo;
+	height: 130px;
+	width: 270px;
+	background-position: 0px -135px;
+}
+
+.logo-optimlol-large {
+	@extend .logo;
+	height: 150px;
+	width: 355px;
+	background-position: 0px -265px;
+}
+
+.logo-lolking {
+	@extend .logo;
+	height: 40px;
+	width: 40px;
+	background-position: 0px 0px;
+}
+
+.logo-opgg {
+	@extend .logo;
+	height: 40px;
+	width: 40px;
+	background-position: 0px -40px;
+}
