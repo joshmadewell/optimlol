@@ -53,6 +53,9 @@ gulp.task('web-app', function(cb) {
 		gulp.src('./web/appDependencies/img/favicon.png')
 			.pipe(gulp.dest('./build/img/')),
 
+		gulp.src('./web/appDependencies/img/favicon*')
+			.pipe(gulp.dest('./build/img')),
+
 		gulp.src('./web/appDependencies/lib/jquery/jquery.cookie.js')
 			.pipe(uglify())
 			.pipe(gulp.dest('./build/lib/jquery')),

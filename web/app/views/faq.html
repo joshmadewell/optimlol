@@ -2,7 +2,7 @@
 	<div class="faq-container" data-bind="foreach: faqs">
 		<div class="question-group">
 			<div class="question" data-bind="click: $parent.toggleCollapse"><!--ko text: question--><!--/ko-->
-				<span data-bind="css: chevronClass, click: $parent.toggleCollapse"></span>
+				<span data-bind="css: chevronClass"></span>
 			</div>
 			<p class="answer" data-bind="html: answer, visible: isVisible"></p>
 		</div>
