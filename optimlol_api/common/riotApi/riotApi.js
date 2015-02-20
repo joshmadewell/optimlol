@@ -47,9 +47,8 @@ module.exports = function() {
 	self.makeRequest = function(region, path) {
 		return _promiseFactory.defer(function(deferredObject) {
 			var responseObject = new RiotApiResponseObject();
-			var apiKeyPrefix = path.indexOf('?') !== -1 ? "&api_key=" : "?api_key="; 
+			var apiKeyPrefix = path.indexOf('?') !== -1 ? "&api_key=" : "?api_key=";
 			var fullUrl = _config.riot_api.url_prefix + region + _config.riot_api.url_midfix + path + apiKeyPrefix + process.env.RIOT_API_KEY;
-
 			request.get({url: fullUrl, json: true}, function(error, result) {
 				if (error) {
 					deferredObject.reject(error);

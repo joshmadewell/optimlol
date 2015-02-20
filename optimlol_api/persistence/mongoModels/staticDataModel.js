@@ -19,11 +19,12 @@ var StaticDataSchema = new Schema({
 // most of the time...this isn't an issue so really, we're using retrieve
 // so we can always have a promise :)
 StaticDataSchema.statics.retrieve = function(identifiers) {
+	var self = this;
 	return _promiseFactory.defer(function(deferredObject) {
-		this.model('static_data').findOne(identifiers, function(error, result) {
-			if (error) deferred.reject(error);
+		self.model('static_data').findOne(identifiers, function(error, result) {
+			if (error) deferredObject.reject(error);
 			else {
-				deferred.resolve(result);
+				deferredObject.resolve(result);
 			}
 		});
 	});

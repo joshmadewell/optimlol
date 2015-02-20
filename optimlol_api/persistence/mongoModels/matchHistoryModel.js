@@ -1,8 +1,8 @@
 var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
+
 var PromiseFactoryConstructor = require('../../common/utilities/promiseFactory');
 var _promiseFactory = new PromiseFactoryConstructor();
-
-var Schema = mongoose.Schema;
 
 var MatchHistorySchema = new Schema({
 	summonerId: { type: Number, required: true },
@@ -20,8 +20,9 @@ var MatchHistorySchema = new Schema({
 // most of the time...this isn't an issue so really, we're using retrieve
 // so we can always have a promise :)
 MatchHistorySchema.statics.retrieve = function(identifiers) {
+	var self = this;
 	return _promiseFactory.defer(function(deferredObject) {
-		this.model('match_history').findOne(identifiers, function(error, result) {
+		self.model('match_history').findOne(identifiers, function(error, result) {
 			if (error) deferredObject.reject(error);
 			else {
 				deferredObject.resolve(result);

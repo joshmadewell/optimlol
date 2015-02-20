@@ -15,33 +15,33 @@ module.exports = function() {
 
 	self.getFromApi = function(parameters) {
 		if (_parameterValidator.validate(parameters, REQUIRED_PARAMETERS) === false) {
-			throw new Error("Invalid parameters for Summoner Data Provider"); 
-		} 
+			throw new Error("Invalid parameters for Summoner Data Provider");
+		}
 
 		return _promiseFactory.defer(function(deferredObject) {
 			_logger.debug("summoner data provider, getFromApi");
-			var championsPath = region + "/" + _apiVersion + "/summoner/by-name/" + parameters.summonerName;
-			_riotApi.makeRequest(parameters.region, championsPath)
+			var summonerPath = parameters.region + "/" + _apiVersion + "/summoner/by-name/" + parameters.summonerName;
+			_riotApi.makeRequest(parameters.region, summonerPath)
 				.then(function(summonerResult) {
 					_mongoCache.set('summoners', parameters, summonerResult)
 						.then(function() {
-							deferred.resolve(summonerResult);
+							deferredObject.resolve(summonerResult);
 						})
 						.fail(function() {
 							// if setting cache fails, don't worry, move on.
-							deferred.resolve(summonerResult);
+							deferredObject.resolve(summonerResult);
 						});
 				})
 				.fail(function(error) {
-					deferred.reject(error);
+					deferredObject.reject(error);
 				});
 		});
 	};
 
 	self.getFromCache = function(parameters) {
 		if (_parameterValidator.validate(parameters, REQUIRED_PARAMETERS) === false) {
-			throw new Error("Invalid parameters for Summoner Data Provider"); 
-		} 
+			throw new Error("Invalid parameters for Summoner Data Provider");
+		}
 
 		return _promiseFactory.defer(function(deferredObject) {
 			_logger.debug("summoner data provider, getFromCache");

@@ -13,7 +13,7 @@ module.exports = function() {
 
 	self.getFromApi = function(parameters) {
 		if (_parameterValidator.validate(parameters, REQUIRED_PARAMETERS) === false) {
-			throw new Error("Invalid parameters for Stats Data Provider"); 
+			throw new Error("Invalid parameters for Stats Data Provider");
 		}
 
 		return _promiseFactory.defer(function(deferredObject) {
@@ -23,22 +23,22 @@ module.exports = function() {
 				.then(function(statsResult) {
 					_mongoCache.set('stats', parameters, statsResult)
 						.then(function() {
-							deferred.resolve(statsResult);
+							deferredObject.resolve(statsResult);
 						})
 						.fail(function(error) {
 							_logger.warn("Some failure when setting stats cache", error);
-							deferred.resolve(statsResult);
+							deferredObject.resolve(statsResult);
 						})
 				})
 				.fail(function(error) {
-					deferred.reject(error);
+					deferredObject.reject(error);
 				});
 		});
 	};
 
 	self.getFromCache = function(parameters) {
 		if (_parameterValidator.validate(parameters, REQUIRED_PARAMETERS) === false) {
-			throw new Error("Invalid parameters for Stats Data Provider"); 
+			throw new Error("Invalid parameters for Stats Data Provider");
 		}
 
 		return _promiseFactory.defer(function(deferredObject) {
