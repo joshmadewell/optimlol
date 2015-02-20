@@ -222,6 +222,9 @@
 		};
 
 		self.activate = function() {
+			if (window.ga && typeof window.ga === 'function') {
+				window.ga('set', 'page', '/');
+			}
 			_initializeSummonerInputs();
 
 			app.on('regionUpdated')

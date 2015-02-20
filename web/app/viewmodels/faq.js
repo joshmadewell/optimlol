@@ -94,7 +94,7 @@ define([], function() {
 
 		self.activate = function(fromWhatIsThis) {
 			if (window.ga && typeof window.ga === 'function') {
-				window.ga('send', 'pageview', '/support');
+				window.ga('send', 'pageview', '/faq');
 			}
 
 			if (fromWhatIsThis === 'explain') {
