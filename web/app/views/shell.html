@@ -11,7 +11,7 @@
             <div class="collapse navbar-collapse" id="navigationbar">
                 <ul class="nav navbar-nav" data-bind="foreach: router.navigationModel">
                     <li class="navigation-item">
-                        <a data-bind="attr: { href: hash }, text: title, click: $parent.onNavigationClicked"></a>
+                        <a data-bind="attr: { href: hash }, text: navigationTitle, click: $parent.onNavigationClicked"></a>
                     </li>
                 </ul>
 

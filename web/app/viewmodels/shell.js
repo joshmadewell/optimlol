@@ -74,20 +74,23 @@
             router.map([
                 {
                     route: '',
-                    title:'Home',
+                    title: '',
+                    navigationTitle:'Home',
                     moduleId: 'viewmodels/optimlol',
                     nav: true
                 },
                 {
                     route: 'faq(/:fromWhatIsThis)',
-                    title: 'FAQ',
+                    title: '',
+                    navigationTitle: 'FAQ',
                     moduleId: 'viewmodels/faq',
                     hash: "#faq",
                     nav: true
                 },
                 {
                     route: 'support',
-                    title:'Support',
+                    title: '',
+                    navigationTitle:'Support',
                     moduleId: 'viewmodels/support',
                     nav: true
                 }
