@@ -23,7 +23,7 @@ module.exports = function() {
 			var model = require('../../persistence/mongoModels/' + collection + 'Model');
 			model.retrieve(parameters)
 				.then(function(cachedResult) {
-					_logger.debug("Cached returned " + (cachedResult ? "value" : "nothing"));
+					_logger.debug(collection + " cache returned " + (cachedResult ? "value" : "nothing"));
 					if (cachedResult && cachedResult.data) {
 						var cacheLastUpdated = moment().diff(cachedResult.updated_at, 'minutes');
 						_logger.debug("Cached " + collection + " object is " + cacheLastUpdated + " minutes old. Expire time is", cachedResult.expiredTimeMinutes);
