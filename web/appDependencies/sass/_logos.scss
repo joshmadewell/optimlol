@@ -1,0 +1,38 @@
+.logo {
+	background-image: url('/img/logos.png');
+	background-repeat: no-repeat;
+	margin: auto;
+}
+
+.logo-lolking {
+	@extend .logo;
+	height: 40px;
+	width: 40px;
+	background-position: 0px 0px;
+}
+
+.logo-opgg {
+	@extend .logo;
+	height: 40px;
+	width: 40px;
+	background-position: 0px -40px;
+}
+
+.logo-optimlol {
+	@extend .logo;
+	height: 150px;
+	width: 355px;
+	background-position: 0px -210px;
+}
+
+/* Smartphones (portrait and landscape) ----------- */
+@media only screen
+and (min-device-width : 320px)
+and (max-device-width : 480px) {
+	.logo-optimlol {
+		@extend .logo;
+		height: 130px;
+		width: 270px;
+		background-position: 0px -80px;
+	}
+}

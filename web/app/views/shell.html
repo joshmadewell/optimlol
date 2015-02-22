@@ -6,17 +6,12 @@
                     <span class="sr-only">Toggle Navigation</span>
                     <span class="icon-bar"></span>
                 </button>
-
-                <a class="navbar-brand" href="#">
-                    <i class="fa fa-home"></i>
-                    <span>OptimLoL</span>
-                </a>
             </div>
 
             <div class="collapse navbar-collapse" id="navigationbar">
                 <ul class="nav navbar-nav" data-bind="foreach: router.navigationModel">
                     <li class="navigation-item">
-                        <a data-bind="attr: { href: hash }, text: title, click: $parent.onNavigationClicked"></a>
+                        <a data-bind="attr: { href: hash }, text: navigationTitle, click: $parent.onNavigationClicked"></a>
                     </li>
                 </ul>
 
@@ -30,5 +25,5 @@
         </div>
     </nav>
 
-    <div class="page-host" data-bind="router: { transition:'entrance' }"></div>
+    <div class="page-host" data-bind="router"></div>
 </div>

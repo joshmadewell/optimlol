@@ -3,18 +3,22 @@
     paths: {
         'text': '../../lib/require/text',
         'durandal':'../../lib/durandal/js',
-        'plugins' : '../../lib/durandal/js/plugins',
-        'transitions' : '../../lib/durandal/js/transitions',
+        'plugins' : '../../lib/durandal/js/plugins'
     }
 });
 
 define('knockout', ko);
-define('jquery', function() { return jQuery });
+define('jquery', function() { return jQuery; });
 define('singleton/session', ['common/session'], function(Session) {
     return new Session();
 });
 
-define(['durandal/system', 'durandal/app', 'durandal/viewLocator', 'configuration/knockoutConfiguration'],  function (system, app, viewLocator, knockoutConfiguration) {
+define(['durandal/system',
+    'durandal/app',
+    'durandal/viewLocator',
+    'configuration/knockoutConfiguration',
+    'configuration/routerConfiguration'],
+function (system, app, viewLocator, knockoutConfiguration, routerConfiguration) {
     system.debug(false);
 
     app.title = 'OptimLoL | Champion Selection Optimization';
@@ -30,6 +34,7 @@ define(['durandal/system', 'durandal/app', 'durandal/viewLocator', 'configuratio
         viewLocator.useConvention();
 
         knockoutConfiguration.configure();
+        routerConfiguration.configure();
 
         //Show the app by setting the root view model for our application with a transition.
         app.setRoot('viewmodels/shell');
