@@ -14,15 +14,12 @@ body {
 
 .region-selection {
 	float: right;
-	padding: 15px;
+	margin-top: 15px;
 }
 
 .navbar {
 	.navigation-item {
 		text-align: center;
-		&:first-child {
-			display: none;
-		}
 	}
 }
 
@@ -35,13 +32,10 @@ and (max-device-width : 480px) {
 		float: none;
 		text-align: center;
 		padding: 6px 0 5px 0;
+		margin-top: 0px;
 	}
 
 	.navbar {
-		.navbar-brand {
-
-		}
-
 		.navigation-item {
 			border-bottom: 1px solid $darkgray;
 		}

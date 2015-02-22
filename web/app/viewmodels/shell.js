@@ -74,7 +74,7 @@
             router.map([
                 {
                     route: '',
-                    title:'',
+                    title:'Home',
                     moduleId: 'viewmodels/optimlol',
                     nav: true
                 },

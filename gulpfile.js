@@ -105,7 +105,10 @@ gulp.task('sprites', function(cb) {
 			}))
 			.pipe(gulp.dest('./build/img/')),
 
-		gulp.src('./web/appDependencies/img/logo*.png')
+		gulp.src(['./web/appDependencies/img/logo_lolking.png',
+			'./web/appDependencies/img/logo_opgg.png',
+			'./web/appDependencies/img/logo_optim_270_130.png',
+			'./web/appDependencies/img/logo_optim_355_150.png'])
 			.pipe(sprite({
 				name: 'logos',
 				margin: 0
