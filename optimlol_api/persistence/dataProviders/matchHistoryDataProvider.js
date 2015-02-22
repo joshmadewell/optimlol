@@ -23,8 +23,8 @@ module.exports = function() {
 
 	self.getFromApi = function(parameters) {
 		if (_parameterValidator.validate(parameters, REQUIRED_PARAMETERS) === false) {
-			throw new Error("Invalid parameters for Match History Data Provider"); 
-		} 
+			throw new Error("Invalid parameters for Match History Data Provider");
+		}
 
 		return _promiseFactory.defer(function(deferredObject) {
 			_logger.debug("match history data provider, getFromApi");
@@ -51,6 +51,8 @@ module.exports = function() {
 								} else {
 									dataProviderResult = matchHistoryApiResult.value;
 								}
+							} else if (dataProviderResult === null) {
+								dataProviderResult = currentMatchHistorySet;
 							}
 						}
 					});
@@ -72,8 +74,8 @@ module.exports = function() {
 
 	self.getFromCache = function(parameters) {
 		if (_parameterValidator.validate(parameters, REQUIRED_PARAMETERS) === false) {
-			throw new Error("Invalid parameters for Match History Data Provider"); 
-		} 
+			throw new Error("Invalid parameters for Match History Data Provider");
+		}
 
 		return _promiseFactory.defer(function(deferredObject) {
 			_logger.debug("match history data provider, getFromCache");

@@ -16,8 +16,6 @@ module.exports = function() {
 	}
 
 	var _setResponseObject = function(responseObject, jsonResponse) {
-		_logger.riotApi("Riot:", jsonResponse.statusCode);
-
 		responseObject.statusCode = jsonResponse.statusCode;
 
 		switch (jsonResponse.statusCode) {

@@ -53,10 +53,9 @@ module.exports = function() {
 
 					responseObject.quality = 'fresh';
 					results.forEach(function(result) {
-						var worstQuality = null;
 						if (result.state === 'fulfilled') {
 							if (result.value.quality && result.value.quality === 'stale') {
-								resonseObject.quality = responseObject.quality === 'unknown' ? 'unknown' : 'stale';
+								responseObject.quality = responseObject.quality === 'unknown' ? 'unknown' : 'stale';
 							} else if (result.value.quality && result.value.quality === 'unkown') {
 								responseObject.quality = 'unknown';
 							}

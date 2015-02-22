@@ -32,6 +32,7 @@ var _getData = function(dataProvider, parameters) {
 					_logger.info(dataProvider + " data expired, or unset, attempting to refresh", parameters);
 					_dataProviders[dataProvider].getFromApi(parameters)
 						.then(function(apiData) {
+							_logger.riotApi(dataProvider + " RiotApi: ", apiData.statusCode);
 							if (apiData.success) {
 								dataResponse.success = true;
 								dataResponse.quality = QUALITY_TYPES.FRESH;
