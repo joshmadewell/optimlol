@@ -44,7 +44,7 @@ var _getData = function(dataProvider, parameters) {
 							} else {
 								dataResponse.success = false;
 								dataResponse.quality = QUALITY_TYPES.UNKNOWN;
-								dataResponses.message = "Failed retrieving data from Riot";
+								dataResponse.message = "Failed retrieving data from Riot";
 							}
 
 							deferredObject.resolve(dataResponse);

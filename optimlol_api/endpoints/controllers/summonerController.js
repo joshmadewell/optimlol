@@ -9,7 +9,7 @@ module.exports = function() {
 	var PromiseFactoryConstructor = require('../../common/utilities/promiseFactory');
 	var _promiseFactory = new PromiseFactoryConstructor();
 
-	var SummonerWithPerformanceDataResponseObject = function() {
+	var FinalSummonerObject = function() {
 		this.quality = null;
 		this.data = null;
 		this.message = null;
@@ -31,7 +31,8 @@ module.exports = function() {
 		recentStats[role].performance = _perfomanceCalculator.calculate(recentStats[role].wins, recentStats[role].losses, {confidence: 1.00});
 	};
 
-	var _generatePerformanceData = function(region, summoner) {
+	var _generatePerformanceData = function(region, finalSummoner) {
+		var summoner = finalSummoner.data;
 		var promiseObject = {
 			STATS_INDEX: 0,
 			RECENT_STATS_INDEX: 1,
@@ -44,7 +45,7 @@ module.exports = function() {
 		};
 
 		return _promiseFactory.defer(function(deferredObject) {
-			var responseObject = new SummonerWithPerformanceDataResponseObject();
+			var responseObject = new FinalSummonerObject();
 			_promiseFactory.wait(promiseObject.PRMOMISES)
 				.then(function(results) {
 					var championStats = results[promiseObject.STATS_INDEX].state === 'fulfilled' ? results[promiseObject.STATS_INDEX].value : null;
@@ -131,10 +132,12 @@ module.exports = function() {
 
 	self.generateSummonerData = function(region, summonerName) {
 		return _promiseFactory.defer(function(deferredObject) {
+			var finalSummoner = new FinalSummonerObject();
 			_summonerFacade.verifySummoner(region, summonerName)
 				.then(function(verifiedSummoner) {
+					finalSummoner.data = verifiedSummoner.summoner;
 					if (verifiedSummoner.verified) {
-						_generatePerformanceData(region, verifiedSummoner.summoner)
+						_generatePerformanceData(region, finalSummoner)
 							.then(function(summonerWithPerformanceData) {
 								deferredObject.resolve(summonerWithPerformanceData);
 							})
@@ -142,7 +145,7 @@ module.exports = function() {
 								deferredObject.reject(error);
 							});
 					} else {
-						deferredObject.resolve(verifiedSummoner);
+						deferredObject.resolve(finalSummoner);
 					}
 				})
 				.fail(function(error) {

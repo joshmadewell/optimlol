@@ -21,7 +21,11 @@ module.exports = function() {
 		switch (jsonResponse.statusCode) {
 			case 200:
 				responseObject.success = true;
-				responseObject.data = jsonResponse.body;
+				if (jsonResponse.body && (jsonResponse.body.length || Object.keys(jsonResponse.body).length)) {
+					responseObject.data = jsonResponse.body;
+				} else {
+					responseObject.data = null;
+				}
 				break;
 			case 404:
 				// riot uses 404 to tell us some things weren't found
