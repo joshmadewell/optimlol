@@ -123,6 +123,7 @@
 					}
 				};
 
+				self.shareUrl("");
 				self.summonerInputs.sort(_sortingComparator);
 				_tagLanes();
 
@@ -165,6 +166,16 @@
 			});
 		};
 
+		var _setNextAvailabeSummonerInput = function(summonerName) {
+			for(var x = 0; x < self.summonerInputs.length; ++x) {
+				var currentSummoner = self.summonerInputs[x];
+				if (currentSummoner.status() === STATUS.INVALID || currentSummoner.status() === STATUS.UNSET) {
+					currentSummoner.summonerName(summonerName);
+					break;
+				}
+			}
+		}
+
 		self.parseChatForPlayers  = function() {
 			var potentialSummoners = [];
 			var chatText = self.chatText();
@@ -190,13 +201,7 @@
 			});
 
 			potentialSummoners.forEach(function(potentialSummoner) {
-				for(var x = 0; x < self.summonerInputs.length; ++x) {
-					var currentSummoner = self.summonerInputs[x];
-					if (currentSummoner.status() === STATUS.INVALID || currentSummoner.status() === STATUS.UNSET) {
-						currentSummoner.summonerName(potentialSummoner);
-						break;
-					}
-				}
+				_setNextAvailabeSummonerInput(potentialSummoner);
 			});
 		}
 
@@ -204,8 +209,10 @@
 		self.selectedRegion = ko.observable(session.get('region'));
 		self.validSummoners = ko.observableArray([]);
 		self.chatText = ko.observable("");
+		self.shareUrl = ko.observable("");
 
 		self.clearSummonerInputs = function() {
+			self.shareUrl("");
 			self.validSummoners.removeAll();
 			self.summonerInputs.forEach(function(input) {
 				input.summonerName("");
@@ -221,12 +228,44 @@
 			})
 		};
 
-		self.activate = function(a, b, c) {
-			console.log(a,b,c);
+		self.generateUrl = function() {
+			var validatedSummoners = self.validSummoners();
+			var region = self.selectedRegion();
+			var shareUrl = "http://www.optimlol.com/?region=" + region;
+			var count = 1;
+			validatedSummoners.forEach(function(summoner) {
+				if(summoner.summonerName()) {
+					shareUrl += "&s" + count + "=" + summoner.summonerName();
+					count++;
+				}
+			});
+
+			self.shareUrl(shareUrl);
+
+			$('.share-url').focus();
+			$('.share-url').select();
+		};
+
+		self.activate = function(queryString) {
 			if (window.__gaTracker && typeof window.__gaTracker === 'function') {
 				window.__gaTracker('send', 'pageview', '/');
 			}
+
 			_initializeSummonerInputs();
+
+			if (queryString) {
+				if (queryString.region) {
+					self.selectedRegion(queryString.region)
+					app.trigger('regionUpdated', queryString.region);
+				}
+
+				var acceptedQueryValues = ['s1', 's2', 's3', 's4', 's5'];
+				for(var property in queryString) {
+					if (acceptedQueryValues.indexOf(property) !== -1) {
+						_setNextAvailabeSummonerInput(queryString[property]);
+					}
+				}
+			}
 
 			app.on('regionUpdated')
 				.then(function(region) {

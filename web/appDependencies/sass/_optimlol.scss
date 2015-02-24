@@ -150,6 +150,15 @@
             width: 30%;
         }
     }
+
+    .commands {
+        display: inline-flex;
+        text-align: center;
+        .share-url {
+            width: 147px;
+            margin-left: 5px;
+        }
+    }
 }
 
 /* Smartphones (portrait and landscape) ----------- */

@@ -7,7 +7,6 @@ define(['durandal/system', 'common/optimlolApi'], function (system, OptimlolApi)
 			var promise = system.defer();
 			optimlolApi.makeRequest(region, 'summoner/by-name/' + name)
 				.then(function(result) {
-					console.log(result);
 					promise.resolve(result.data.data);
 				})
 				.fail(function(error) {

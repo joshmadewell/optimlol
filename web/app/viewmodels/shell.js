@@ -50,6 +50,15 @@
         });
         self.router = router;
 
+        var _findAndSetRegion = function(regionKey) {
+            var regionKeys = self.availableRegions.map(function(availableRegion) {
+                return availableRegion.key;
+            });
+
+            var regionIndex = regionKeys.indexOf(regionKey);
+            self.selectedRegion(self.availableRegions[regionIndex]);
+        }
+
         self.onNavigationClicked= function(navigationItem) {
             router.navigate(navigationItem.hash);
             if($('.navbar-header .navbar-toggle').css('display') !='none'){
@@ -61,15 +70,17 @@
             var storedRegion = session.get('region');
 
             if (storedRegion) {
-                var regionKeys = self.availableRegions.map(function(availableRegion) {
-                    return availableRegion.key;
-                });
-
-                var regionIndex = regionKeys.indexOf(storedRegion);
-                self.selectedRegion(self.availableRegions[regionIndex]);
+                _findAndSetRegion(storedRegion);
             } else {
                 session.set('region', self.availableRegions[0].key);
             }
+
+            app.on('regionUpdated')
+                .then(function(region) {
+                    if (self.selectedRegion().key !== region) {
+                        _findAndSetRegion(region);
+                    }
+                });
 
             router.map([
                 {

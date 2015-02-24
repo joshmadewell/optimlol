@@ -75,8 +75,18 @@
             <div>
                 <textarea class="form-control chat-log" data-bind="value: chatText"></textarea>
             </div>
-            <button class="btn btn-default" data-bind="click: parseChatForPlayers">Parse Chat Log</button>
         </div>
-         <a href="#faq/explain">What is this?</a>
+
+        <div class="commands">
+            <button class="btn btn-default" data-bind="click: parseChatForPlayers">Parse Chat Log</button>
+            <!-- ko if: shareUrl() -->
+            <input class="form-control share-url" data-bind="value: shareUrl"></input>
+            <!-- /ko -->
+            <!-- ko ifnot: shareUrl() -->
+            <button class="btn btn-default share-url" type="submit" data-bind="click: generateUrl">Share With Team</button>
+            <!-- /ko -->
+        </div>
+        
+        <div><a href="#faq/explain">What is this?</a></div>
     </div>
 </div>
