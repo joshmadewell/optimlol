@@ -221,7 +221,8 @@
 			})
 		};
 
-		self.activate = function() {
+		self.activate = function(a, b, c) {
+			console.log(a,b,c);
 			if (window.__gaTracker && typeof window.__gaTracker === 'function') {
 				window.__gaTracker('send', 'pageview', '/');
 			}

@@ -132,7 +132,8 @@ gulp.task('lint', function() {
 
 gulp.task('webserver', function() {
 	connect.server({
-		root: './build',
+		root: './build/',
+		fallback: './build/index.html',
 		port: 9001
 	});
 });

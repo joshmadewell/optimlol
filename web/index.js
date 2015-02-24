@@ -7,8 +7,8 @@ app.set('views', __dirname);
 app.use(compression());
 app.use(express.static(__dirname));
 
-app.get('/', function(req, res){
-  res.render('index.html');
+app.get('*', function(req, res){
+  res.sendFile(__dirname + '/index.html');
 });
 
 app.listen(process.env.PORT || 9001);
