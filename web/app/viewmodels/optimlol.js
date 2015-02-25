@@ -18,11 +18,6 @@
 		}
 		var summonersDataProvider = new SummonersDataProvider();
 
-		var lineDelimiters = [
-			":",
-			" joined the room"
-		];
-
 		var _onSummonerNameEntered = function(summonerName) {
 			var summoner = this;
 			if (summonerName === "" || summonerName === null || summonerName === undefined) {
@@ -180,6 +175,9 @@
 			var potentialSummoners = [];
 			var chatText = self.chatText();
 			var lines = chatText.split('\n');
+			var joinedRoomConstants = [
+				" joined the room"
+			];
 
 			var alreadyEnteredSummoners = self.summonerInputs.map(function(summoner) {
 				return summoner.summonerName()
@@ -190,14 +188,26 @@
 			});
 
 			lines.forEach(function(line) {
-				lineDelimiters.forEach(function(delimeter) {
-					if (line.indexOf(delimeter) !== -1) {
-						var playerName = line.split(delimeter)[0];
-						if (potentialSummoners.indexOf(playerName) === -1 && alreadyEnteredSummoners.indexOf(playerName) === -1) {
-							potentialSummoners.push(playerName);
+				if (line.indexOf(":") !== -1) {
+					// if it's a chat message, take the characters before 
+					// the first colon...
+					var playerName = line.split(":")[0];
+					if (potentialSummoners.indexOf(playerName) === -1 && alreadyEnteredSummoners.indexOf(playerName) === -1) {
+						potentialSummoners.push(playerName);
+					}
+				} else {
+					// if it's a 'joined the room' message then we need to
+					// take the characters before the default message
+					for(var x = 0; x < joinedRoomConstants.length; x++) {
+						if (line.indexOf(joinedRoomConstants[x]) !== -1) {
+							var playerName = line.split(joinedRoomConstants[x])[0];
+							if (potentialSummoners.indexOf(playerName) === -1 && alreadyEnteredSummoners.indexOf(playerName) === -1) {
+								potentialSummoners.push(playerName);
+							}
+							break;
 						}
 					}
-				});
+				}
 			});
 
 			potentialSummoners.forEach(function(potentialSummoner) {
