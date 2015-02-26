@@ -2,8 +2,8 @@ define(['plugins/http', 'durandal/system', 'settings'], function (http, system, 
 	return function() {
 		var self = this;
 
-		self.makeRequest = function(region, path) {
-			var url = settings.optimlolApiUrl + region + "/" + path; 
+		self.makeRequest = function(path) {
+			var url = settings.optimlolApiUrl + path; 
 			var promise = system.defer();
 			http.get(url)
 				.then(function(response) {
@@ -14,6 +14,11 @@ define(['plugins/http', 'durandal/system', 'settings'], function (http, system, 
 				})
 
 			return promise;
+		}
+
+		self.makeRegionizedRequest = function(region, path) {
+			var urlPath = region + "/" + path;
+			return self.makeRequest(urlPath);
 		};
 	};
 });

@@ -24,9 +24,18 @@ routes.forEach(function(route) {
 });
 
 var crossOriginMiddleware = function(req, res, next) {
-	res.header('Access-Control-Allow-Origin', '*');
-	res.header('Access-Control-Allow-Methods', 'GET');
-	res.header('Access-Control-Allow-Headers', 'Content-Type');
+	if (app.get('env') === 'development') {
+		res.header('Access-Control-Allow-Origin', '*');
+		res.header('Access-Control-Allow-Methods', 'GET');
+		res.header('Access-Control-Allow-Headers', 'Content-Type');
+	} else if (app.get('env') === 'production') {
+		if (req.headers.origin && config.optimlol_api.allowedOrigins.indexOf(req.headers.origin) !== -1) {
+			res.header('Access-Control-Allow-Origin', req.headers.origin);
+			res.header('Access-Control-Allow-Methods', 'GET');
+			res.header('Access-Control-Allow-Headers', 'Content-Type');
+		}
+	}
+
 	next();
 };
 

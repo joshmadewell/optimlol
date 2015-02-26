@@ -4,6 +4,10 @@ var config = {};
 config.optimlol_api = {};
 config.optimlol_api.expiredCacheMinutes = 20;
 config.optimlol_api.matchHistoryLookBackCount = 30;
+config.optimlol_api.allowedOrigins = [
+	'http://www.optimlol.com',
+	'http://optimlol.com'
+]
 
 // Riot API
 config.riot_api = {};

@@ -1,10 +1,11 @@
 ﻿define(['durandal/system',
 	'durandal/app',
 	'dataProviders/summonersDataProvider',
+	'dataProviders/shortenedUrlDataProvider',
 	'presentationObjects/summonerPresentationObject',
 	'common/collectionSorter',
 	'singleton/session'],
-	function (durandal, app, SummonersDataProvider, SummonerPresentationObject, collectionSorter, session) {
+	function (durandal, app, SummonersDataProvider, ShortenedUrlDataProvider, SummonerPresentationObject, collectionSorter, session) {
 	return function() {
 		var self = this;
 		var NUMBER_OF_SUMMONERS = 5;
@@ -17,6 +18,7 @@
 			VALIDATING: "validating"
 		}
 		var summonersDataProvider = new SummonersDataProvider();
+		var shortenedUrlDataProvider = new ShortenedUrlDataProvider();
 
 		var _onSummonerNameEntered = function(summonerName) {
 			var summoner = this;
@@ -171,6 +173,11 @@
 			}
 		}
 
+		var _foucsShareUrl = function() {
+			$('.share-url').focus();
+			$('.share-url').select();
+		};
+
 		self.parseChatForPlayers  = function() {
 			var potentialSummoners = [];
 			var chatText = self.chatText();
@@ -241,22 +248,34 @@
 		self.generateUrl = function() {
 			var validatedSummoners = self.validSummoners();
 			var region = self.selectedRegion();
-			var shareUrl = "http://www.optimlol.com/?region=" + region;
-			var count = 1;
-			validatedSummoners.forEach(function(summoner) {
-				if(summoner.summonerName()) {
-					shareUrl += "&s" + count + "=" + summoner.summonerName();
-					count++;
-				}
-			});
+			var defaultShareUrl = window.location.origin || "http://www.optimlol.com";
+			
+			if (validatedSummoners.length === 0) {
+				self.shareUrl(defaultShareUrl + "/?region=" + region);
+				_foucsShareUrl();
+			} else {
+				var generationObject = {
+					region: region,
+					summoners: []
+				};
 
-			self.shareUrl(shareUrl);
+				validatedSummoners.forEach(function(summoner) {
+					generationObject.summoners.push(summoner.summonerName());
+				});
 
-			$('.share-url').focus();
-			$('.share-url').select();
+				shortenedUrlDataProvider.generate(generationObject)
+					.then(function(generationResult) {
+						self.shareUrl(defaultShareUrl + "/" + generationResult.shortUrl);
+						_foucsShareUrl();
+					})
+					.fail(function(error) {
+						self.shareUrl(defaultShareUrl + "/?region=" + region);
+						_foucsShareUrl();
+					})
+			}
 		};
 
-		self.activate = function(queryString) {
+		self.activate = function(shortUrlValue, queryString) {
 			if (window.__gaTracker && typeof window.__gaTracker === 'function') {
 				window.__gaTracker('send', 'pageview', '/');
 			}
@@ -268,13 +287,22 @@
 					self.selectedRegion(queryString.region)
 					app.trigger('regionUpdated', queryString.region);
 				}
+			}
 
-				var acceptedQueryValues = ['s1', 's2', 's3', 's4', 's5'];
-				for(var property in queryString) {
-					if (acceptedQueryValues.indexOf(property) !== -1) {
-						_setNextAvailabeSummonerInput(queryString[property]);
-					}
-				}
+			if (shortUrlValue) {
+				shortenedUrlDataProvider.getData(shortUrlValue)
+					.then(function(shortUrlData) {
+						self.selectedRegion(shortUrlData.region)
+						app.trigger('regionUpdated', shortUrlData.region);
+
+						shortUrlData.summoners.forEach(function(summoner) {
+							_setNextAvailabeSummonerInput(summoner);
+						});
+					})
+					.fail(function(error) {
+						// not really anything to do here
+						// maybe tell them the URL was invalid?
+					});
 			}
 
 			app.on('regionUpdated')

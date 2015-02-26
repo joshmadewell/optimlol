@@ -1,9 +1,8 @@
 var mongoose = require('mongoose');
-var shortId = require('shortid');
 var Schema = mongoose.Schema;
 
 var SummonersSchema = new Schema({
-	_id: { type: String, required: true, default: shortId.generate() },
+	_id: { type: String, required: true },
 	region: { type: String, required: true },
 	summoners: { type: Array },
 	created_at: { type: Date },

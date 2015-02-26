@@ -1,3 +1,5 @@
+var shortId = require('shortid');
+
 module.exports = function(router) {
 	var self = this;
 
@@ -17,12 +19,13 @@ module.exports = function(router) {
 	var UrlDataResponseObject = function() {
 		this.region = null;
 		this.summoners = [];
+		this.shortUrl = null;
 	}
 
 	router.get('/getUrlData/:urlId', function(req, res) {
 		var urlId = req.params.urlId;
 		var responseObject = new UrlDataResponseObject();
-		_shortenedUrlModel.findOne(function(error, result) {
+		_shortenedUrlModel.findOne({_id: urlId}, function(error, result) {
 			if (error) _handleResponse(res, 500);
 			else {
 				if (result) {
@@ -36,19 +39,23 @@ module.exports = function(router) {
 		});
 	});
 
-	router.post('/generateShortUrl', function(req, res) {
-		var body = req.body;
-		console.log(shortenedUrlDocument);
-		var shortenedUrlDocument = new _shortenedUrlModel();
-		shortenedUrlDocument.summoners = body.summoners;
-		shortenedUrlDocument.region = body.region;
+	router.get('/generateShortUrl', function(req, res) {
+		var query = req.query;
 
-		console.log(shortenedUrlDocument);
+		var responseObject = new UrlDataResponseObject();
+
+		var shortenedUrlDocument = new _shortenedUrlModel();
+		shortenedUrlDocument._id = shortId.generate();
+		shortenedUrlDocument.summoners = query.summoners.split(',');
+		shortenedUrlDocument.region = query.region || 'na';
 
 		shortenedUrlDocument.save(function(error, result) {
 			if (error) _handleResponse(res, 500);
 			else {
-				_handleResponse(res, 200, shortenedUrlDocument._id);
+				responseObject.shortUrl = shortenedUrlDocument._id;
+				responseObject.summoners = shortenedUrlDocument.summoners;
+				responseObject.region = shortenedUrlDocument.region;
+				_handleResponse(res, 200, responseObject);
 			}
 		});
 	});

@@ -84,7 +84,7 @@
 
             router.map([
                 {
-                    route: '',
+                    route: '(:shortUrlValue)',
                     title: '',
                     navigationTitle:'Home',
                     moduleId: 'viewmodels/optimlol',

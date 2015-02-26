@@ -5,7 +5,7 @@ define(['durandal/system', 'common/optimlolApi'], function (system, OptimlolApi)
 
 		self.getSummonerData = function(region, name) {
 			var promise = system.defer();
-			optimlolApi.makeRequest(region, 'summoner/by-name/' + name)
+			optimlolApi.makeRegionizedRequest(region, 'summoner/by-name/' + name)
 				.then(function(result) {
 					promise.resolve(result.data.data);
 				})
