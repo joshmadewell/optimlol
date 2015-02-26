@@ -266,7 +266,7 @@
 
 				shortenedUrlDataProvider.generate(generationObject)
 					.then(function(generationResult) {
-						self.shareUrl(defaultShareUrl + "/?share=" + generationResult.shortUrl);
+						self.shareUrl(defaultShareUrl + "/" + generationResult.shortUrl);
 						_foucsShareUrl();
 					})
 					.fail(function(error) {
@@ -276,7 +276,7 @@
 			}
 		};
 
-		self.activate = function(queryString) {
+		self.activate = function(shareUrl, queryString) {
 			if (window.__gaTracker && typeof window.__gaTracker === 'function') {
 				window.__gaTracker('send', 'pageview', '/');
 			}
@@ -288,23 +288,23 @@
 					self.selectedRegion(queryString.region)
 					app.trigger('regionUpdated', queryString.region);
 				}
+			}
 
-				if (queryString.share) {
-					var shortUrlValue = queryString.share;
-					shortenedUrlDataProvider.getData(shortUrlValue)
-						.then(function(shortUrlData) {
-							self.selectedRegion(shortUrlData.region)
-							app.trigger('regionUpdated', shortUrlData.region);
 
-							shortUrlData.summoners.forEach(function(summoner) {
-								_setNextAvailabeSummonerInput(summoner);
-							});
-						})
-						.fail(function(error) {
-							// not really anything to do here
-							// maybe tell them the URL was invalid?
+			if (shareUrl) {
+				shortenedUrlDataProvider.getData(shareUrl)
+					.then(function(shortUrlData) {
+						self.selectedRegion(shortUrlData.region)
+						app.trigger('regionUpdated', shortUrlData.region);
+
+						shortUrlData.summoners.forEach(function(summoner) {
+							_setNextAvailabeSummonerInput(summoner);
 						});
-				}
+					})
+					.fail(function(error) {
+						// not really anything to do here
+						// maybe tell them the URL was invalid?
+					});
 			}
 
 			app.on('regionUpdated')

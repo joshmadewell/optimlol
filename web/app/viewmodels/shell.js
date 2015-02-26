@@ -106,9 +106,8 @@
                     nav: true
                 },
                 {
-                    route: 'share(/:shortUrl)',
+                    route: '(:shortUrl)',
                     title: '',
-                    hash: 'share',
                     navigationTitle: null,
                     moduleId: 'viewmodels/optimlol',
                     nav: false
