@@ -1,5 +1,6 @@
 var express = require('express');
 var moment = require('moment');
+var bodyParser = require('body-parser');
 
 var Logger = require('./common/logging/logger');
 var logger = new Logger();
@@ -11,9 +12,16 @@ mongo.init();
 var config = require('./config');
 
 var expressRouter = express.Router();
-var SummonerRoutesConstructor = require('./endpoints/routes/summonerRoutes');
-var summonerRoutes = new SummonerRoutesConstructor(expressRouter);
-summonerRoutes.init();
+var routes = [
+	'./endpoints/routes/summonerRoutes',
+	'./endpoints/routes/shortenUrlRoutes'
+];
+
+routes.forEach(function(route) {
+	var RouteConstructor = require(route);
+	var routeInstance = new RouteConstructor(expressRouter);
+	routeInstance.init();
+});
 
 var crossOriginMiddleware = function(req, res, next) {
 	res.header('Access-Control-Allow-Origin', '*');
@@ -29,6 +37,7 @@ var loggerMiddleware = function(req, res, next) {
 
 var app = express();
 app.use(crossOriginMiddleware);
+app.use(bodyParser.json());
 app.use(loggerMiddleware);
 app.use(expressRouter);
 app.use(function(req, res, next) {
