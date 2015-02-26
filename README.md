@@ -18,6 +18,8 @@ To Run Code:
         RIOT_API_KEY='riot_api_key'
         
         PORT=8080 #local api port
+
+        NODE_ENV='development'
     ```
 5. Run the optimlol_api. ```foreman start -e .env```
 6. In another command console, run gulp. ```gulp debug-web```
