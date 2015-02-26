@@ -1,11 +1,12 @@
 ﻿define(['durandal/system',
 	'durandal/app',
+	'plugins/router',
 	'dataProviders/summonersDataProvider',
 	'dataProviders/shortenedUrlDataProvider',
 	'presentationObjects/summonerPresentationObject',
 	'common/collectionSorter',
 	'singleton/session'],
-	function (durandal, app, SummonersDataProvider, ShortenedUrlDataProvider, SummonerPresentationObject, collectionSorter, session) {
+	function (durandal, app, router, SummonersDataProvider, ShortenedUrlDataProvider, SummonerPresentationObject, collectionSorter, session) {
 	return function() {
 		var self = this;
 		var NUMBER_OF_SUMMONERS = 5;
@@ -265,7 +266,7 @@
 
 				shortenedUrlDataProvider.generate(generationObject)
 					.then(function(generationResult) {
-						self.shareUrl(defaultShareUrl + "/" + generationResult.shortUrl);
+						self.shareUrl(defaultShareUrl + "/?share=" + generationResult.shortUrl);
 						_foucsShareUrl();
 					})
 					.fail(function(error) {
@@ -275,7 +276,7 @@
 			}
 		};
 
-		self.activate = function(shortUrlValue, queryString) {
+		self.activate = function(queryString) {
 			if (window.__gaTracker && typeof window.__gaTracker === 'function') {
 				window.__gaTracker('send', 'pageview', '/');
 			}
@@ -287,22 +288,23 @@
 					self.selectedRegion(queryString.region)
 					app.trigger('regionUpdated', queryString.region);
 				}
-			}
 
-			if (shortUrlValue) {
-				shortenedUrlDataProvider.getData(shortUrlValue)
-					.then(function(shortUrlData) {
-						self.selectedRegion(shortUrlData.region)
-						app.trigger('regionUpdated', shortUrlData.region);
+				if (queryString.share) {
+					var shortUrlValue = queryString.share;
+					shortenedUrlDataProvider.getData(shortUrlValue)
+						.then(function(shortUrlData) {
+							self.selectedRegion(shortUrlData.region)
+							app.trigger('regionUpdated', shortUrlData.region);
 
-						shortUrlData.summoners.forEach(function(summoner) {
-							_setNextAvailabeSummonerInput(summoner);
+							shortUrlData.summoners.forEach(function(summoner) {
+								_setNextAvailabeSummonerInput(summoner);
+							});
+						})
+						.fail(function(error) {
+							// not really anything to do here
+							// maybe tell them the URL was invalid?
 						});
-					})
-					.fail(function(error) {
-						// not really anything to do here
-						// maybe tell them the URL was invalid?
-					});
+				}
 			}
 
 			app.on('regionUpdated')
