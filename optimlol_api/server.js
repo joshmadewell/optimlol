@@ -1,6 +1,5 @@
 var express = require('express');
 var moment = require('moment');
-var bodyParser = require('body-parser');
 
 var Logger = require('./common/logging/logger');
 var logger = new Logger();
@@ -46,7 +45,6 @@ var loggerMiddleware = function(req, res, next) {
 
 var app = express();
 app.use(crossOriginMiddleware);
-app.use(bodyParser.json());
 app.use(loggerMiddleware);
 app.use(expressRouter);
 app.use(function(req, res, next) {
