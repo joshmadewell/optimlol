@@ -104,6 +104,14 @@
                     navigationTitle:'Support',
                     moduleId: 'viewmodels/support',
                     nav: true
+                },
+                {
+                    route: 'share(/:shortUrl)',
+                    title: '',
+                    hash: 'share',
+                    navigationTitle: null,
+                    moduleId: 'viewmodels/optimlol',
+                    nav: false
                 }
             ]).buildNavigationModel();
 
