@@ -184,7 +184,8 @@
 			var chatText = self.chatText();
 			var lines = chatText.split('\n');
 			var joinedRoomConstants = [
-				" joined the room"
+				" joined the room.",
+				"entró a la sala."
 			];
 
 			var alreadyEnteredSummoners = self.summonerInputs.map(function(summoner) {
@@ -197,7 +198,7 @@
 
 			lines.forEach(function(line) {
 				if (line.indexOf(":") !== -1) {
-					// if it's a chat message, take the characters before 
+					// if it's a chat message, take the characters before
 					// the first colon...
 					var playerName = line.split(":")[0];
 					if (potentialSummoners.indexOf(playerName) === -1 && alreadyEnteredSummoners.indexOf(playerName) === -1) {
@@ -250,7 +251,7 @@
 			var validatedSummoners = self.validSummoners();
 			var region = self.selectedRegion();
 			var defaultShareUrl = window.location.origin || "http://www.optimlol.com";
-			
+
 			if (validatedSummoners.length === 0) {
 				self.shareUrl(defaultShareUrl + "/?region=" + region);
 				_foucsShareUrl();
