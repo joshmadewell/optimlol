@@ -185,7 +185,7 @@
 			var lines = chatText.split('\n');
 			var joinedRoomConstants = [
 				" joined the room.",
-				"entró a la sala."
+				" entró a la sala."
 			];
 
 			var alreadyEnteredSummoners = self.summonerInputs.map(function(summoner) {
