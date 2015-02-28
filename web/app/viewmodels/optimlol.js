@@ -313,12 +313,16 @@
 			app.on('regionUpdated')
 				.then(function(region) {
 					self.selectedRegion(region);
-					self.validSummoners.removeAll();
 
-					self.summonerInputs.forEach(function(input) {
-						var summonerName = input.summonerName();
+					var previousSummonerInputNames = self.summonerInputs.map(function(summoner) {
+						return summoner.summonerName();
+					})
+					
+					self.clearSummonerInputs();
+
+					previousSummonerInputNames.forEach(function(summonerName) {
 						if (summonerName !== null || summonerName !== undefined || summonerName !== "") {
-							input.summonerName.valueHasMutated();
+							_setNextAvailabeSummonerInput(summonerName);
 						}
 					});
 				});
