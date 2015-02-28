@@ -122,7 +122,6 @@
 				};
 
 				self.shareUrl("");
-				self.summonerInputs.sort(_sortingComparator);
 				_tagLanes();
 
 				self.summonerInputs.forEach(function(summoner) {
@@ -130,6 +129,8 @@
 						self.validSummoners.push(summoner);
 					}
 				});
+
+				self.validSummoners.sort(_sortingComparator);
 			}
 		};
 
@@ -179,6 +180,12 @@
 			$('.share-url').select();
 		};
 
+		self.summonerInputs = [];
+		self.selectedRegion = ko.observable(session.get('region'));
+		self.validSummoners = ko.observableArray([]);
+		self.chatText = ko.observable("");
+		self.shareUrl = ko.observable("");
+
 		self.parseChatForPlayers  = function() {
 			var potentialSummoners = [];
 			var chatText = self.chatText();
@@ -224,12 +231,6 @@
 			});
 		}
 
-		self.summonerInputs = [];
-		self.selectedRegion = ko.observable(session.get('region'));
-		self.validSummoners = ko.observableArray([]);
-		self.chatText = ko.observable("");
-		self.shareUrl = ko.observable("");
-
 		self.clearSummonerInputs = function() {
 			self.shareUrl("");
 			self.validSummoners.removeAll();
@@ -243,7 +244,8 @@
 				input.laneTag = "";
 				input.totalStats = {};
 				input.championStats = [],
-				input.recentHistory = []
+				input.recentHistory = [],
+				input.bestPerformanceStats = []
 			})
 		};
 
