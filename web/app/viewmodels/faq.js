@@ -19,7 +19,8 @@ define([], function() {
 						"selection screen and hit the \"Parse Chat Log\" button. The second option is usually the quickest " +
 						"but sometimes, you won't have a message that contains summoner names so you'll have to type all " +
 						"the names in. I still find this much faster than opening five tabs in my browser and searching " +
-						"individually on LoLKing.",
+						"individually on LoLKing. You can now click the \"Share With Team\" button to quickly share the " +
+						"page with the other summoners in champion select, saving them the extra work!",
 				isVisible: ko.observable(false),
 				chevronClass: ko.observable('fa fa-chevron-up collapse')
 			},
@@ -75,8 +76,8 @@ define([], function() {
 			{
 				whatIsThis: false,
 				question: "Why does your website look so lame?",
-				answer: "Funny you should ask!!! I'm actually looking for a web-designer and working with someone to get a logo " +
-						"created. If you're interested in helping or have any suggestions shoot me an <a mailto:\"optimloldotcom@gmail.com\">email</a>!",
+				answer: "Funny you should ask!!! I'm actually looking for a web-designer. If you're interested in helping or have any " +
+						"suggestions shoot me an <a href=\"mailto:optimloldotcom@gmail.com&Subject=Design%20Suggestions\">email</a>!",
 				isVisible: ko.observable(false),
 				chevronClass: ko.observable('fa fa-chevron-up collapse')
 			}
