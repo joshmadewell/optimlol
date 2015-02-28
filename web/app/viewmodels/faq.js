@@ -77,13 +77,13 @@ define([], function() {
 				whatIsThis: false,
 				question: "Why does your website look so lame?",
 				answer: "Funny you should ask!!! I'm actually looking for a web-designer. If you're interested in helping or have any " +
-						"suggestions shoot me an <a href=\"mailto:optimloldotcom@gmail.com&Subject=Design%20Suggestions\">email</a>!",
+						"suggestions shoot me an <a href=\"mailto:optimloldotcom@gmail.com?Subject=Design%20Suggestions\">email</a>!",
 				isVisible: ko.observable(false),
 				chevronClass: ko.observable('fa fa-chevron-up collapse')
 			}
 		]);
 
-		self.toggleCollapse = function(value) {
+		self.toggleCollapse = function(value) {an
 			if (value.isVisible() === false) {
 				value.isVisible(true);
 				value.chevronClass('fa fa-chevron-down collapse');
