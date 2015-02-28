@@ -58,13 +58,12 @@ module.exports = function() {
 
 									match.participants[0].timeline = {}
 									match.participants[0].timeline.lane = lane;
-									match.participants[0].timeline.lane = role;
+									match.participants[0].timeline.role = role;
 								});
-
 								if (dataProviderResult) {
 									dataProviderResult.data.matches = dataProviderResult.data.matches.concat(currentMatchHistorySet.data.matches);
 								} else {
-									dataProviderResult = matchHistoryApiResult.value;
+									dataProviderResult = currentMatchHistorySet;
 								}
 							} else if (dataProviderResult === null) {
 								dataProviderResult = currentMatchHistorySet;
