@@ -83,7 +83,7 @@ define([], function() {
 			}
 		]);
 
-		self.toggleCollapse = function(value) {an
+		self.toggleCollapse = function(value) {
 			if (value.isVisible() === false) {
 				value.isVisible(true);
 				value.chevronClass('fa fa-chevron-down collapse');
