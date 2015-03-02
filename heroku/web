@@ -4,5 +4,5 @@ if [ "$ENVIRONMENT" == "OPTIMLOL_UI_HEROKU" ] || [ "$ENVIRONMENT" == "OPTIMLOL_U
     gulp build-web
     node build/index.js
 else
-    node optimlol_api/server.js
+    node --max-old-space-size=410 optimlol_api/server.js
 fi
