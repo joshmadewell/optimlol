@@ -99,10 +99,10 @@
                     nav: true
                 },
                 {
-                    route: 'support',
+                    route: 'donate',
                     title: '',
-                    navigationTitle:'Support',
-                    moduleId: 'viewmodels/support',
+                    navigationTitle:'Donate',
+                    moduleId: 'viewmodels/donate',
                     nav: true
                 },
                 {

@@ -80,6 +80,16 @@ define([], function() {
 						"suggestions shoot me an <a href=\"mailto:optimloldotcom@gmail.com?Subject=Design%20Suggestions\">email</a>!",
 				isVisible: ko.observable(false),
 				chevronClass: ko.observable('fa fa-chevron-up collapse')
+			},
+			{
+				whatIsThis: false,
+				question: "What can I do to help?",
+				answer: "As mentioned in the above question, I'm always looking for design help! I have a Logo but if you want to try and " +
+						"make another one, do it and send it to my email: optimloldotcom@gmail.com. Also, if you're interested in " + 
+						"contributing, head over to my <a href=\"https://github.com/joshmadewell/optimlol\">github repo.</a> As far as any " +
+						"other suggestions go, please e-mail them to me and I will try to get back to you as soon as possible!",
+				isVisible: ko.observable(false),
+				chevronClass: ko.observable('fa fa-chevron-up collapse')
 			}
 		]);
 
