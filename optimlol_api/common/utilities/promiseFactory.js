@@ -2,12 +2,9 @@ var q = require('q');
 
 module.exports = function() {
 	var self = this;
-	var _deferredList = [];
 
 	self.defer = function(deferredFunction) {
 		var deferred = q.defer();
-
-		_deferredList.push(deferred);
 
 		try {
 			if (deferredFunction !== undefined) {
