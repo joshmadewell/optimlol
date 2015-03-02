@@ -3,6 +3,8 @@ var q = require('q');
 module.exports = function() {
 	var self = this;
 
+	var _promiseTimeoutMilliseconds = 60000;
+
 	self.defer = function(deferredFunction) {
 		var deferred = q.defer();
 
@@ -14,7 +16,7 @@ module.exports = function() {
 			deferred.reject(exception);
 		}
 
-		return deferred.promise;
+		return deferred.promise.timeout(_promiseTimeoutMilliseconds);
 	}
 
 	self.wait = function(promises) {
