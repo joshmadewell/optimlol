@@ -24,6 +24,23 @@ define([], function() {
                 });
             }
         };
+
+        ko.bindingHandlers.changeTip = {
+            init: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+                (function(document,script,id) {
+                    var js,
+                        r=document.getElementsByTagName(script)[0],
+                        protocol=/^http:/.test(document.location)?'http':'https';
+
+                    if(!document.getElementById(id)){
+                        js=document.createElement(script);
+                        js.id=id;
+                        js.src=protocol+'://widgets.changetip.com/public/js/widgets.js';
+                        r.parentNode.insertBefore(js,r)
+                    }
+                }(document,'script','changetip_w_0'));
+            }
+        }
 	};
 
 	return {

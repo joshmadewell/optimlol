@@ -50,7 +50,7 @@ gulp.task('web-app', function(cb) {
 		gulp.src('./web/appDependencies/lib/knockout/**/*')
 			.pipe(gulp.dest('./build/lib/knockout')),
 
-		gulp.src('./web/appDependencies/img/favicon.png')
+		gulp.src('./web/appDependencies/img/paypal-donate.png')
 			.pipe(gulp.dest('./build/img/')),
 
 		gulp.src('./web/appDependencies/img/favicon*')

@@ -99,13 +99,6 @@
                     nav: true
                 },
                 {
-                    route: 'donate',
-                    title: '',
-                    navigationTitle:'Donate',
-                    moduleId: 'viewmodels/donate',
-                    nav: true
-                },
-                {
                     route: '(:shortUrl)',
                     title: '',
                     navigationTitle: null,
