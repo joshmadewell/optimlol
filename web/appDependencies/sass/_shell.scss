@@ -48,6 +48,14 @@ and (max-device-width : 480px) {
 		margin-top: 0px;
 	}
 
+	.paypal {
+		display: none;
+	}
+
+	.changetip_tipme_button {
+		display: none;
+	}
+
 	.navbar {
 		.navigation-item {
 			border-bottom: 1px solid $darkgray;
