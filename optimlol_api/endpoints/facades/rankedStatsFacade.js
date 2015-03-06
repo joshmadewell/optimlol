@@ -15,13 +15,18 @@ var _prepareStats = function(stats) {
             optimlolChampion.kills = champion.stats.totalChampionKills;
             optimlolChampion.deaths = champion.stats.totalDeathsPerSession;
             optimlolChampion.assists = champion.stats.totalAssists;
+            optimlolChampion.gamesPlayed = champion.stats.totalSessionsPlayed;
+            optimlolChampion.totalDamageTaken = champion.stats.totalDamageTaken;
+            optimlolChampion.totalMinionKills = champion.stats.totalMinionKills;
+            optimlolChampion.totalDamageDealt = champion.stats.totalDamageDealt;
+            optimlolChampion.totalGoldEarned = champion.stats.totalGoldEarned;
+
+            optimlolChampion.performance = _performanceCalculator.calculate(champion.stats.totalSessionsWon, champion.stats.totalSessionsLost);
             if (champion.stats.totalDeathsPerSession) {
                 optimlolChampion.kda = (champion.stats.totalChampionKills + champion.stats.totalAssists) / champion.stats.totalDeathsPerSession;
             } else {
                 optimlolChampion.kda = (champion.stats.totalChampionKills + champion.stats.totalAssists);
             }
-            optimlolChampion.gamesPlayed = champion.stats.totalSessionsPlayed;
-            optimlolChampion.performance = _performanceCalculator.calculate(champion.stats.totalSessionsWon, champion.stats.totalSessionsLost);
             optimlolChampions.push(optimlolChampion);
         });
 
