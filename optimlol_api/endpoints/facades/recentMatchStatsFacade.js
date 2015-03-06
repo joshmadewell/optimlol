@@ -17,18 +17,19 @@ var _prepareStats = function(matchHistory) {
 			recentStats.champions[participants.championId].deaths = participants.stats.deaths;
 			recentStats.champions[participants.championId].assists = participants.stats.assists;
             recentStats.champions[participants.championId].totalDamageTaken = participants.stats.totalDamageTaken;
-            recentStats.champions[participants.championId].sightWardsBoughtInGame participants.stats.sightWardsBoughtInGame;
-            recentStats.champions[participants.championId].wardsKilled participants.stats.wardsKilled;
-            recentStats.champions[participants.championId].visionWardsBoughtInGame participants.stats.visionWardsBoughtInGame;
-            recentStats.champions[participants.championId].champLevel participants.stats.champLevel;
+            recentStats.champions[participants.championId].sightWardsBoughtInGame = participants.stats.sightWardsBoughtInGame;
+            recentStats.champions[participants.championId].wardsKilled = participants.stats.wardsKilled;
+            recentStats.champions[participants.championId].visionWardsBoughtInGame = participants.stats.visionWardsBoughtInGame;
+            recentStats.champions[participants.championId].champLevel = participants.stats.champLevel;
             recentStats.champions[participants.championId].totalDamageDealt = participants.stats.totalDamageDealt;
-            recentStats.champions[participants.championId].largestKillingSpree participants.stats.largestKillingSpree;
+            recentStats.champions[participants.championId].largestKillingSpree = participants.stats.largestKillingSpree;
             recentStats.champions[participants.championId].minionsKilled = participants.stats.minionsKilled;
-            recentStats.champions[participants.championId].towerKills participants.stats.towerKills;
+            recentStats.champions[participants.championId].towerKills = participants.stats.towerKills;
             recentStats.champions[participants.championId].goldSpent = participants.stats.goldSpent;
             recentStats.champions[participants.championId].totalDamageDealtToChampions = participants.stats.totalDamageDealtToChampions;
             recentStats.champions[participants.championId].goldEarned = participants.stats.goldEarned;
             recentStats.champions[participants.championId].wardsPlaced = participants.stats.wardsPlaced;
+            recentStats.champions[participants.championId].totalTimePlayed = match.matchDuration;
 			if (participants.stats.winner) {
 				recentStats.champions[participants.championId].wins = 1;
 				recentStats.champions[participants.championId].losses = 0;
@@ -54,6 +55,7 @@ var _prepareStats = function(matchHistory) {
             recentStats.champions[participants.championId].totalDamageDealtToChampions += participants.stats.totalDamageDealtToChampions;
             recentStats.champions[participants.championId].goldEarned += participants.stats.goldEarned;
             recentStats.champions[participants.championId].wardsPlaced += participants.stats.wardsPlaced;
+            recentStats.champions[participants.championId].totalTimePlayed += match.matchDuration;
 			if (participants.stats.winner) {
 				recentStats.champions[participants.championId].wins++;
 			} else {
@@ -64,6 +66,17 @@ var _prepareStats = function(matchHistory) {
 				recentStats.champions[participants.championId].lanes.push(participants.timeline.lane);
 			}
 		}
+
+		var optimlolMatchHistoryObject = {};
+		optimlolMatchHistoryObject.matchCreation = match.matchCreation;
+		optimlolMatchHistoryObject.role = participants.timeline.lane;
+		optimlolMatchHistoryObject.championId = participants.championId;
+		optimlolMatchHistoryObject.winner = participants.stats.winner;
+		optimlolMatchHistoryObject.kills = participants.stats.kills;
+		optimlolMatchHistoryObject.deaths = participants.stats.deaths;
+		optimlolMatchHistoryObject.assists = participants.stats.assists;
+		optimlolMatchHistoryObject.champLevel = participants.stats.champLevel;
+		recentStats.matches.push(optimlolMatchHistoryObject);
 	});
 
 	matchHistory.data = recentStats;
