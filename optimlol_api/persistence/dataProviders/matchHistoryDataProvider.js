@@ -45,21 +45,31 @@ module.exports = function() {
 					results.forEach(function(matchHistoryApiResult) {
 						if (matchHistoryApiResult.state === 'fulfilled') {
 							var currentMatchHistorySet = matchHistoryApiResult.value;
+							var deleteHistory = [];
 							if (currentMatchHistorySet.data && currentMatchHistorySet.data.matches) {
 								// this result is freaking massive, we need to remove the un-needed data...
-								currentMatchHistorySet.data.matches.forEach(function(match) {
+								currentMatchHistorySet.data.matches.forEach(function(match, index) {
 									delete match.participantIdentities;
 									delete match.participants[0].runes;
 									delete match.participants[0].participantId;
 									delete match.participants[0].masteries;
 
-									var lane = match.participants[0].timeline.lane;
-									var role = match.participants[0].timeline.role;
-
-									match.participants[0].timeline = {}
-									match.participants[0].timeline.lane = lane;
-									match.participants[0].timeline.role = role;
+									if (match.participants[0].timeline) {
+										var lane = match.participants[0].timeline.lane;
+										var role = match.participants[0].timeline.role;
+	
+										match.participants[0].timeline = {}
+										match.participants[0].timeline.lane = lane;
+										match.participants[0].timeline.role = role;
+									} else {
+										deleteHistory.push(index);
+									}
 								});
+
+								deleteHistory.forEach(function(index) {
+									currentMatchHistorySet.data.matches.splice(index, 1);
+								});
+
 								if (dataProviderResult) {
 									dataProviderResult.data.matches = dataProviderResult.data.matches.concat(currentMatchHistorySet.data.matches);
 								} else {
