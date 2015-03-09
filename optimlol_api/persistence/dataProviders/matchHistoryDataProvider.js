@@ -16,11 +16,6 @@ module.exports = function() {
 	var REQUIRED_PARAMETERS = ['region', 'summonerId', 'type'];
 	var LOOKBACK_GAMES_COUNT = 30;
 
-	var _prepareMatchHistory = function(matchHistory) {
-		_sorter.sort(matchHistory.data.matches, 'matchCreation', 'descending');
-		return matchHistory;
-	};
-
 	self.getFromApi = function(parameters) {
 		if (_parameterValidator.validate(parameters, REQUIRED_PARAMETERS) === false) {
 			throw new Error("Invalid parameters for Match History Data Provider");
@@ -61,13 +56,7 @@ module.exports = function() {
 										match.participants[0].timeline = {}
 										match.participants[0].timeline.lane = lane;
 										match.participants[0].timeline.role = role;
-									} else {
-										deleteHistory.push(index);
 									}
-								});
-
-								deleteHistory.forEach(function(index) {
-									currentMatchHistorySet.data.matches.splice(index, 1);
 								});
 
 								if (dataProviderResult) {
