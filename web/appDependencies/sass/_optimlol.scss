@@ -63,20 +63,20 @@
                     width: 20px;
                 }
                 .top {
-                    background-color: #DBAE5A;
+                    background-color: $top-color;
                 }
                 .jungle {
-                    background-color: #FF9100;
+                    background-color: $jungle-color;
                 }
                 .middle {
-                    background-color: #4A66C9;
+                    background-color: $middle-color;
                 }
                 .support {
-                    background-color: #6BEEA2;
+                    background-color: $support-color;
                 }
                 .marksman {
                     font-size: 7px;
-                    background-color: #C73A3A;
+                    background-color: $marksman-color;
                 }
 
                 .name {
