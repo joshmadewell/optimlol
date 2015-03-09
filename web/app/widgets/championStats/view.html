@@ -1,0 +1,26 @@
+<div class="champion-profile" data-bind="with: championStats">
+	<div data-bind="css: 'icon-champion-large-' + championKey">
+
+	<div id="popover-content" style="display: none;">
+		<div class="champion-profile">
+			<div class="column-1">
+				<div data-bind="{ css: 'icon-champion-large-' + championKey }"></div>
+				<label data-bind="text: championName"></label>
+			</div>
+
+			<div class="column-2">
+				<label>Roles Played:</label>
+				<ul class="lanes">
+					<li class="top" data-bind="css: { 'highlight': lanes.indexOf('TOP') !== -1 }">TOP</li>
+					<li class="jungle" data-bind="css: { 'highlight': lanes.indexOf('JUNGLE') !== -1 }">JUN</li>
+					<li class="middle" data-bind="css: { 'highlight': lanes.indexOf('MIDDLE') !== -1 }">MID</li>
+					<li class="marksman" data-bind="css: { 'highlight': lanes.indexOf('MARKSMAN') !== -1 }">ADC</li>
+					<li class="support" data-bind="css: { 'highlight': lanes.indexOf('SUPPORT') !== -1 }">SUP</li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="champion-stats">
+		</div>
+	</div>
+</div>

@@ -1,4 +1,7 @@
 define([], function() {
+    var bestPerformanceTemplate = '<div class="icon-champion-large-irelia"/>';
+    var recentHistoryTemplate = '';
+
 	var _configureKnockout = function() {
 		ko.bindingHandlers.tooltip = {
             init: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
@@ -21,6 +24,29 @@ define([], function() {
 
                 ko.utils.domNodeDisposal.addDisposeCallback(element, function() {
                     $(element).tooltip('destroy');
+                });
+            }
+        };
+
+        ko.bindingHandlers.popover = {
+            init: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+                var ele = $(element);
+                console.log("pray", $(element).find("#popover-content"));
+
+                var options = {
+                    content: function() {
+                        return $(element).find("#popover-content").html();
+                    },
+                    placement: 'bottom',
+                    trigger: 'hover',
+                    html: true
+                }
+
+                $(element).attr("data-container", 'body');
+                $(element).popover(options);
+
+                ko.utils.domNodeDisposal.addDisposeCallback(element, function() {
+                    $(element).popover('destroy');
                 });
             }
         };

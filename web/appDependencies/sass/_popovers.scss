@@ -1,0 +1,42 @@
+.popover-content {
+	.champion-profile {
+		display: inline-flex;
+
+		.column-1 {
+			text-align: center;
+		}
+
+		.column-2 {
+			margin-left: 14px;
+			text-align: center;
+		}
+	}
+	.lanes {
+		list-style-type: none;
+		display: inline-flex;
+		padding: 0;
+
+		.top,
+		.jungle,
+		.middle,
+		.marksman,
+		.support {
+			&:last-child {
+				border-right: 1px solid black;
+			}
+			border-left: 1px solid black;
+			border-top: 1px solid black;
+			border-bottom: 1px solid black;
+			padding: 2px;
+			font-size: 9px;
+			background-color: $darkgray;
+		} 
+		.highlight {
+			&.top { background-color: $top-color; }
+			&.jungle { background-color: $jungle-color; }
+			&.middle { background-color: $middle-color; }
+			&.marksman { background-color: $marksman-color; }
+			&.support { background-color: $support-color; }
+		}
+	}
+}

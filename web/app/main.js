@@ -3,7 +3,8 @@
     paths: {
         'text': '../../lib/require/text',
         'durandal':'../../lib/durandal/js',
-        'plugins' : '../../lib/durandal/js/plugins'
+        'plugins' : '../../lib/durandal/js/plugins',
+        'widgets' : 'widgets'
     }
 });
 
@@ -25,7 +26,10 @@ function (system, app, viewLocator, knockoutConfiguration, routerConfiguration) 
 
     app.configurePlugins({
         router:true,
-        dialog: true
+        dialog: true,
+        widget: {
+            kinds: ['championStats']
+        }
     });
 
     app.start().then(function() {

@@ -38,10 +38,10 @@
                 <td data-bind="text: displayName"></td>
                 <td class="recently-played">
                     <div class="no-stats" data-bind="visible: recentHistory.length === 0">No stats for this season.</div>
-                    <ul class="champion-list" data-bind="foreach: recentHistory.champions">
+                    <ul class="champion-list" data-bind="foreach: { data: recentHistory.champions, as: 'currentChampion' }">
                         <!-- ko if: $index() < 5 -->
                         <li class="champion-data">
-                            <div data-bind="css: 'icon-champion-large-' + championKey, tooltip: championName "/>
+                            <div data-bind="popover, championStats: currentChampion"/>
                             <div data-bind="text: 'Games: ' + count"/>
                             <div><span class="wins" data-bind="text: wins"/> / <span class="losses" data-bind="text: losses"/></div>
                         </li>
