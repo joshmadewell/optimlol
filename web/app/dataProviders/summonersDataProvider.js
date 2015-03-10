@@ -7,7 +7,7 @@ define(['durandal/system', 'common/optimlolApi'], function (system, OptimlolApi)
 			var promise = system.defer();
 			optimlolApi.makeRegionizedRequest(region, 'summoner/by-name/' + name)
 				.then(function(result) {
-					promise.resolve(result.data.data);
+					promise.resolve(result.data);
 				})
 				.fail(function(error) {
 					promise.reject(error);

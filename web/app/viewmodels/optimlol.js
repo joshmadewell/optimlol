@@ -12,6 +12,8 @@
 		var NUMBER_OF_SUMMONERS = 5;
 		var LOL_KING_URL = "http://www.lolking.net/summoner/{{region}}/{{summoner_id}}";
 		var NA_OP_GG_URL = "http://{{region}}.op.gg/summoner/userName={{summoner_name}}";
+		var RIOT_API_STRUGGLES = "Riot API currently having issues.";
+		var NO_STATS_AVAIABLE = "No stats this season."
 		var STATUS = {
 			UNSET: "unset",
 			VALID: "valid",
@@ -28,29 +30,40 @@
 			} else {
 				summoner.status(STATUS.VALIDATING);
 				_getSummonerData(summonerName)
-					.then(function(result) {
-						if (result.id) {
-							summoner.displayName = result.name;
-							if (result.championStats && result.championStats.length) {
-								collectionSorter.sort(result.championStats, "gamesPlayed", "descending");
-								summoner.championStats = result.championStats;
+					.then(function(apiResult) {
+						var summonerData = apiResult.data;
+						var quality = apiResult.quality;
 
-								var fiveMostPlayed = result.championStats.slice(0, 5);
+						if (quality === 'stale' || quality === 'unknown') {
+							self.noStatsText(RIOT_API_STRUGGLES);
+						} else {
+							self.noStatsText(NO_STATS_AVAIABLE);
+						}
+
+						if (summonerData.id) {
+							summoner.displayName = summonerData.name;
+							if (summonerData.championStats && summonerData.championStats.length) {
+								collectionSorter.sort(summonerData.championStats, "gamesPlayed", "descending");
+								summoner.championStats = summonerData.championStats;
+
+								var fiveMostPlayed = summonerData.championStats.slice(0, 5);
 								collectionSorter.sort(fiveMostPlayed, "performance", "descending");
 								summoner.bestPerformanceStats = fiveMostPlayed;
 							} else {
 								summoner.championStats = [];
 							}
-							if (result.recentHistory && result.recentHistory.champions) {
-								collectionSorter.sort(result.recentHistory.champions, "count", "descending");
+							if (summonerData.recentHistory && summonerData.recentHistory.champions) {
+								collectionSorter.sort(summonerData.recentHistory.champions, "count", "descending");
 							}
-							if (summoner.championStats.length > 0) {
-								summoner.recentHistory = result.recentHistory;
+
+							if (summoner.championStats.length > 0 && summonerData.recentHistory) {
+								summoner.recentHistory = summonerData.recentHistory;
 							} else {
 								summoner.recentHistory = [];
 							}
-							summoner.totalStats = result.totalStats;
-							summoner.summonerId(result.id);
+
+							summoner.totalStats = summonerData.totalStats;
+							summoner.summonerId(summonerData.id);
 							summoner.status(STATUS.VALID);
 						} else {
 							_summonerVerificationFailed(summoner);
@@ -147,21 +160,23 @@
 
 		var _tagLanes = function() {
 			self.summonerInputs.forEach(function(summoner) {
-				var highestCount = 0;
-				var laneTag = "";
-				for(var lane in summoner.recentHistory.laneStats) {
-					var currentLane = summoner.recentHistory.laneStats[lane];
-					currentLane.total = currentLane.total || 0;
-					if (currentLane.total > highestCount) {
-						highestCount = currentLane.total;
-						laneTag = lane;
+				if (summoner.recentHistory.laneStats) {
+					var highestCount = 0;
+					var laneTag = "";
+					for(var lane in summoner.recentHistory.laneStats) {
+						var currentLane = summoner.recentHistory.laneStats[lane];
+						currentLane.total = currentLane.total || 0;
+						if (currentLane.total > highestCount) {
+							highestCount = currentLane.total;
+							laneTag = lane;
+						}
 					}
-				}
 
-				if (laneTag !== "") {
-					summoner.tooltipText = summoner.displayName + " has played " + laneTag + " " + highestCount + " of the last 30 games.";
+					if (laneTag !== "") {
+						summoner.tooltipText = summoner.displayName + " has played " + laneTag + " " + highestCount + " of the last 30 games.";
+					}
+					summoner.laneTag = laneTag;
 				}
-				summoner.laneTag = laneTag;
 			});
 		};
 
@@ -185,6 +200,7 @@
 		self.validSummoners = ko.observableArray([]);
 		self.chatText = ko.observable("");
 		self.shareUrl = ko.observable("");
+		self.noStatsText = ko.observable("");
 
 		self.parseChatForPlayers  = function() {
 			var potentialSummoners = [];
