@@ -22,12 +22,13 @@
 		var shortenedUrlDataProvider = new ShortenedUrlDataProvider();
 
 		var _onSummonerNameEntered = function(summonerName) {
+			var region = self.selectedRegion();
 			var summoner = this;
 			if (summonerName === "" || summonerName === null || summonerName === undefined) {
 				_summonerVerificationFailed(summoner);
 			} else {
 				summoner.status(STATUS.VALIDATING);
-				_getSummonerData(summonerName)
+				summonersDataProvider.getSummonerData(region, summonerName)
 					.then(function(result) {
 						if (result.id) {
 							summoner.displayName = result.name;
@@ -85,20 +86,6 @@
 				summoner.lolKingUrl(LOL_KING_URL.replace('{{summoner_id}}', summonerId).replace('{{region}}', region));
 				summoner.naOpGgUrl(NA_OP_GG_URL.replace('{{summoner_name}}', summonerName).replace('{{region}}', region));
 			}
-		};
-
-		var _getSummonerData = function(summoner) {
-			var region = self.selectedRegion();
-			var promise = durandal.defer();
-			summonersDataProvider.getSummonerData(region, summoner)
-				.then(function(result) {
-					promise.resolve(result);
-				})
-				.fail(function(error) {
-					promise.reject(error);
-				})
-
-			return promise;
 		};
 
 		var _onSummonerStatusUpdated = function(data) {

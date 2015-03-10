@@ -1,16 +1,29 @@
 .popover-content {
-	.champion-profile {
-		display: inline-flex;
+	display: inline-flex;
 
-		.column-1 {
-			text-align: center;
+	.column-1 {
+		text-align: center;
+		font-size: 10px;
+
+		.kda-data {
+			text-align: left;
 		}
 
-		.column-2 {
-			margin-left: 14px;
-			text-align: center;
+		.champion-name {
+			font-size: 14px;
+		}
+
+		.champion-icon {
+			margin: auto;
 		}
 	}
+
+	.column-2 {
+		font-size: 10px;
+		margin-left: 14px;
+		text-align: center;
+	}
+
 	.lanes {
 		list-style-type: none;
 		display: inline-flex;
@@ -38,5 +51,15 @@
 			&.marksman { background-color: $marksman-color; }
 			&.support { background-color: $support-color; }
 		}
+	}
+
+	.champion-stats {
+		-webkit-column-count: 2;
+	}
+
+	.data-info {
+		font-size: 9px;
+		margin-bottom: -10px;
+		text-align: center;
 	}
 }

@@ -31,14 +31,13 @@ define([], function() {
         ko.bindingHandlers.popover = {
             init: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
                 var ele = $(element);
-                console.log("pray", $(element).find("#popover-content"));
 
                 var options = {
                     content: function() {
                         return $(element).find("#popover-content").html();
                     },
                     placement: 'bottom',
-                    trigger: 'hover',
+                    //trigger: 'hover',
                     html: true
                 }
 
