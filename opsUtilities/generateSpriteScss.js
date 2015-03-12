@@ -13,7 +13,7 @@ var _version = null;
 var _champions = [];
 var _sprites = [];
 var versionUrl = "https://na.api.pvp.net/api/lol/static-data/na/v1.2/versions?api_key=" + env.RIOT_API_KEY;
-var imagesUrl = "https://na.api.pvp.net/api/lol/static-data/na/v1.2/champion?champData=image&api_key=" + env.RIOT_API_KEY;
+var imagesUrl = "https://na.api.pvp.net/api/lol/static-data/na/v1.2/champion?champData=image&version={{version}}&api_key=" + env.RIOT_API_KEY;
 var binaryImage = "http://ddragon.leagueoflegends.com/cdn/{{version}}/img/sprite/{{file}}";
 
 var _writeScssFile = function() {
@@ -55,6 +55,7 @@ var _downloadImages = function() {
 
 request.get(versionUrl, function(error, result) {
 	_version = JSON.parse(result.body)[0].toString();
+	imagesUrl = imagesUrl.replace("{{version}}", _version);
 	console.log(_version);
 
 	request.get(imagesUrl, function(error, result) {
@@ -89,6 +90,6 @@ request.get(versionUrl, function(error, result) {
 
 
 		_writeScssFile();
-		//_downloadImages();
+		_downloadImages();
 	});
 });
