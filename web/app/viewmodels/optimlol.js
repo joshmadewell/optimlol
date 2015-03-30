@@ -5,8 +5,9 @@
 	'dataProviders/shortenedUrlDataProvider',
 	'presentationObjects/summonerPresentationObject',
 	'common/collectionSorter',
-	'singleton/session'],
-	function (durandal, app, router, SummonersDataProvider, ShortenedUrlDataProvider, SummonerPresentationObject, collectionSorter, session) {
+	'singleton/session',
+	'settings'],
+	function (durandal, app, router, SummonersDataProvider, ShortenedUrlDataProvider, SummonerPresentationObject, collectionSorter, session, settings) {
 	return function() {
 		var self = this;
 		var NUMBER_OF_SUMMONERS = 5;
@@ -195,9 +196,26 @@
 			$('.share-url').select();
 		};
 
+		var _setStatusMessages = function() {
+			var clearedMessages = session.get('clearedMessages');
+
+			if (clearedMessages) {
+				clearedMessages = clearedMessages.split(',');
+
+				settings.messages.forEach(function(message) {
+					if (!clearedMessages.indexOf(message.id)) {
+						self.statusMessages.push(message);
+					}
+				})
+			} else {
+				self.statusMessages(settings.messages);
+			}
+		}
+
 		self.summonerInputs = [];
 		self.selectedRegion = ko.observable(session.get('region'));
 		self.validSummoners = ko.observableArray([]);
+		self.statusMessages = ko.observableArray([]);
 		self.chatText = ko.observable("");
 		self.shareUrl = ko.observable("");
 		self.noStatsText = ko.observable("");
@@ -295,12 +313,29 @@
 			}
 		};
 
+		self.clearMessage = function(messageObject) {
+			var clearedMessages = session.get('clearedMessages');
+			console.log("clearedMessages", clearedMessages);
+
+			if (clearedMessages) {
+				clearedMessages = clearedMessages.split(',');
+				clearedMessages.push(messageObject.id);
+				clearedMessages = clearedMessages.join();
+			} else {
+				clearedMessages = messageObject.id;
+			}
+
+			session.set('clearedMessages', clearedMessages);
+			self.statusMessages.remove(messageObject);
+		}
+
 		self.activate = function(shareUrl, queryString) {
 			if (window.__gaTracker && typeof window.__gaTracker === 'function') {
 				window.__gaTracker('send', 'pageview', '/');
 			}
 
 			_initializeSummonerInputs();
+			_setStatusMessages();
 
 			if (queryString) {
 				if (queryString.region) {
@@ -308,7 +343,6 @@
 					app.trigger('regionUpdated', queryString.region);
 				}
 			}
-
 
 			if (shareUrl) {
 				shortenedUrlDataProvider.getData(shareUrl)

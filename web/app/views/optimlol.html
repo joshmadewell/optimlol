@@ -1,4 +1,10 @@
 ﻿<div>
+    <div class="notifications" data-bind="foreach: statusMessages">
+        <div class="message-box">
+            <label class="message" data-bind="text: message"></label>
+            <button type="button" class="close" data-bind="click: $parent.clearMessage">x</button>
+        </div>
+    </div>
     <div class="search">
         <div class="logo-optimlol"></div>
         <div>Enter the Summoner Names of everyone in champion select:</div>
