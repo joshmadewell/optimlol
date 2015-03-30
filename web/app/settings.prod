@@ -4,7 +4,7 @@ define(function() {
 		messages: [
 			{
 				"id": 0,
-				"message": "There has been an EXPLOSION of activity ever since the "Useful Websites" reddit post and I want to thank each and every person who is now using OptimLoL!!! Look forward to more features coming soon!!!"
+				"message": "There has been an EXPLOSION of activity ever since the 'Useful Websites' reddit post and I want to thank each and every person who is now using OptimLoL!!! Look forward to more features coming soon!!!"
 			},
 			{
 				"id": 1,
