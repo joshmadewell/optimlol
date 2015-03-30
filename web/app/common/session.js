@@ -10,7 +10,7 @@ define('common/session', [], function() {
             };
 
             self.set = function(key, value) {
-            	$.cookie(key, value);
+            	$.cookie(key, value, { expires: 365 });
             }
         };
 
