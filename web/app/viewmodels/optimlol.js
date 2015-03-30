@@ -21,6 +21,11 @@
 			INVALID: "invalid",
 			VALIDATING: "validating"
 		}
+		var JOINED_ROOM_CONSTANTS = [
+			" joined the room.",
+			" entró a la sala.",
+			" entrou na sala."
+		];
 		var summonersDataProvider = new SummonersDataProvider();
 		var shortenedUrlDataProvider = new ShortenedUrlDataProvider();
 
@@ -224,10 +229,6 @@
 			var potentialSummoners = [];
 			var chatText = self.chatText();
 			var lines = chatText.split('\n');
-			var joinedRoomConstants = [
-				" joined the room.",
-				" entró a la sala."
-			];
 
 			var alreadyEnteredSummoners = self.summonerInputs.map(function(summoner) {
 				return summoner.summonerName()
@@ -248,9 +249,9 @@
 				} else {
 					// if it's a 'joined the room' message then we need to
 					// take the characters before the default message
-					for(var x = 0; x < joinedRoomConstants.length; x++) {
-						if (line.indexOf(joinedRoomConstants[x]) !== -1) {
-							var playerName = line.split(joinedRoomConstants[x])[0];
+					for(var x = 0; x < JOINED_ROOM_CONSTANTS.length; x++) {
+						if (line.indexOf(JOINED_ROOM_CONSTANTS[x]) !== -1) {
+							var playerName = line.split(JOINED_ROOM_CONSTANTS[x])[0];
 							if (potentialSummoners.indexOf(playerName) === -1 && alreadyEnteredSummoners.indexOf(playerName) === -1) {
 								potentialSummoners.push(playerName);
 							}
@@ -367,7 +368,7 @@
 					var previousSummonerInputNames = self.summonerInputs.map(function(summoner) {
 						return summoner.summonerName();
 					})
-					
+
 					self.clearSummonerInputs();
 
 					previousSummonerInputNames.forEach(function(summonerName) {
