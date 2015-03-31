@@ -208,7 +208,7 @@
 				clearedMessages = clearedMessages.split(',');
 
 				settings.messages.forEach(function(message) {
-					if (!clearedMessages.indexOf(message.id)) {
+					if (clearedMessages.indexOf(message.id) !== -1) {
 						self.statusMessages.push(message);
 					}
 				})
