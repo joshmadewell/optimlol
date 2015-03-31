@@ -208,7 +208,7 @@
 				clearedMessages = clearedMessages.split(',');
 
 				settings.messages.forEach(function(message) {
-					if (clearedMessages.indexOf(message.id) === -1) {
+					if (clearedMessages.indexOf(message.id.toString()) === -1) {
 						self.statusMessages.push(message);
 					}
 				})
@@ -316,7 +316,6 @@
 
 		self.clearMessage = function(messageObject) {
 			var clearedMessages = session.get('clearedMessages');
-			console.log("clearedMessages", clearedMessages);
 
 			if (clearedMessages) {
 				clearedMessages = clearedMessages.split(',');
