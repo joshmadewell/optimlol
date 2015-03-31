@@ -11,8 +11,8 @@ define(function() {
 				"message": "Currently the 'Parse Chat Log' feature only works in English, Spanish, and Portuguese. If you are using another language, please send an e-mail with your chat log to optimloldotcom@gmail.com so I can add support for your language!"
 			},
 			{
-				"id": 2,
-				"message": "We are currently experiencing long response times from Riot's API. Hopefully these issues subside soon."
+				"id": 3,
+				"message": "Riot's API seems to be back to a working state. Sorry for the inconvenience!"
 			}
 		]
 	}
