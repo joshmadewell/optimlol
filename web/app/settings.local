@@ -1,6 +1,6 @@
 define(function() {
 	return {
-		optimlolApiUrl: "http://api.optimlol.com/",
+		optimlolApiUrl: "http://localhost:8080/",
 		messages: [
 			{
 				"id": 0,
