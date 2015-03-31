@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var SummonersSchema = new Schema({
+var ShortenedUrlSchema = new Schema({
 	_id: { type: String, required: true },
 	region: { type: String, required: true },
 	summoners: { type: Array },
@@ -9,7 +9,7 @@ var SummonersSchema = new Schema({
 	updated_at: { type: Date }
 });
 
-SummonersSchema.pre('save', function(next) {
+ShortenedUrlSchema.pre('save', function(next) {
 	var now = new Date();
 	this.updated_at = now;
 	if (!this.created_at) {
@@ -20,4 +20,4 @@ SummonersSchema.pre('save', function(next) {
 
 // mongoose makes collections plural if we don't specify an name in third parameter :[
 // this one is already plural but I like consistency.
-module.exports = mongoose.model('shortenedUrls', SummonersSchema, 'shortenedUrls');
+module.exports = mongoose.model('shortenedUrls', ShortenedUrlSchema, 'shortenedUrls');

@@ -1,19 +1,5 @@
 define(function() {
 	return {
-		optimlolApiUrl: "http://api.optimlol.com/",
-		messages: [
-			{
-				"id": 0,
-				"message": "There has been an EXPLOSION of activity ever since the 'Useful Websites' reddit post and I want to thank each and every person who is now using OptimLoL!!! Look forward to more features coming soon!!!"
-			},
-			{
-				"id": 1,
-				"message": "Currently the 'Parse Chat Log' feature only works in English, Spanish, and Portuguese. If you are using another language, please send an e-mail with your chat log to optimloldotcom@gmail.com so I can add support for your language!"
-			},
-			{
-				"id": 3,
-				"message": "Riot's API seems to be back to a working state. Sorry for the inconvenience!"
-			}
-		]
+		optimlolApiUrl: "http://api.optimlol.com/"
 	}
 });

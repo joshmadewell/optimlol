@@ -3,11 +3,12 @@
 	'plugins/router',
 	'dataProviders/summonersDataProvider',
 	'dataProviders/shortenedUrlDataProvider',
+	'dataProviders/statusMessagesDataProvider',
 	'presentationObjects/summonerPresentationObject',
 	'common/collectionSorter',
 	'singleton/session',
 	'settings'],
-	function (durandal, app, router, SummonersDataProvider, ShortenedUrlDataProvider, SummonerPresentationObject, collectionSorter, session, settings) {
+	function (durandal, app, router, SummonersDataProvider, ShortenedUrlDataProvider, StatusMessagesDataProvider, SummonerPresentationObject, collectionSorter, session, settings) {
 	return function() {
 		var self = this;
 		var NUMBER_OF_SUMMONERS = 5;
@@ -28,6 +29,7 @@
 		];
 		var summonersDataProvider = new SummonersDataProvider();
 		var shortenedUrlDataProvider = new ShortenedUrlDataProvider();
+		var statusMessagesDataProvider = new StatusMessagesDataProvider();
 
 		var _onSummonerNameEntered = function(summonerName) {
 			var summoner = this;
@@ -204,17 +206,23 @@
 		var _setStatusMessages = function() {
 			var clearedMessages = session.get('clearedMessages');
 
-			if (clearedMessages) {
-				clearedMessages = clearedMessages.split(',');
+			statusMessagesDataProvider.getStatusMessages()
+				.then(function(messagesResult) {
+					if (clearedMessages) {
+						clearedMessages = clearedMessages.split(',');
 
-				settings.messages.forEach(function(message) {
-					if (clearedMessages.indexOf(message.id.toString()) === -1) {
-						self.statusMessages.push(message);
+						messagesResult.messages.forEach(function(message) {
+							if (clearedMessages.indexOf(message._id) === -1) {
+								self.statusMessages.push(message);
+							}
+						});
+					} else {
+						self.statusMessages(messagesResult.messages);
 					}
 				})
-			} else {
-				self.statusMessages(settings.messages);
-			}
+				.fail(function(error) {
+					self.statusMessages([]);
+				});
 		}
 
 		self.summonerInputs = [];
@@ -319,10 +327,10 @@
 
 			if (clearedMessages) {
 				clearedMessages = clearedMessages.split(',');
-				clearedMessages.push(messageObject.id);
+				clearedMessages.push(messageObject._id);
 				clearedMessages = clearedMessages.join();
 			} else {
-				clearedMessages = messageObject.id;
+				clearedMessages = messageObject._id;
 			}
 
 			session.set('clearedMessages', clearedMessages);
