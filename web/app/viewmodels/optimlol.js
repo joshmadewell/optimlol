@@ -25,7 +25,8 @@
 		var JOINED_ROOM_CONSTANTS = [
 			" joined the room.",
 			" entró a la sala.",
-			" entrou na sala."
+			" entrou na sala.",
+			" 님이 입장하셨습니다."
 		];
 		var summonersDataProvider = new SummonersDataProvider();
 		var shortenedUrlDataProvider = new ShortenedUrlDataProvider();
