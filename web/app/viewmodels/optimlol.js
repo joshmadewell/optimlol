@@ -27,7 +27,8 @@
 			" joined the group.",
 			" entró a la sala.",
 			" entrou na sala.",
-			" 님이 입장하셨습니다."
+			" 님이 입장하셨습니다.",
+			"님이 방에 참가했습니다."
 		];
 		var summonersDataProvider = new SummonersDataProvider();
 		var shortenedUrlDataProvider = new ShortenedUrlDataProvider();
