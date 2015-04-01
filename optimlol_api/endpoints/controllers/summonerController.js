@@ -36,10 +36,12 @@ module.exports = function() {
 		var promiseObject = {
 			STATS_INDEX: 0,
 			RECENT_STATS_INDEX: 1,
-			CHAMPIONS_INDEX: 2,
+			LEAGUE_INFO_INDEX: 2,
+			CHAMPIONS_INDEX: 3,
 			PRMOMISES: [
 				_rankedStatsFacade.getRankedStats(region, summoner.id),
 				_recentMatchStatsFacade.getRecentStats(region, summoner.id, "SOLO"),
+				_leagueInfoFacade.getLeagueInfo(region, summoner.id),
 				_championDataFacade.getChampionData(region)
 			]
 		};
@@ -50,6 +52,7 @@ module.exports = function() {
 				.then(function(results) {
 					var championStats = results[promiseObject.STATS_INDEX].state === 'fulfilled' ? results[promiseObject.STATS_INDEX].value : null;
 					var recentHistoryStats = results[promiseObject.RECENT_STATS_INDEX].state === 'fulfilled' ? results[promiseObject.RECENT_STATS_INDEX].value : null;
+					var leagueInfo = results[promiseObject.LEAGUE_INFO_INDEX].state ==== 'fulfilled' ? results[promiseObject.LEAGUE_INFO_INDEX].value : null;
 					var champions = results[promiseObject.CHAMPIONS_INDEX].state === 'fulfilled' ? results[promiseObject.CHAMPIONS_INDEX].value : null;
 
 					responseObject.quality = 'fresh';
