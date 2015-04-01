@@ -3,6 +3,12 @@ var _dataProvider = null;
 var PromiseFactoryConstructor = require('../../common/utilities/promiseFactory');
 var _promiseFactory = new PromiseFactoryConstructor();
 
+var _pruneStats = function(matchHistory) {
+	matchHistory.data.matches = matchHistory.data.matches.filter(function(match) {
+		return match.participants[0].timeline;
+	});
+}
+
 var _prepareStats = function(matchHistory) {
 	var recentStats = { champions: {}, matches: [] };
 	var matches = matchHistory.data.matches;
@@ -87,6 +93,7 @@ var _getRecentStats = function(region, summonerId, type) {
 		_dataProvider.getData('matchHistory', {region: region, summonerId: summonerId, type: type})
 			.then(function(matchHistory) {
 				if (matchHistory.data && matchHistory.data.matches) {
+					_pruneStats(matchHistory);
 					_prepareStats(matchHistory);
 					deferredObject.resolve(matchHistory);
 				} else {

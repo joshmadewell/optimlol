@@ -1,3 +1,25 @@
+.notifications {
+    width: 80%;
+    text-align: center;
+    margin: auto;
+
+    .message-box {
+        padding: 15px;
+        margin-bottom: 20px;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        background-color: #fcf8e3;
+        border-color: #faebcc;
+        color: #8a6d3b;
+        margin-bottom: 5px;
+
+        .message {
+            font-weight: 400;
+            width: 96%;
+        }
+    }
+}
+
 .search {
     text-align: center;
 

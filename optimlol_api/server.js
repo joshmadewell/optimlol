@@ -17,7 +17,7 @@ var config = require('./config');
 var expressRouter = express.Router();
 var routes = [
 	'./endpoints/routes/summonerRoutes',
-	'./endpoints/routes/shortenUrlRoutes'
+	'./endpoints/routes/utilityRoutes'
 ];
 
 routes.forEach(function(route) {

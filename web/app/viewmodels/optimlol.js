@@ -3,23 +3,35 @@
 	'plugins/router',
 	'dataProviders/summonersDataProvider',
 	'dataProviders/shortenedUrlDataProvider',
+	'dataProviders/statusMessagesDataProvider',
 	'presentationObjects/summonerPresentationObject',
 	'common/collectionSorter',
-	'singleton/session'],
-	function (durandal, app, router, SummonersDataProvider, ShortenedUrlDataProvider, SummonerPresentationObject, collectionSorter, session) {
+	'singleton/session',
+	'settings'],
+	function (durandal, app, router, SummonersDataProvider, ShortenedUrlDataProvider, StatusMessagesDataProvider, SummonerPresentationObject, collectionSorter, session, settings) {
 	return function() {
 		var self = this;
 		var NUMBER_OF_SUMMONERS = 5;
 		var LOL_KING_URL = "http://www.lolking.net/summoner/{{region}}/{{summoner_id}}";
 		var NA_OP_GG_URL = "http://{{region}}.op.gg/summoner/userName={{summoner_name}}";
+		var RIOT_API_STRUGGLES = "Riot API currently having issues.";
+		var NO_STATS_AVAIABLE = "No stats this season."
 		var STATUS = {
 			UNSET: "unset",
 			VALID: "valid",
 			INVALID: "invalid",
 			VALIDATING: "validating"
 		}
+		var JOINED_ROOM_CONSTANTS = [
+			" joined the room.",
+			" joined the group.",
+			" entró a la sala.",
+			" entrou na sala.",
+			" 님이 입장하셨습니다."
+		];
 		var summonersDataProvider = new SummonersDataProvider();
 		var shortenedUrlDataProvider = new ShortenedUrlDataProvider();
+		var statusMessagesDataProvider = new StatusMessagesDataProvider();
 
 		var _onSummonerNameEntered = function(summonerName) {
 			var region = self.selectedRegion();
@@ -29,29 +41,40 @@
 			} else {
 				summoner.status(STATUS.VALIDATING);
 				summonersDataProvider.getSummonerData(region, summonerName)
-					.then(function(result) {
-						if (result.id) {
-							summoner.displayName = result.name;
-							if (result.championStats && result.championStats.length) {
-								collectionSorter.sort(result.championStats, "gamesPlayed", "descending");
-								summoner.championStats = result.championStats;
+					.then(function(apiResult) {
+						var summonerData = apiResult.data;
+						var quality = apiResult.quality;
 
-								var fiveMostPlayed = result.championStats.slice(0, 5);
+						if (quality === 'stale' || quality === 'unknown') {
+							self.noStatsText(RIOT_API_STRUGGLES);
+						} else {
+							self.noStatsText(NO_STATS_AVAIABLE);
+						}
+
+						if (summonerData.id) {
+							summoner.displayName = summonerData.name;
+							if (summonerData.championStats && summonerData.championStats.length) {
+								collectionSorter.sort(summonerData.championStats, "gamesPlayed", "descending");
+								summoner.championStats = summonerData.championStats;
+
+								var fiveMostPlayed = summonerData.championStats.slice(0, 5);
 								collectionSorter.sort(fiveMostPlayed, "performance", "descending");
 								summoner.bestPerformanceStats = fiveMostPlayed;
 							} else {
 								summoner.championStats = [];
 							}
-							if (result.recentHistory && result.recentHistory.champions) {
-								collectionSorter.sort(result.recentHistory.champions, "count", "descending");
+							if (summonerData.recentHistory && summonerData.recentHistory.champions) {
+								collectionSorter.sort(summonerData.recentHistory.champions, "count", "descending");
 							}
-							if (summoner.championStats.length > 0) {
-								summoner.recentHistory = result.recentHistory;
+
+							if (summoner.championStats.length > 0 && summonerData.recentHistory) {
+								summoner.recentHistory = summonerData.recentHistory;
 							} else {
 								summoner.recentHistory = [];
 							}
-							summoner.totalStats = result.totalStats;
-							summoner.summonerId(result.id);
+
+							summoner.totalStats = summonerData.totalStats;
+							summoner.summonerId(summonerData.id);
 							summoner.status(STATUS.VALID);
 						} else {
 							_summonerVerificationFailed(summoner);
@@ -134,21 +157,23 @@
 
 		var _tagLanes = function() {
 			self.summonerInputs.forEach(function(summoner) {
-				var highestCount = 0;
-				var laneTag = "";
-				for(var lane in summoner.recentHistory.laneStats) {
-					var currentLane = summoner.recentHistory.laneStats[lane];
-					currentLane.total = currentLane.total || 0;
-					if (currentLane.total > highestCount) {
-						highestCount = currentLane.total;
-						laneTag = lane;
+				if (summoner.recentHistory.laneStats) {
+					var highestCount = 0;
+					var laneTag = "";
+					for(var lane in summoner.recentHistory.laneStats) {
+						var currentLane = summoner.recentHistory.laneStats[lane];
+						currentLane.total = currentLane.total || 0;
+						if (currentLane.total > highestCount) {
+							highestCount = currentLane.total;
+							laneTag = lane;
+						}
 					}
-				}
 
-				if (laneTag !== "") {
-					summoner.tooltipText = summoner.displayName + " has played " + laneTag + " " + highestCount + " of the last 30 games.";
+					if (laneTag !== "") {
+						summoner.tooltipText = summoner.displayName + " has played " + laneTag + " " + highestCount + " of the last 30 games.";
+					}
+					summoner.laneTag = laneTag;
 				}
-				summoner.laneTag = laneTag;
 			});
 		};
 
@@ -167,20 +192,40 @@
 			$('.share-url').select();
 		};
 
+		var _setStatusMessages = function() {
+			var clearedMessages = session.get('clearedMessages');
+
+			statusMessagesDataProvider.getStatusMessages()
+				.then(function(messagesResult) {
+					if (clearedMessages) {
+						clearedMessages = clearedMessages.split(',');
+
+						messagesResult.messages.forEach(function(message) {
+							if (clearedMessages.indexOf(message._id) === -1) {
+								self.statusMessages.push(message);
+							}
+						});
+					} else {
+						self.statusMessages(messagesResult.messages);
+					}
+				})
+				.fail(function(error) {
+					self.statusMessages([]);
+				});
+		}
+
 		self.summonerInputs = [];
 		self.selectedRegion = ko.observable(session.get('region'));
 		self.validSummoners = ko.observableArray([]);
+		self.statusMessages = ko.observableArray([]);
 		self.chatText = ko.observable("");
 		self.shareUrl = ko.observable("");
+		self.noStatsText = ko.observable("");
 
 		self.parseChatForPlayers  = function() {
 			var potentialSummoners = [];
 			var chatText = self.chatText();
 			var lines = chatText.split('\n');
-			var joinedRoomConstants = [
-				" joined the room.",
-				" entró a la sala."
-			];
 
 			var alreadyEnteredSummoners = self.summonerInputs.map(function(summoner) {
 				return summoner.summonerName()
@@ -201,9 +246,9 @@
 				} else {
 					// if it's a 'joined the room' message then we need to
 					// take the characters before the default message
-					for(var x = 0; x < joinedRoomConstants.length; x++) {
-						if (line.indexOf(joinedRoomConstants[x]) !== -1) {
-							var playerName = line.split(joinedRoomConstants[x])[0];
+					for(var x = 0; x < JOINED_ROOM_CONSTANTS.length; x++) {
+						if (line.indexOf(JOINED_ROOM_CONSTANTS[x]) !== -1) {
+							var playerName = line.split(JOINED_ROOM_CONSTANTS[x])[0];
 							if (potentialSummoners.indexOf(playerName) === -1 && alreadyEnteredSummoners.indexOf(playerName) === -1) {
 								potentialSummoners.push(playerName);
 							}
@@ -266,12 +311,28 @@
 			}
 		};
 
+		self.clearMessage = function(messageObject) {
+			var clearedMessages = session.get('clearedMessages');
+
+			if (clearedMessages) {
+				clearedMessages = clearedMessages.split(',');
+				clearedMessages.push(messageObject._id);
+				clearedMessages = clearedMessages.join();
+			} else {
+				clearedMessages = messageObject._id;
+			}
+
+			session.set('clearedMessages', clearedMessages);
+			self.statusMessages.remove(messageObject);
+		}
+
 		self.activate = function(shareUrl, queryString) {
 			if (window.__gaTracker && typeof window.__gaTracker === 'function') {
 				window.__gaTracker('send', 'pageview', '/');
 			}
 
 			_initializeSummonerInputs();
+			_setStatusMessages();
 
 			if (queryString) {
 				if (queryString.region) {
@@ -279,7 +340,6 @@
 					app.trigger('regionUpdated', queryString.region);
 				}
 			}
-
 
 			if (shareUrl) {
 				shortenedUrlDataProvider.getData(shareUrl)
@@ -304,7 +364,7 @@
 					var previousSummonerInputNames = self.summonerInputs.map(function(summoner) {
 						return summoner.summonerName();
 					})
-					
+
 					self.clearSummonerInputs();
 
 					previousSummonerInputNames.forEach(function(summonerName) {

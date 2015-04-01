@@ -4,6 +4,7 @@ module.exports = function(router) {
 	var self = this;
 
 	var _shortenedUrlModel = null;
+	var _statusMessagesModel = null;
 
 	var _handleResponse = function(res, status, data) {
 		switch (status) {
@@ -20,6 +21,10 @@ module.exports = function(router) {
 		this.region = null;
 		this.summoners = [];
 		this.shortUrl = null;
+	}
+
+	var MessagesResponseObject = function() {
+		this.messages = [];
 	}
 
 	router.get('/getUrlData/:urlId', function(req, res) {
@@ -60,7 +65,19 @@ module.exports = function(router) {
 		});
 	});
 
+	router.get('/statusMessages', function(req, res) {
+		var responseObject = new MessagesResponseObject();
+		_statusMessagesModel.find({}, function(error, result) {
+			if (error) _handleResponse(res, 500);
+			else {
+				responseObject.messages = result;
+				_handleResponse(res, 200, responseObject);
+			}
+		});
+	});
+
 	self.init = function(router) {
 		_shortenedUrlModel = require('../../persistence/mongoModels/shortenedUrlsModel');
+		_statusMessagesModel = require('../../persistence/mongoModels/statusMessagesModel');
 	}
 }

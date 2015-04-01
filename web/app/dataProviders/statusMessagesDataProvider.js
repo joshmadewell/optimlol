@@ -3,9 +3,9 @@ define(['durandal/system', 'common/optimlolApi'], function (system, OptimlolApi)
 		var self = this;
 		var optimlolApi = new OptimlolApi();
 
-		self.getSummonerData = function(region, name) {
+		self.getStatusMessages = function(region, name) {
 			var promise = system.defer();
-			optimlolApi.makeRegionizedRequest(region, 'summoner/by-name/' + name)
+			optimlolApi.makeRequest('statusMessages/')
 				.then(function(result) {
 					promise.resolve(result.data);
 				})

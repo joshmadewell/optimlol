@@ -8,11 +8,9 @@ var apiStatusSingleton = function apiStatusSingleton(){
 	};
 
 	this.setRateLimitExceeded = function(isExceeded, timeout) {
-		console.log("setRateLimitExceeded", isExceeded, timeout);
 		_rateLimitExceeded = isExceeded;
 		_nextApiCallTime = new Date();
 		_nextApiCallTime.setSeconds(_nextApiCallTime.getSeconds() + timeout);
-		console.log(_nextApiCallTime);
 	};
 
 	this.getNextApiCallTime = function() {

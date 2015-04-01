@@ -1,4 +1,10 @@
 ﻿<div>
+    <div class="notifications" data-bind="foreach: statusMessages">
+        <div class="message-box">
+            <label class="message" data-bind="text: message"></label>
+            <button type="button" class="close" data-bind="click: $parent.clearMessage">x</button>
+        </div>
+    </div>
     <div class="search">
         <div class="logo-optimlol"></div>
         <div>Enter the Summoner Names of everyone in champion select:</div>
@@ -37,8 +43,8 @@
                 </td>
                 <td data-bind="text: displayName"></td>
                 <td class="recently-played">
-                    <div class="no-stats" data-bind="visible: recentHistory.length === 0">No stats for this season.</div>
-                    <ul class="champion-list" data-bind="foreach: { data: recentHistory.champions, as: 'currentChampion' }">
+                    <div class="no-stats" data-bind="visible: recentHistory.length === 0, text: $parent.noStatsText"></div>
+                    <ul class="champion-list" data-bind="foreach: recentHistory.champions">
                         <!-- ko if: $index() < 5 -->
                         <li class="champion-data">
                             <div data-bind="popover, championStats: { type: 'recent', 
@@ -51,7 +57,7 @@
                     </ul>
                 </td>
                 <td class="best-performance">
-                    <div class="no-stats" data-bind="visible: championStats.length === 0">No stats for this season.</div>
+                    <div class="no-stats" data-bind="visible: championStats.length === 0, text: $parent.noStatsText"></div>
                     <ul class="champion-list" data-bind="foreach: bestPerformanceStats">
                         <!-- ko if: $index() < 5 -->
                         <li class="champion-data">
@@ -63,10 +69,10 @@
                     </ul>
                 </td>
                 <td class="img-link">
-                    <a data-bind="attr: { href: lolKingUrl }"><div class="logo-lolking"/></a>
+                    <a data-bind="attr: { target: '_blank', href: lolKingUrl }"><div class="logo-lolking"/></a>
                 </td>
                 <td class="img-link">
-                    <a data-bind="attr: { href: naOpGgUrl }"><div class="logo-opgg"/></a>
+                    <a data-bind="attr: { target: '_blank', href: naOpGgUrl }"><div class="logo-opgg"/></a>
                 </td>
             </tbody>
         </table>
