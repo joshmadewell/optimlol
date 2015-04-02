@@ -27,7 +27,8 @@
 			" joined the group.",
 			" entró a la sala.",
 			" entrou na sala.",
-			" 님이 입장하셨습니다."
+			" 님이 입장하셨습니다.",
+			"님이 방에 참가했습니다."
 		];
 		var summonersDataProvider = new SummonersDataProvider();
 		var shortenedUrlDataProvider = new ShortenedUrlDataProvider();
@@ -54,24 +55,30 @@
 						if (summonerData.id) {
 							summoner.displayName = summonerData.name;
 							if (summonerData.championStats && summonerData.championStats.length) {
+								// sort all champion stats on the amount of games played first
 								collectionSorter.sort(summonerData.championStats, "gamesPlayed", "descending");
 								summoner.championStats = summonerData.championStats;
 
+								// use five most played champs to pick best performing champs
 								var fiveMostPlayed = summonerData.championStats.slice(0, 5);
 								collectionSorter.sort(fiveMostPlayed, "performance", "descending");
 								summoner.bestPerformanceStats = fiveMostPlayed;
 							} else {
 								summoner.championStats = [];
 							}
+
 							if (summonerData.recentHistory && summonerData.recentHistory.champions) {
 								collectionSorter.sort(summonerData.recentHistory.champions, "count", "descending");
-							}
-
-							if (summoner.championStats.length > 0 && summonerData.recentHistory) {
 								summoner.recentHistory = summonerData.recentHistory;
 							} else {
 								summoner.recentHistory = [];
 							}
+
+							// if (summoner.championStats.length > 0 && summonerData.recentHistory) {
+							// 	summoner.recentHistory = summonerData.recentHistory;
+							// } else {
+							// 	summoner.recentHistory = [];
+							// }
 
 							summoner.totalStats = summonerData.totalStats;
 							summoner.summonerId(summonerData.id);

@@ -34,6 +34,7 @@ module.exports = function() {
 				responseObject.data = null;
 				break;
 			case 401:
+			case 408:
 			case 429:
 			case 500:
 			case 503:
@@ -51,10 +52,15 @@ module.exports = function() {
 			var responseObject = new RiotApiResponseObject();
 			var apiKeyPrefix = path.indexOf('?') !== -1 ? "&api_key=" : "?api_key=";
 			var fullUrl = _config.riot_api.url_prefix + region + _config.riot_api.url_midfix + path + apiKeyPrefix + process.env.RIOT_API_KEY;
-			_logger.debug("Hitting Riot: " + fullUrl);
-			request.get({url: fullUrl, json: true}, function(error, result) {
+			_logger.debug("Hitting Riot: " + path);
+			request.get({url: fullUrl, json: true, timeout: 4000}, function(error, result) {
 				if (error) {
-					deferredObject.reject(error);
+					if (error.code === 'ETIMEDOUT') {
+						_setResponseObject(responseObject, { statusCode: 408 });
+						deferredObject.resolve(responseObject);
+					} else {
+						deferredObject.reject(error);
+					}
 				} else {
 					_setResponseObject(responseObject, result.toJSON());
 					deferredObject.resolve(responseObject);

@@ -37,6 +37,7 @@ module.exports = function() {
 			_promiseFactory.wait(promises)
 				.then(function(results) {
 					var dataProviderResult = null;
+
 					results.forEach(function(matchHistoryApiResult) {
 						if (matchHistoryApiResult.state === 'fulfilled') {
 							var currentMatchHistorySet = matchHistoryApiResult.value;
