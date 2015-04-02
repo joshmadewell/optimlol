@@ -21,7 +21,7 @@ var LeagueSchema = new Schema({
 LeagueSchema.statics.retrieve = function(identifiers) {
 	var self = this;
 	return _promiseFactory.defer(function(deferredObject) {
-		self.model('leagues').findOne(identifiers, function(error, result) {
+		self.model('league').findOne(identifiers, function(error, result) {
 			if (error) deferredObject.reject(error);
 			else {
 				deferredObject.resolve(result);
@@ -41,4 +41,4 @@ LeagueSchema.pre('save', function(next) {
 
 // mongoose makes collections plural if we don't specify an name in third parameter :[
 // this one is already plural but I like consistency.
-module.exports = mongoose.model('leagues', LeagueSchema, 'leagues');
+module.exports = mongoose.model('league', LeagueSchema, 'leagues');

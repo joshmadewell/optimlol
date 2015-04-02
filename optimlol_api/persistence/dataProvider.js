@@ -5,7 +5,8 @@ var _dataProviders = {
 	matchHistory: null,
 	static: null,
 	rankedStats: null,
-	summoner: null
+	summoner: null,
+	league: null
 };
 
 var QUALITY_TYPES = {
@@ -91,9 +92,13 @@ var _init = function() {
 	_dataProviders.matchHistory = new MatchHistoryDataProvider();
 	_dataProviders.matchHistory.init();
 
-	var StaticDatProvider = require('./dataProviders/staticDataProvider');
-	_dataProviders.static = new StaticDatProvider();
+	var StaticDataProvider = require('./dataProviders/staticDataProvider');
+	_dataProviders.static = new StaticDataProvider();
 	_dataProviders.static.init();
+
+	var LeagueDataProvider = require('./dataProviders/leagueDataProvider');
+	_dataProviders.league = new LeagueDataProvider();
+	_dataProviders.league.init();
 
 	var RankedStatsDataProvider = require('./dataProviders/rankedStatsDataProvider');
 	_dataProviders.rankedStats = new RankedStatsDataProvider();

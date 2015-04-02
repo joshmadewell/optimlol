@@ -3,9 +3,9 @@ var _dataProvider = null;
 var PromiseFactoryConstructor = require('../../common/utilities/promiseFactory');
 var _promiseFactory = new PromiseFactoryConstructor();
 
-var _getLeagueInfo = function(region, summonerId) {
+var _getLeagueData = function(region, summonerId) {
 	return _promiseFactory.defer(function(deferredObject) {
-		_dataProvider.getData('leagues', {region: region, summonerId: summonerId})
+		_dataProvider.getData('league', {region: region, summonerId: summonerId})
 			.then(function(leagueInfo) {
 				deferredObject.resolve(leagueInfo);
 			})
@@ -24,5 +24,5 @@ var _init = function() {
 module.exports = function() {
 	var self = this;
 	self.init = _init;
-	self.getLeagueInfo = _getLeagueInfo;
+	self.getLeagueData = _getLeagueData;
 }

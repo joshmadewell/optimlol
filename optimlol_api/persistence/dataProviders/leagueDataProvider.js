@@ -21,20 +21,21 @@ module.exports = function() {
 			var leaguePath = parameters.region + "/" + _apiVersion + "/league/by-summoner/" + parameters.summonerId;
 			_riotApi.makeRequest(parameters.region, leaguePath)
 				.then(function(leagueResult) {
-					var leagueInfo = null;
-					if (leagueResult) {
-						leagueInfo = leagueResult[parameters.summonerId][0];
-						leagueInfo.entries = leagueInfo.entries.filter(function(entry) {
-							return entry.playerOrTeamId === parameters.summonerId;
+					if (leagueResult.data) {
+						var summonerEntry = leagueResult.data[parameters.summonerId][0].entries.filter(function(entry) {
+							return parseInt(entry.playerOrTeamId) === parseInt(parameters.summonerId);
 						});
+						leagueResult.data[parameters.summonerId][0].entries = summonerEntry[0];
+						leagueResult.data = leagueResult.data[parameters.summonerId][0];
 					}
-					_mongoCache.set('leagues', parameters, leagueInfo)
+
+					_mongoCache.set('league', parameters, leagueResult)
 						.then(function() {
-							deferredObject.resolve(leagueInfo);
+							deferredObject.resolve(leagueResult);
 						})
 						.fail(function(error) {
 							_logger.warn("Some failure when setting leagues cache", error);
-							deferredObject.resolve(leagueInfo);
+							deferredObject.resolve(leagueResult);
 						})
 				})
 				.fail(function(error) {
@@ -49,8 +50,8 @@ module.exports = function() {
 		}
 
 		return _promiseFactory.defer(function(deferredObject) {
-			_logger.debug("league data provider, getFromCache");
-			_mongoCache.get('leagues', parameters)
+			_logger.debug("league data provider, getFromCache", parameters);
+			_mongoCache.get('league', parameters)
 				.then(function(cacheLeagueResult) {
 					deferredObject.resolve(cacheLeagueResult);
 				})

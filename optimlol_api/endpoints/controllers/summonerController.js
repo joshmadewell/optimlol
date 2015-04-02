@@ -41,7 +41,7 @@ module.exports = function() {
 			PRMOMISES: [
 				_rankedStatsFacade.getRankedStats(region, summoner.id),
 				_recentMatchStatsFacade.getRecentStats(region, summoner.id, "SOLO"),
-				_leagueInfoFacade.getLeagueInfo(region, summoner.id),
+				_leagueDataFacade.getLeagueData(region, summoner.id),
 				_championDataFacade.getChampionData(region)
 			]
 		};
@@ -52,7 +52,7 @@ module.exports = function() {
 				.then(function(results) {
 					var championStats = results[promiseObject.STATS_INDEX].state === 'fulfilled' ? results[promiseObject.STATS_INDEX].value : null;
 					var recentHistoryStats = results[promiseObject.RECENT_STATS_INDEX].state === 'fulfilled' ? results[promiseObject.RECENT_STATS_INDEX].value : null;
-					var leagueInfo = results[promiseObject.LEAGUE_INFO_INDEX].state ==== 'fulfilled' ? results[promiseObject.LEAGUE_INFO_INDEX].value : null;
+					var leagueInfo = results[promiseObject.LEAGUE_INFO_INDEX].state === 'fulfilled' ? results[promiseObject.LEAGUE_INFO_INDEX].value : null;
 					var champions = results[promiseObject.CHAMPIONS_INDEX].state === 'fulfilled' ? results[promiseObject.CHAMPIONS_INDEX].value : null;
 
 					responseObject.quality = 'fresh';
@@ -123,6 +123,16 @@ module.exports = function() {
 						summoner.recentHistory = recentHistoryObject;
 					}
 
+					if (leagueInfo.data && leagueInfo.data.entries) {
+						summoner.leagueData = {};
+						summoner.leagueData.tier = leagueInfo.data.tier;
+						summoner.leagueData.division = leagueInfo.data.entries.division;
+						summoner.leagueData.leaguePoints = leagueInfo.data.entries.leaguePoints;
+						summoner.leagueData.isVeteran = leagueInfo.data.entries.isVeteran;
+						summoner.leagueData.isHotStreak = leagueInfo.data.entries.isHotStreak;
+						summoner.leagueData.miniSeries = leagueInfo.data.entries.miniSeries;
+					}
+
 					responseObject.data = summoner;
 
 					deferredObject.resolve(responseObject);
@@ -169,6 +179,10 @@ module.exports = function() {
 		var RecentMatchStatsFacadeConstructor = require('../facades/recentMatchStatsFacade');
 		_recentMatchStatsFacade = new RecentMatchStatsFacadeConstructor();
 		_recentMatchStatsFacade.init();
+
+		var LeagueDataFacadeConstructor = require('../facades/leagueDataFacade');
+		_leagueDataFacade = new LeagueDataFacadeConstructor();
+		_leagueDataFacade.init();
 
 		var ChampionDataFacadeConstructor = require('../facades/championDataFacade');
 		_championDataFacade = new ChampionDataFacadeConstructor();
