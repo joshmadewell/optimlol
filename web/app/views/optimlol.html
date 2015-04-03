@@ -43,6 +43,7 @@
                 </td>
                 <td class="summoner-profile">
                     <label class="summoner-name" data-bind="text: displayName"></label>
+                    <!-- ko if: leagueData -->
                     <div class="ranking">
                         <div data-bind="css: 'division-' + leagueData.tier.toLowerCase()"></div>
                         <label class="division-label" data-bind="text: leagueData.leagueDisplayName + ' (' + leagueData.leaguePoints + 'LP)'"></label>
@@ -54,6 +55,7 @@
                             <span data-bind="text: $data, css: { 'win': $data === 'W', 'loss': $data === 'L' }"/>
                         </span>
                     </div>
+                    <!-- /ko -->
                     <!-- /ko -->
                 </td>
                 <td class="recently-played">
