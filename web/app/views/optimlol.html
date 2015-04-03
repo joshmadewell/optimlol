@@ -41,15 +41,30 @@
                 <td data-bind="css: laneTag.toLowerCase(), foreach: laneTag, tooltip: { text: tooltipText, position: 'left' }">
                     <span data-bind="text: $rawData[0]"/><br>
                 </td>
-                <td data-bind="text: displayName"></td>
+                <td class="summoner-profile">
+                    <label class="summoner-name" data-bind="text: displayName"></label>
+                    <div class="ranking">
+                        <div data-bind="css: 'division-' + leagueData.tier.toLowerCase()"></div>
+                        <label class="division-label" data-bind="text: leagueData.leagueDisplayName + ' (' + leagueData.leaguePoints + 'LP)'"></label>
+                    </div>
+                    <!-- ko if: leagueData.miniSeries -->
+                    <div class="series">
+                        Series: 
+                        <span class="series" data-bind="foreach: leagueData.miniSeries.progress">
+                            <span data-bind="text: $data, css: { 'win': $data === 'W', 'loss': $data === 'L' }"/>
+                        </span>
+                    </div>
+                    <!-- /ko -->
+                </td>
                 <td class="recently-played">
                     <div class="no-stats" data-bind="visible: recentHistory.length === 0, text: $parent.noStatsText"></div>
-                    <ul class="champion-list" data-bind="foreach: recentHistory.champions">
+                    <ul class="champion-list" data-bind="foreach: { data: recentHistory.champions, as: 'currentChampion' }">
                         <!-- ko if: $index() < 5 -->
                         <li class="champion-data">
                             <div data-bind="popover, championStats: { type: 'recent', 
                                                                       summonerName: $parent.displayName, 
                                                                       championData: currentChampion }"/>
+                            <div data-bind="css: 'icon-champion-large-' + championKey, tooltip: championName "/>
                             <div data-bind="text: 'Games: ' + count"/>
                             <div><span class="wins" data-bind="text: wins"/> / <span class="losses" data-bind="text: losses"/></div>
                         </li>

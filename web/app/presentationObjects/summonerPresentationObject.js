@@ -13,7 +13,8 @@ define(['knockout'], function (ko) {
 			totalStats: {},
 			championStats: [],
 			recentHistory: [],
-			bestPerformanceStats: []
+			bestPerformanceStats: [],
+			leagueData: {}
 		}
 	}
 });

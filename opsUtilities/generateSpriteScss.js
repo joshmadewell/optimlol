@@ -47,8 +47,8 @@ var _downloadImages = function() {
 
 	_sprites.forEach(function(sprite) {
 		var url = binaryImage.replace('{{version}}', _version).replace('{{file}}', sprite);
-		download(url, __dirname + '/../web/appDependencies/img/' + sprite, function(){
-		  	console.log('done');
+		download(url, __dirname + '/../web/appDependencies/img/champions' + sprite, function(){
+		  	console.log(sprite + ' downloaded');
 		});
 	});
 }

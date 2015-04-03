@@ -74,12 +74,21 @@
 								summoner.recentHistory = [];
 							}
 
-							// if (summoner.championStats.length > 0 && summonerData.recentHistory) {
-							// 	summoner.recentHistory = summonerData.recentHistory;
-							// } else {
-							// 	summoner.recentHistory = [];
-							// }
+							summoner.leagueData = summonerData.leagueData;
+							if (summoner.leagueData) {
+								var leagueDisplay = summoner.leagueData.tier.toLowerCase();
+								leagueDisplayName = leagueDisplay.slice(0,1).toUpperCase() + leagueDisplay.slice(1) + ' ' + summoner.leagueData.division;
+								summoner.leagueData.leagueDisplayName = leagueDisplayName;
 
+								if (summoner.leagueData.miniSeries) {
+									var progress = summoner.leagueData.miniSeries.progress;
+									progress = progress.replace(/N/g, '-');
+									progress = progress.split('');
+									summoner.leagueData.miniSeries.progress = progress;
+								}
+							}
+
+							
 							summoner.totalStats = summonerData.totalStats;
 							summoner.summonerId(summonerData.id);
 							summoner.status(STATUS.VALID);

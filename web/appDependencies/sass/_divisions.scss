@@ -1,0 +1,62 @@
+.divisions {
+	background-image: url('/img/divisions.png');
+	background-repeat: no-repeat;
+	background-size: 20px;
+	margin: auto;
+}
+
+.division-master {
+	@extend .divisions;
+	height: 16px;
+	min-width: 20px;
+	background-position: 0px 0px;
+}
+
+.division-bronze {
+	@extend .divisions;
+	height: 16px;
+	min-width: 20px;
+	background-position: 0px -20px;
+}
+
+.division-challenger {
+	@extend .divisions;
+	height: 16px;
+	min-width: 20px;
+	background-position: 0px -40px;;
+}
+
+.division-diamond {
+	@extend .divisions;
+	height: 16px;
+	min-width: 20px;
+	background-position: 0px -60px;
+}
+
+.division-gold {
+	@extend .divisions;
+	height: 16px;
+	min-width: 20px;
+	background-position: 0px -80px;
+}
+
+.division-platinum {
+	@extend .divisions;
+	height: 16px;
+	min-width: 20px;
+	background-position: 0px -100px;
+}
+
+.division-silver {
+	@extend .divisions;
+	height: 16px;
+	min-width: 20px;
+	background-position: 0px -120px;
+}
+
+.division-unranked {
+	@extend .divisions;
+	height: 16px;
+	min-width: 20px;
+	background-position: 0px -140px;
+}
