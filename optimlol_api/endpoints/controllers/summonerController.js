@@ -57,7 +57,6 @@ module.exports = function() {
 
 					responseObject.quality = 'fresh';
 					results.forEach(function(result) {
-						console.log(result);
 						if (result.state === 'fulfilled') {
 							if (result.value.quality && result.value.quality === 'stale') {
 								responseObject.quality = responseObject.quality === 'unknown' ? 'unknown' : 'stale';
