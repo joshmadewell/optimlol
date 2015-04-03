@@ -61,6 +61,9 @@
                     <ul class="champion-list" data-bind="foreach: { data: recentHistory.champions, as: 'currentChampion' }">
                         <!-- ko if: $index() < 5 -->
                         <li class="champion-data">
+                            <div data-bind="popover, championStats: { type: 'recent', 
+                                                                      summonerName: $parent.displayName, 
+                                                                      championData: currentChampion }"/>
                             <div data-bind="css: 'icon-champion-large-' + championKey, tooltip: championName "/>
                             <div data-bind="text: 'Games: ' + count"/>
                             <div><span class="wins" data-bind="text: wins"/> / <span class="losses" data-bind="text: losses"/></div>
