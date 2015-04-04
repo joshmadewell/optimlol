@@ -31,8 +31,10 @@ define([], function() {
         ko.bindingHandlers.popover = {
             init: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
                 var ele = $(element);
-
                 var options = {
+                    title: function() {
+                        return $(element).find("#popover-title").html();
+                    },
                     content: function() {
                         return $(element).find("#popover-content").html();
                     },

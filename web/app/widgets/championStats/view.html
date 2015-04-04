@@ -1,38 +1,36 @@
 <div class="champion-profile" data-bind="with: championStats">
 	<div data-bind="css: 'icon-champion-large-' + profile.key">
 
+	<div id="popover-title" style="display: none;">
+	<!-- ko text: profile.name --><!-- /ko -->
+	</div>
+
 	<div id="popover-content" style="display: none;">
-		<div class="column-1" data-bind="with: profile">
-			<div class="champion-icon" data-bind="{ css: 'icon-champion-large-' + key }"/>
-			<label class="champion-name" data-bind="text: name"/>
-			<div class="kda-data">
-				<label data-bind="text: 'K: ' + kills"/>
-				<label data-bind="text: 'D: ' + deaths"/>
-				<label data-bind="text: 'A: ' + assists"/>
-				<label data-bind="text: 'KDA: ' + kda"/>
+		<ul class="lanes">
+			<li class="top" data-bind="css: { 'highlight': lanes.indexOf('TOP') !== -1 }">T<br/>O<br/>P</li>
+			<li class="jungle" data-bind="css: { 'highlight': lanes.indexOf('JUNGLE') !== -1 }">J<br/>U<br/>N</li>
+			<li class="middle" data-bind="css: { 'highlight': lanes.indexOf('MIDDLE') !== -1 }">M<br/>I<br/>D</li>
+			<li class="marksman" data-bind="css: { 'highlight': lanes.indexOf('MARKSMAN') !== -1 }">A<br/>D<br/>C</li>
+			<li class="support" data-bind="css: { 'highlight': lanes.indexOf('SUPPORT') !== -1 }">S<br/>U<br/>P</li>
+		</ul>
+
+		<div class="data">
+			<div data-bind="foreach: stats">
+				<table class="data-set">
+					<thead class="data-set-header">
+						<tr data-bind="foreach: categories">
+							<th data-bind="text: name"/>
+						</tr>
+					</thead>
+					<tbody class="data-set-body">
+						<tr data-bind="foreach: categories">
+							<td data-bind="text: value"/>
+						</tr>
+					</tbody>
+				</table>
 			</div>
+
+			<div class="data-info">Data is the per-game average of <span data-bind="text: $parent.summonerName"/>'s last 30 games</div>
 		</div>
-
-		<div class="column-2">
-			<label>Roles:</label>
-			<ul class="lanes">
-				<li class="top" data-bind="css: { 'highlight': lanes.indexOf('TOP') !== -1 }">TOP</li>
-				<li class="jungle" data-bind="css: { 'highlight': lanes.indexOf('JUNGLE') !== -1 }">JUN</li>
-				<li class="middle" data-bind="css: { 'highlight': lanes.indexOf('MIDDLE') !== -1 }">MID</li>
-				<li class="marksman" data-bind="css: { 'highlight': lanes.indexOf('MARKSMAN') !== -1 }">ADC</li>
-				<li class="support" data-bind="css: { 'highlight': lanes.indexOf('SUPPORT') !== -1 }">SUP</li>
-			</ul>
-
-			<div class="champion-stats" data-bind="foreach: noGroup">
-				<label data-bind="text: name + ': ' + data"/>
-			</div>
-
-			<label>Damage</label>
-			<div class="champion-stats" data-bind="foreach: damage">
-				<label data-bind="text: name + ': ' + data"/>
-			</div>
-		</div>
-
-		<div class="data-info">Data is the per-game average of <span data-bind="text: $parent.summonerName"/>'s last 30 games</div>
 	</div>
 </div>

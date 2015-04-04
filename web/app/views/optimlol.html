@@ -47,12 +47,15 @@
                     <div class="ranking">
                         <div data-bind="css: 'division-' + leagueData.tier.toLowerCase()"></div>
                         <label class="division-label" data-bind="text: leagueData.leagueDisplayName + ' (' + leagueData.leaguePoints + 'LP)'"></label>
+                        <div class="league-fresh-blood" data-bind="visible: leagueData.isFreshBlood, tooltip: { text: displayName + ' is new to the ' + leagueData.tier + ' league.', position: 'bottom', size: 'small' }"/>
+                        <div class="league-hot-streak" data-bind="visible: leagueData.isHotStreak, tooltip: { text: displayName + ' has won 3+ games in a row.', position: 'bottom', size: 'small' }"/>
+                        <div class="league-veteran" data-bind="visible: leagueData.isVeteran, tooltip: { text: displayName + ' has played over 100 games in ' + leagueData.tier + ' league.', position: 'bottom', size: 'small' }"/>
                     </div>
                     <!-- ko if: leagueData.miniSeries -->
                     <div class="series">
                         Series: 
                         <span class="series" data-bind="foreach: leagueData.miniSeries.progress">
-                            <span data-bind="text: $data, css: { 'win': $data === 'W', 'loss': $data === 'L' }"/>
+                            <span data-bind="text: $data, css: { 'win': $data === 'W', 'loss': $data === 'L', size: 'small' }"/>
                         </span>
                     </div>
                     <!-- /ko -->

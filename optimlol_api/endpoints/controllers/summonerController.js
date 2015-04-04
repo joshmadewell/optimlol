@@ -128,6 +128,7 @@ module.exports = function() {
 						summoner.leagueData.tier = leagueInfo.data.tier;
 						summoner.leagueData.division = leagueInfo.data.entries.division;
 						summoner.leagueData.leaguePoints = leagueInfo.data.entries.leaguePoints;
+						summoner.leagueData.isFreshBlood = leagueInfo.data.entries.isFreshBlood;
 						summoner.leagueData.isVeteran = leagueInfo.data.entries.isVeteran;
 						summoner.leagueData.isHotStreak = leagueInfo.data.entries.isHotStreak;
 						summoner.leagueData.miniSeries = leagueInfo.data.entries.miniSeries;
