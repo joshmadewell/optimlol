@@ -99,9 +99,16 @@ gulp.task('images', function(cb) {
 			}))
 			.pipe(gulp.dest('./build/img/')),
 
-		gulp.src('./web/appDependencies/img/divisions/*.png')
+		gulp.src('./web/appDependencies/img/divisions/division*.png')
 			.pipe(sprite({
 				name: 'divisions',
+				margin: 0
+			}))
+			.pipe(gulp.dest('./build/img/')),
+
+		gulp.src('./web/appDependencies/img/divisions/league*.png')
+			.pipe(sprite({
+				name: 'leagues',
 				margin: 0
 			}))
 			.pipe(gulp.dest('./build/img/')),
