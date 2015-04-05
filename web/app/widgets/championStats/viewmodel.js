@@ -46,7 +46,7 @@ define([], function() {
 						]
 					},
 					{
-						title: "Per Game Stats",
+						title: "Game Stats",
 						categories: [
 							{
 								name: "GPM",
