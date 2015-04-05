@@ -1,0 +1,27 @@
+.leagues {
+	background-image: url('/img/leagues.png');
+	background-repeat: no-repeat;
+	background-size: 20px;
+	margin: auto;
+}
+
+.league-fresh-blood {
+	@extend .leagues;
+	height: 17px;
+	min-width: 20px;
+	background-position: 0px 0px;
+}
+
+.league-hot-streak {
+	@extend .leagues;
+	height: 17px;
+	min-width: 20px;
+	background-position: 0px -20px;
+}
+
+.league-veteran {
+	@extend .leagues;
+	height: 17px;
+	min-width: 20px;
+	background-position: 0px -40px;
+}

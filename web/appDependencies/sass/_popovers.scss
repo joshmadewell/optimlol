@@ -46,18 +46,32 @@
 	}
 
 	.data {
+		font-size: 10px;
 		th {
 			text-align: center;
 		}
 		.data-set {
 			width: 100%;
 			text-align: center;
-			.data-set-header {
-				background-color: red;
-			}
+			margin-bottom: 4px;
 
+			.data-set-header,
 			.data-set-body {
+				.data-value {
+					border-right: 1px solid $darkgray;
 
+					&:last-child {
+						border-right: none;
+					}
+				}
+			}
+			.data-set-header {
+				background-color: #CCE5F7;
+			}
+			.data-set-body {
+				.data-value {
+					border-bottom: 1px solid $darkgray;
+				}
 			}
 		}
 

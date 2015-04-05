@@ -5,6 +5,17 @@ define([], function() {
 		self.championStats = null;
 		self.summonerName = null;
 
+		var comify = function(number) {
+		    var str = number.toString().split('.');
+		    if (str[0].length >= 5) {
+		        str[0] = str[0].replace(/(\d)(?=(\d{3})+$)/g, '$1,');
+		    }
+		    if (str[1] && str[1].length >= 5) {
+		        str[1] = str[1].replace(/(\d{3})/g, '$1 ');
+		    }
+		    return str.join('.');
+		}
+
 		var _setChampionStatistics = function(type, fullChampionData) {
 			self.championStats = {
 				profile: {
@@ -14,22 +25,44 @@ define([], function() {
 				lanes: fullChampionData.lanes,
 				stats: [
 					{
+						title: "Performance",
 						categories: [
 							{
 								name: "Kills",
-								value: (fullChampionData.kills / fullChampionData.count).toFixed(2)
+								value: comify((fullChampionData.kills / fullChampionData.count).toFixed(2))
 							},
 							{
 								name: "Deaths",
-								value: (fullChampionData.deaths / fullChampionData.count).toFixed(2)
+								value: comify((fullChampionData.deaths / fullChampionData.count).toFixed(2))
 							},
 							{
 								name: "Assists",
-								value: (fullChampionData.assists / fullChampionData.count).toFixed(2)
+								value: comify((fullChampionData.assists / fullChampionData.count).toFixed(2))
 							},
 							{
 								name: "KDA",
-								value: ((fullChampionData.kills + fullChampionData.assists) / fullChampionData.deaths).toFixed(2)
+								value: comify(((fullChampionData.kills + fullChampionData.assists) / fullChampionData.deaths).toFixed(2))
+							}
+						]
+					},
+					{
+						title: "Per Game Stats",
+						categories: [
+							{
+								name: "GPM",
+								value: comify((fullChampionData.goldEarned / ( fullChampionData.totalTimePlayed / 60 )).toFixed())
+							},
+							{
+								name: "Wards",
+								value: comify((fullChampionData.wardsPlaced / fullChampionData.count).toFixed())
+							},
+							{
+								name: "CS",
+								value: comify((fullChampionData.minionsKilled / fullChampionData.count).toFixed())
+							},
+							{
+								name: "Length",
+								value: comify(((fullChampionData.totalTimePlayed / 60) / fullChampionData.count).toFixed()) + "m"
 							}
 						]
 					},
@@ -38,31 +71,15 @@ define([], function() {
 						categories: [
 							{
 								name: "Dealt",
-								value: (fullChampionData.totalDamageDealt / fullChampionData.count).toFixed()
+								value: comify((fullChampionData.totalDamageDealt / fullChampionData.count).toFixed())
 							},
 							{
-								name: "vs. Champs",
-								value: (fullChampionData.totalDamageDealtToChampions / fullChampionData.count).toFixed()
+								name: "v. Champs",
+								value: comify((fullChampionData.totalDamageDealtToChampions / fullChampionData.count).toFixed())
 							},
 							{
 								name: "Taken",
-								value: (fullChampionData.totalDamageTaken / fullChampionData.count).toFixed()
-							}
-						]
-					},
-					{
-						categories: [
-							{
-								name: "GPM",
-								value: (fullChampionData.goldEarned / ( fullChampionData.totalTimePlayed / 60 )).toFixed()
-							},
-							{
-								name: "Wards",
-								value: (fullChampionData.wardsPlaced / fullChampionData.count).toFixed()
-							},
-							{
-								name: "Game Length",
-								value: ((fullChampionData.totalTimePlayed / 60) / fullChampionData.count).toFixed() + "m"
+								value: comify((fullChampionData.totalDamageTaken / fullChampionData.count).toFixed())
 							}
 						]
 					}

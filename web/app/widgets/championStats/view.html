@@ -15,16 +15,20 @@
 		</ul>
 
 		<div class="data">
-			<div data-bind="foreach: stats">
+			<div data-bind="foreach: { data: stats, as: 'stat' }">
 				<table class="data-set">
+					<!-- ko if: stat.title -->
+					<caption data-bind="text: stat.title"></caption>
+					<!-- /ko -->
+
 					<thead class="data-set-header">
 						<tr data-bind="foreach: categories">
-							<th data-bind="text: name"/>
+							<th class="data-value" data-bind="text: name, style: { width: 100 / $parent.categories.length + '%' }"/>
 						</tr>
 					</thead>
 					<tbody class="data-set-body">
 						<tr data-bind="foreach: categories">
-							<td data-bind="text: value"/>
+							<td class="data-value" data-bind="text: value"/>
 						</tr>
 					</tbody>
 				</table>
