@@ -39,7 +39,7 @@ define([], function() {
                         return $(element).find("#popover-content").html();
                     },
                     placement: 'bottom',
-                    //trigger: 'hover',
+                    trigger: 'hover',
                     html: true
                 }
 

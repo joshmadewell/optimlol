@@ -28,6 +28,14 @@ define([], function() {
 						title: "Performance",
 						categories: [
 							{
+								name: "Wins",
+								value: fullChampionData.wins
+							},
+							{
+								name: "Losses",
+								value: fullChampionData.losses
+							},
+							{
 								name: "Kills",
 								value: comify((fullChampionData.kills / fullChampionData.count).toFixed(2))
 							},
