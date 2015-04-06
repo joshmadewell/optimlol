@@ -2,11 +2,11 @@
 	<div data-bind="css: 'icon-champion-large-' + profile.key">
 
 	<div id="popover-title" style="display: none;">
-	<!-- ko text: profile.name --><!-- /ko -->
+	<!-- ko text: profile.name --><!-- /ko --> (<span class="wins" data-bind="text: profile.wins"/>/<span class="losses" data-bind="text: profile.losses"/>)
 	</div>
 
 	<div id="popover-content" style="display: none;">
-		<ul class="lanes">
+		<ul class="lanes" data-bind="tooltip: 'Highlighted lanes indicate which role ' + $parent.summonerName + ' has played this champion in.' ">
 			<li class="top" data-bind="css: { 'highlight': lanes.indexOf('TOP') !== -1 }">T<br/>O<br/>P</li>
 			<li class="jungle" data-bind="css: { 'highlight': lanes.indexOf('JUNGLE') !== -1 }">J<br/>U<br/>N</li>
 			<li class="middle" data-bind="css: { 'highlight': lanes.indexOf('MIDDLE') !== -1 }">M<br/>I<br/>D</li>
@@ -34,7 +34,7 @@
 				</table>
 			</div>
 
-			<div class="data-info">Data is the per-game average of <span data-bind="text: $parent.summonerName"/>'s last 30 games</div>
+			<div class="data-info">Data is the per-game average of <span data-bind="text: $parent.summonerName"/>'s last 30 games.</div>
 		</div>
 	</div>
 </div>

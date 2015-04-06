@@ -5,6 +5,13 @@
 .popover-title {
 	margin-bottom: -4px;
 	text-align: center;
+
+	.wins {
+		color: green;
+	}
+	.losses {
+		color: red;
+	}
 }
 
 .popover-content {

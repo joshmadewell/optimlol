@@ -20,7 +20,9 @@ define([], function() {
 			self.championStats = {
 				profile: {
 					name: fullChampionData.championName,
-					key: fullChampionData.championKey
+					key: fullChampionData.championKey,
+					wins: fullChampionData.wins,
+					losses: fullChampionData.losses
 				},
 				lanes: fullChampionData.lanes,
 				stats: [
@@ -28,16 +30,9 @@ define([], function() {
 						title: "Performance",
 						categories: [
 							{
-								name: "Wins",
-								value: fullChampionData.wins
-							},
-							{
-								name: "Losses",
-								value: fullChampionData.losses
-							},
-							{
 								name: "Kills",
-								value: comify((fullChampionData.kills / fullChampionData.count).toFixed(2))
+								value: comify((fullChampionData.kills / fullChampionData.count).toFixed(2)),
+								tooltip: "Fuck"
 							},
 							{
 								name: "Deaths",

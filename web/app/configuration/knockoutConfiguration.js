@@ -20,7 +20,8 @@ define([], function() {
                 }
 
                 $(element).attr("data-container", 'body');
-                $(element).tooltip();
+                $(element).addClass('has-tooltip');
+                $('body').tooltip( { selector: '.has-tooltip' });
 
                 ko.utils.domNodeDisposal.addDisposeCallback(element, function() {
                     $(element).tooltip('destroy');
@@ -39,12 +40,30 @@ define([], function() {
                         return $(element).find("#popover-content").html();
                     },
                     placement: 'bottom',
-                    trigger: 'hover',
+                    trigger: 'manual',
+                    animation: false,
                     html: true
                 }
 
                 $(element).attr("data-container", 'body');
-                $(element).popover(options);
+                $(element).popover(options)
+                    .on("mouseenter", function () {
+                        var _this = this;
+                        $(this).popover("show");
+                        $(".popover").on("mouseleave", function () {
+                            $(_this).popover('hide');
+                            $('body .tooltip').remove();
+                        });
+                    })
+                    .on("mouseleave", function () {
+                        var _this = this;
+                        setTimeout(function () {
+                            if (!$(".popover:hover").length) {
+                                $(_this).popover("hide");
+                                $('body .tooltip').remove();
+                            }
+                        }, 1);
+                    });
 
                 ko.utils.domNodeDisposal.addDisposeCallback(element, function() {
                     $(element).popover('destroy');
