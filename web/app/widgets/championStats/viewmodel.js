@@ -23,6 +23,7 @@ define([], function() {
 					key: fullChampionData.championKey,
 					wins: fullChampionData.wins,
 					losses: fullChampionData.losses,
+					percentage: ((fullChampionData.wins / (fullChampionData.wins + fullChampionData.losses)) * 100).toFixed(1)
 				}
 			};
 

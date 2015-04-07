@@ -1,8 +1,8 @@
 <div class="champion-profile" data-bind="with: championStats">
 	<div data-bind="css: 'icon-champion-large-' + profile.key">
 
-	<div id="popover-title" style="display: none;">
-	<!-- ko text: profile.name --><!-- /ko --> (<span class="wins" data-bind="text: profile.wins"/>/<span class="losses" data-bind="text: profile.losses"/>)
+	<div id="popover-title" style="display: none;" data-bind="with: profile">
+	<!-- ko text: name --><!-- /ko --> (<span class="wins" data-bind="text: wins"/>/<span class="losses" data-bind="text: losses"/> - <!-- ko text: percentage + '%' --><!-- /ko -->)
 	</div>
 
 	<div id="popover-content" style="display: none;">

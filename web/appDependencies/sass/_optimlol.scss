@@ -55,9 +55,12 @@
         font-size: 18px;
         margin-top: 10px;
         margin-bottom: 10px;
-        width: 75%;
         margin-right: auto;
         margin-left: auto;
+
+        @media all and (min-width: 100px) and (max-width: 1499px){ width: 75% }
+        @media all and (min-width: 1500px) and (max-width: 1899px){ width: 65% }
+        @media all and (min-width: 1900px) { width: 60% }
 
         thead {
             background-color: $black;
