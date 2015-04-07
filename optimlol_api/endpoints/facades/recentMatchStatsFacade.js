@@ -75,7 +75,8 @@ var _prepareStats = function(matchHistory) {
 
 		var optimlolMatchHistoryObject = {};
 		optimlolMatchHistoryObject.matchCreation = match.matchCreation;
-		optimlolMatchHistoryObject.role = participants.timeline.lane;
+		optimlolMatchHistoryObject.lane = participants.timeline.lane;
+		optimlolMatchHistoryObject.role = participants.timeline.role;
 		optimlolMatchHistoryObject.championId = participants.championId;
 		optimlolMatchHistoryObject.winner = participants.stats.winner;
 		optimlolMatchHistoryObject.kills = participants.stats.kills;

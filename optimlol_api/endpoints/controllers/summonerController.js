@@ -15,20 +15,49 @@ module.exports = function() {
 		this.message = null;
 	}
 
-	var _incrementLaneStats = function(recentStats, matchData, champion) {
-		var role = matchData.role;
-		if (role === "BOTTOM") {
-			role = champion.tags.indexOf("Marksman") === -1 ? "SUPPORT" : "MARKSMAN";
+	var _incrementLaneStats = function(laneStats, matchData, recentChamps, championInfo) {
+		var lane = matchData.lane;
+		var role = "";
+		switch (lane) {
+			case "TOP":
+				role = "TOP";
+				break;
+			case "MID":
+			case "MIDDLE":
+				role = "MIDDLE";
+				break;
+			case "BOT":
+			case "BOTTOM":
+				if (role === 'DUO_SUPPORT') {
+					role = "SUPPORT";
+				} else if (role === 'DUO_CARRY') {
+					role = "MARKSMAN";
+				} else {
+					role = championInfo.tags.indexOf("Marksman") === -1 ? "SUPPORT" : "MARKSMAN";
+				}
+				break;
+			case "JUNGLE":
+				role = "JUNGLE";
+				break;
 		}
 
-		recentStats[role].total++;
+		laneStats[role].total++;
 		if (matchData.winner) {
-			recentStats[role].wins++;
+			laneStats[role].wins++;
 		} else {
-			recentStats[role].losses++;
+			laneStats[role].losses++;
 		}
 
-		recentStats[role].performance = _perfomanceCalculator.calculate(recentStats[role].wins, recentStats[role].losses, {confidence: 1.00});
+		var idToString = matchData.championId.toString();
+		if (recentChamps[idToString].roles) {
+			if (recentChamps[idToString].roles.indexOf(role) === -1) {
+				recentChamps[idToString].roles.push(role);
+			}
+		} else {
+			recentChamps[idToString].roles = [role];
+		}
+
+		laneStats[role].performance = _perfomanceCalculator.calculate(laneStats[role].wins, laneStats[role].losses, {confidence: 1.00});
 	};
 
 	var _generatePerformanceData = function(region, finalSummoner) {
@@ -115,7 +144,7 @@ module.exports = function() {
 							recentMatchStats.championKey = champions.data.data[championIdString].key.toLowerCase();
 							recentMatchStats.championName = champions.data.data[championIdString].name;
 
-							_incrementLaneStats(laneStats, recentMatchStats, champions.data.data[championIdString]);
+							_incrementLaneStats(laneStats, recentMatchStats, recentChamps, champions.data.data[championIdString]);
 						});
 
 						recentHistoryObject.champions = recentChampionsArray;

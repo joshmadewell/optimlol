@@ -28,7 +28,7 @@ define([], function() {
 			};
 
 			if (type === 'recent') {
-				self.championStats.lanes = fullChampionData.lanes;
+				self.championStats.roles = fullChampionData.roles;
 				self.championStats.stats = [
 					{
 						title: "Performance",
@@ -187,7 +187,6 @@ define([], function() {
 			self.summonerName = settings.summonerName;
 			self.type = settings.type;
 			_setChampionStatistics(settings.type, settings.championData);
-			console.log(settings);
 		}
 	};
 });
