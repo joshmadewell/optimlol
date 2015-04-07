@@ -43,6 +43,9 @@
                 </td>
                 <td class="summoner-profile">
                     <label class="summoner-name" data-bind="text: displayName"></label>
+                    <div class="profile-stats">
+                        <span class="wins" data-bind="text: totalStats.wins"/>/<span class="losses" data-bind="text: totalStats.losses"/> (<span data-bind="text: totalStats.percentage + '%'"/>)
+                    </div>
                     <!-- ko if: leagueData -->
                     <div class="ranking">
                         <div data-bind="css: 'division-' + leagueData.tier.toLowerCase()"></div>

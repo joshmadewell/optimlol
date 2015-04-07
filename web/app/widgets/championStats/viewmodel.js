@@ -96,7 +96,7 @@ define([], function() {
 			}
 
 			if (type === 'total') { 
-				self.championStats.optimlolScore = Math.ceil(fullChampionData.performance * 100);
+				self.championStats.optimlolScore = Math.ceil((fullChampionData.performance * 100) * 1.25);
 				self.championStats.stats = [
 					{
 						title: "Performance",

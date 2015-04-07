@@ -114,6 +114,7 @@ module.exports = function() {
 
 						if (allIndex) {
 							summoner.totalStats = championStats.data.champions.splice(allIndex, 1)[0];
+							summoner.totalStats.percentage = ((summoner.totalStats.wins / (summoner.totalStats.wins + summoner.totalStats.losses)) * 100).toFixed(1);
 						}
 
 						summoner.championStats = championStats.data.champions;
