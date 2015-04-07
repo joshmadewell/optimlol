@@ -7,7 +7,9 @@ define([], function() {
 				whatIsThis: true,
 				question: "What is OptimLoL?",
 				answer: "OptimLoL is a website created for ranked solo/duo players to quickly see stats of " +
-						"all the players in champion select so that they can determine who would fit each lane the best.",
+						"all the players in champion select so that they can determine who would fit each lane the best." +
+						"Although it was created for ranked games, you could also use it in normals, however, the stats" +
+						"shown will still be ranked stats of all players queried.",
 				isVisible: ko.observable(false),
 				chevronClass: ko.observable('fa fa-chevron-up collapse')
 			},

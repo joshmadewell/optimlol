@@ -20,7 +20,7 @@
 			<!-- ko if: $parent.type === 'total' -->
 			<div class="optimlol-score">
 				<label>OptimLoL Score</label>
-				<div class="progress">
+				<div class="progress" data-bind="tooltip: 'Score determined by applying the Wilson Score Interval to win/loss counts.'">
 					<div data-bind="text: optimlolScore, attr: { 'aria-valuenow': optimlolScore }, style: { width: optimlolScore + '%' }" class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100">
 					</div>
 				</div>
