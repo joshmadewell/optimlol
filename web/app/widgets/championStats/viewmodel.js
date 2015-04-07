@@ -31,8 +31,7 @@ define([], function() {
 						categories: [
 							{
 								name: "Kills",
-								value: comify((fullChampionData.kills / fullChampionData.count).toFixed(2)),
-								tooltip: "Fuck"
+								value: comify((fullChampionData.kills / fullChampionData.count).toFixed(2))
 							},
 							{
 								name: "Deaths",
@@ -53,7 +52,8 @@ define([], function() {
 						categories: [
 							{
 								name: "GPM",
-								value: comify((fullChampionData.goldEarned / ( fullChampionData.totalTimePlayed / 60 )).toFixed())
+								value: comify((fullChampionData.goldEarned / ( fullChampionData.totalTimePlayed / 60 )).toFixed()),
+								titleTooltip: 'Gold per minute.'
 							},
 							{
 								name: "Wards",
@@ -61,11 +61,13 @@ define([], function() {
 							},
 							{
 								name: "CS",
-								value: comify((fullChampionData.minionsKilled / fullChampionData.count).toFixed())
+								value: comify((fullChampionData.minionsKilled / fullChampionData.count).toFixed()),
+								titleTooltip: 'Creep score.'
 							},
 							{
 								name: "Length",
-								value: comify(((fullChampionData.totalTimePlayed / 60) / fullChampionData.count).toFixed()) + "m"
+								value: comify(((fullChampionData.totalTimePlayed / 60) / fullChampionData.count).toFixed()) + "m",
+								titleTooltip: 'Average game length (minutes).'
 							}
 						]
 					},

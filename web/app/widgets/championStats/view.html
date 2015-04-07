@@ -6,7 +6,7 @@
 	</div>
 
 	<div id="popover-content" style="display: none;">
-		<ul class="lanes" data-bind="tooltip: 'Highlighted lanes indicate which role ' + $parent.summonerName + ' has played this champion in.' ">
+		<ul class="lanes" data-bind="tooltip: { text: 'Highlighted lanes indicate which role ' + $parent.summonerName + ' has played this champion in.', position: 'left' }">
 			<li class="top" data-bind="css: { 'highlight': lanes.indexOf('TOP') !== -1 }">T<br/>O<br/>P</li>
 			<li class="jungle" data-bind="css: { 'highlight': lanes.indexOf('JUNGLE') !== -1 }">J<br/>U<br/>N</li>
 			<li class="middle" data-bind="css: { 'highlight': lanes.indexOf('MIDDLE') !== -1 }">M<br/>I<br/>D</li>
@@ -22,13 +22,13 @@
 					<!-- /ko -->
 
 					<thead class="data-set-header">
-						<tr data-bind="foreach: categories">
-							<th class="data-value" data-bind="text: name, style: { width: 100 / $parent.categories.length + '%' }"/>
+						<tr data-bind="foreach: { data: categories, as: 'category' }">
+							<th class="data-value" data-bind="text: name, style: { width: 100 / $parent.categories.length + '%' }, tooltip: category.titleTooltip"/>
 						</tr>
 					</thead>
 					<tbody class="data-set-body">
-						<tr data-bind="foreach: categories">
-							<td class="data-value" data-bind="text: value"/>
+						<tr data-bind="foreach: { data: categories, as: 'category' }">
+							<td class="data-value" data-bind="text: value, tooltip: category.valueTooltip"/>
 						</tr>
 					</tbody>
 				</table>
