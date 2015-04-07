@@ -31,7 +31,6 @@ define([], function() {
 
         ko.bindingHandlers.popover = {
             init: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
-                var ele = $(element);
                 var options = {
                     title: function() {
                         return $(element).find("#popover-title").html();
@@ -40,30 +39,31 @@ define([], function() {
                         return $(element).find("#popover-content").html();
                     },
                     placement: 'bottom',
-                    trigger: 'manual',
+                    trigger: 'click',
                     animation: false,
                     html: true
                 }
 
                 $(element).attr("data-container", 'body');
-                $(element).popover(options)
-                    .on("mouseenter", function () {
-                        var _this = this;
-                        $(this).popover("show");
-                        $(".popover").on("mouseleave", function () {
-                            $(_this).popover('hide');
-                            $('body .tooltip').remove();
-                        });
-                    })
-                    .on("mouseleave", function () {
-                        var _this = this;
-                        setTimeout(function () {
-                            if (!$(".popover:hover").length) {
-                                $(_this).popover("hide");
-                                $('body .tooltip').remove();
-                            }
-                        }, 1);
-                    });
+                $(element).popover(options);
+                // $(element).popover(options)
+                //     .on("mouseenter", function () {
+                //         var _this = this;
+                //         $(this).popover("show");
+                //         $(".popover").on("mouseleave", function () {
+                //             $(_this).popover('hide');
+                //             $('body .tooltip').remove();
+                //         });
+                //     })
+                //     .on("mouseleave", function () {
+                //         var _this = this;
+                //         setTimeout(function () {
+                //             if (!$(".popover:hover").length) {
+                //                 $(_this).popover("hide");
+                //                 $('body .tooltip').remove();
+                //             }
+                //         }, 1);
+                //     });
 
                 ko.utils.domNodeDisposal.addDisposeCallback(element, function() {
                     $(element).popover('destroy');

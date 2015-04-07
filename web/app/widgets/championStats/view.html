@@ -6,6 +6,7 @@
 	</div>
 
 	<div id="popover-content" style="display: none;">
+		<!-- ko if: $parent.type === 'recent' -->
 		<ul class="lanes" data-bind="tooltip: { text: 'Highlighted lanes indicate which role ' + $parent.summonerName + ' has played this champion in.', position: 'left' }">
 			<li class="top" data-bind="css: { 'highlight': lanes.indexOf('TOP') !== -1 }">T<br/>O<br/>P</li>
 			<li class="jungle" data-bind="css: { 'highlight': lanes.indexOf('JUNGLE') !== -1 }">J<br/>U<br/>N</li>
@@ -13,8 +14,19 @@
 			<li class="marksman" data-bind="css: { 'highlight': lanes.indexOf('MARKSMAN') !== -1 }">A<br/>D<br/>C</li>
 			<li class="support" data-bind="css: { 'highlight': lanes.indexOf('SUPPORT') !== -1 }">S<br/>U<br/>P</li>
 		</ul>
+		<!-- /ko -->
 
 		<div class="data">
+			<!-- ko if: $parent.type === 'total' -->
+			<div class="optimlol-score">
+				<label>OptimLoL Score</label>
+				<div class="progress">
+					<div data-bind="text: optimlolScore, attr: { 'aria-valuenow': optimlolScore }, style: { width: optimlolScore + '%' }" class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+					</div>
+				</div>
+			</div>
+			<!-- /ko -->
+
 			<div data-bind="foreach: { data: stats, as: 'stat' }">
 				<table class="data-set">
 					<!-- ko if: stat.title -->
@@ -34,7 +46,9 @@
 				</table>
 			</div>
 
+			<!-- ko if: $parent.type === 'recent' -->
 			<div class="data-info">Data is the per-game average of <span data-bind="text: $parent.summonerName"/>'s last 30 games.</div>
+			<!-- /ko -->
 		</div>
 	</div>
 </div>

@@ -19,7 +19,15 @@ var _prepareStats = function(stats) {
             optimlolChampion.totalDamageTaken = champion.stats.totalDamageTaken;
             optimlolChampion.totalMinionKills = champion.stats.totalMinionKills;
             optimlolChampion.totalDamageDealt = champion.stats.totalDamageDealt;
+            optimlolChampion.totalMagicDamageDealt = champion.stats.totalMagicDamageDealt;
+            optimlolChampion.totalPhysicalDamageDealt = champion.stats.totalPhysicalDamageDealt;
             optimlolChampion.totalGoldEarned = champion.stats.totalGoldEarned;
+            optimlolChampion.maxChampionsKilled = champion.stats.maxChampionsKilled;
+            optimlolChampion.maxNumDeaths = champion.stats.maxNumDeaths;
+            optimlolChampion.totalDoubleKills = champion.stats.totalDoubleKills;
+            optimlolChampion.totalTripleKills = champion.stats.totalTripleKills;
+            optimlolChampion.totalQuadraKills = champion.stats.totalQuadraKills;
+            optimlolChampion.totalPentaKills = champion.stats.totalPentaKills;
 
             optimlolChampion.performance = _performanceCalculator.calculate(champion.stats.totalSessionsWon, champion.stats.totalSessionsLost);
             if (champion.stats.totalDeathsPerSession) {

@@ -77,7 +77,7 @@
                 </td>
                 <td class="best-performance">
                     <div class="no-stats" data-bind="visible: championStats.length === 0, text: $parent.noStatsText"></div>
-                    <ul class="champion-list" data-bind="foreach: bestPerformanceStats">
+                    <ul class="champion-list" data-bind="foreach: { data: bestPerformanceStats, as: 'currentChampion' }">
                         <!-- ko if: $index() < 5 -->
                         <li class="champion-data">
                             <div data-bind="popover, championStats: { type: 'total', 
