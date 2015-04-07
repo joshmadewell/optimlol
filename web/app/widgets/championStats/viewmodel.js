@@ -22,9 +22,8 @@ define([], function() {
 					name: fullChampionData.championName,
 					key: fullChampionData.championKey,
 					wins: fullChampionData.wins,
-					losses: fullChampionData.losses
+					losses: fullChampionData.losses,
 				},
-				lanes: fullChampionData.lanes,
 				stats: [
 					{
 						title: "Performance",
@@ -46,50 +45,77 @@ define([], function() {
 								value: comify(((fullChampionData.kills + fullChampionData.assists) / fullChampionData.deaths).toFixed(2))
 							}
 						]
-					},
-					{
-						title: "Game Stats",
-						categories: [
-							{
-								name: "GPM",
-								value: comify((fullChampionData.goldEarned / ( fullChampionData.totalTimePlayed / 60 )).toFixed()),
-								titleTooltip: 'Gold per minute.'
-							},
-							{
-								name: "Wards",
-								value: comify((fullChampionData.wardsPlaced / fullChampionData.count).toFixed())
-							},
-							{
-								name: "CS",
-								value: comify((fullChampionData.minionsKilled / fullChampionData.count).toFixed()),
-								titleTooltip: 'Creep score.'
-							},
-							{
-								name: "Length",
-								value: comify(((fullChampionData.totalTimePlayed / 60) / fullChampionData.count).toFixed()) + "m",
-								titleTooltip: 'Average game length (minutes).'
-							}
-						]
-					},
-					{
-						title: "Damage",
-						categories: [
-							{
-								name: "Dealt",
-								value: comify((fullChampionData.totalDamageDealt / fullChampionData.count).toFixed())
-							},
-							{
-								name: "v. Champs",
-								value: comify((fullChampionData.totalDamageDealtToChampions / fullChampionData.count).toFixed())
-							},
-							{
-								name: "Taken",
-								value: comify((fullChampionData.totalDamageTaken / fullChampionData.count).toFixed())
-							}
-						]
 					}
 				]
 			};
+
+			if (type === 'recent') {
+				self.championStats.lanes = fullChampionData.lanes;
+				self.championStats.stats.push({
+					title: "Performance",
+					categories: [
+						{
+							name: "Kills",
+							value: comify((fullChampionData.kills / fullChampionData.count).toFixed(2))
+						},
+						{
+							name: "Deaths",
+							value: comify((fullChampionData.deaths / fullChampionData.count).toFixed(2))
+						},
+						{
+							name: "Assists",
+							value: comify((fullChampionData.assists / fullChampionData.count).toFixed(2))
+						},
+						{
+							name: "KDA",
+							value: comify(((fullChampionData.kills + fullChampionData.assists) / fullChampionData.deaths).toFixed(2))
+						}
+					]
+				},
+				{
+					title: "Game Stats",
+					categories: [
+						{
+							name: "GPM",
+							value: comify((fullChampionData.goldEarned / ( fullChampionData.totalTimePlayed / 60 )).toFixed()),
+							titleTooltip: 'Gold per minute.'
+						},
+						{
+							name: "Wards",
+							value: comify((fullChampionData.wardsPlaced / fullChampionData.count).toFixed())
+						},
+						{
+							name: "CS",
+							value: comify((fullChampionData.minionsKilled / fullChampionData.count).toFixed()),
+							titleTooltip: 'Creep score.'
+						},
+						{
+							name: "Length",
+							value: comify(((fullChampionData.totalTimePlayed / 60) / fullChampionData.count).toFixed()) + "m",
+							titleTooltip: 'Average game length (minutes).'
+						}
+					]
+				},
+				{
+					title: "Damage",
+					categories: [
+						{
+							name: "Dealt",
+							value: comify((fullChampionData.totalDamageDealt / fullChampionData.count).toFixed())
+						},
+						{
+							name: "v. Champs",
+							value: comify((fullChampionData.totalDamageDealtToChampions / fullChampionData.count).toFixed())
+						},
+						{
+							name: "Taken",
+							value: comify((fullChampionData.totalDamageTaken / fullChampionData.count).toFixed())
+						}
+					]
+				});
+			}
+
+			if (type === 'total') { }
 		}
 
 		self.activate = function(settings) {

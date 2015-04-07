@@ -80,7 +80,9 @@
                     <ul class="champion-list" data-bind="foreach: bestPerformanceStats">
                         <!-- ko if: $index() < 5 -->
                         <li class="champion-data">
-                            <div data-bind="css: 'icon-champion-large-' + championKey, tooltip: championName "/>
+                            <div data-bind="popover, championStats: { type: 'total', 
+                                                                      summonerName: $parent.displayName, 
+                                                                      championData: currentChampion }"/>
                             <div data-bind="text: 'KDA: ' + kda.toFixed(2)"/>
                             <div><span class="wins" data-bind="text: wins"/> / <span class="losses" data-bind="text: losses"/></div>
                         </li>
