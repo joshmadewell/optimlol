@@ -21,19 +21,32 @@ body {
 	.navigation-item {
 		text-align: center;
 	}
+
+	.paypal {
+		width: 75px;
+		position: absolute;
+		margin-left: 148px;
+		margin-top: 14px;
+	}
 }
 
-.changetip_tipme_button {
+.footer {
+	background-color: $footer-color;
+	border-top: 1px solid $footer-border-color;
+	text-align: center;
 	position: absolute;
-	margin-left: 251px;
-	margin-top: 15px;
-}
+	bottom: 0;
+	height: 50px;
+	width: 100%;
 
-.paypal {
-	width: 75px;
-	position: absolute;
-	margin-left: 148px;
-	margin-top: 14px;
+	.social-links {
+		display: inline-flex;
+		margin-top: 15px;
+
+		.social-link-facebook {
+			margin-right: 5px;
+		}
+	}
 }
 
 /* Smartphones (portrait and landscape) ----------- */
