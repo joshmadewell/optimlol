@@ -23,8 +23,6 @@
                     <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
                 </form>
 
-                <div data-bind="changeTip" class="changetip_tipme_button" data-bid="JNVJ88Q3zz6HN7qHxLKogg" data-uid="GqbuGaneDtnEbMuWP6xNtm"></div>
-
                 <div class="region-selection">
                        <label>Region: </label>
                        <select data-bind="options: availableRegions,
@@ -35,5 +33,16 @@
         </div>
     </nav>
 
-    <div class="page-host" data-bind="router"></div>
+    <div class="page-host" data-bind="router"/>
+
+    <footer class="footer">
+        <div class="social-links">
+            <div data-bind="facebook" class="social-link-facebook">
+                <div class="fb-like" data-href="https://www.facebook.com/optimlol" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true"/>
+            </div>
+            <div data-bind="twitter" class="social-link-twitter">
+                <a href="https://twitter.com/OptimLoL" class="twitter-follow-button" data-show-count="false">Follow @OptimLoL</a>
+            </div>
+        </div>
+    </footer>
 </div>

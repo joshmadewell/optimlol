@@ -70,7 +70,7 @@ define([], function() {
             }
         };
 
-        ko.bindingHandlers.changeTip = {
+        ko.bindingHandlers.changetip = {
             init: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
                 (function(document,script,id) {
                     var js,
@@ -84,6 +84,34 @@ define([], function() {
                         r.parentNode.insertBefore(js,r)
                     }
                 }(document,'script','changetip_w_0'));
+            }
+        }
+
+        ko.bindingHandlers.twitter = {
+            init: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+                (function(d,s,id){
+                    var js,
+                        fjs=d.getElementsByTagName(s)[0],
+                        p=/^http:/.test(d.location)?'http':'https';
+                    if(!d.getElementById(id)){
+                        js=d.createElement(s);
+                        js.id=id;
+                        js.src=p+'://platform.twitter.com/widgets.js';
+                        fjs.parentNode.insertBefore(js,fjs);
+                    }
+                }(document, 'script', 'twitter-wjs'));
+            }
+        }
+
+        ko.bindingHandlers.facebook = {
+            init: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+                (function(d, s, id) {
+                    var js, fjs = d.getElementsByTagName(s)[0];
+                    if (d.getElementById(id)) return;
+                    js = d.createElement(s); js.id = id;
+                    js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.3";
+                    fjs.parentNode.insertBefore(js, fjs);
+                }(document, 'script', 'facebook-jssdk'));
             }
         }
 	};
