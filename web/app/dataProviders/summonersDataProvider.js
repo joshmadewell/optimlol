@@ -15,5 +15,18 @@ define(['durandal/system', 'common/optimlolApi'], function (system, OptimlolApi)
 
 			return promise;
 		};
+
+		self.getCurrentGame = function(region, summonerId) {
+			var promise = system.defer();
+			optimlolApi.makeRegionizedRequest(region, 'currentGame/by-id/' + summonerId)
+				.then(function(result) {
+					promise.resolve(result.data);
+				})
+				.fail(function(error) {
+					promise.reject(error);
+				})
+
+			return promise;
+		}
 	};
 });

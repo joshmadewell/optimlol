@@ -16,6 +16,8 @@
 		var NA_OP_GG_URL = "http://{{region}}.op.gg/summoner/userName={{summoner_name}}";
 		var RIOT_API_STRUGGLES = "Riot API currently having issues.";
 		var NO_STATS_AVAIABLE = "No stats this season."
+		var MAX_CURRENT_GAME_ATTEMPTS = 20;
+		var MAX_CURRENT_GAME_FAILURES = 5;
 		var STATUS = {
 			UNSET: "unset",
 			VALID: "valid",
@@ -30,6 +32,14 @@
 			" 님이 입장하셨습니다.",
 			"님이 방에 참가했습니다."
 		];
+
+		var currentGameState = {
+			searching: false,
+			interval: null,
+			attempts: 0,
+			failures: 0
+		};
+
 		var summonersDataProvider = new SummonersDataProvider();
 		var shortenedUrlDataProvider = new ShortenedUrlDataProvider();
 		var statusMessagesDataProvider = new StatusMessagesDataProvider();
@@ -53,6 +63,7 @@
 						}
 
 						if (summonerData.id) {
+							_pollForCurrentGame(summonerData.id);
 							summoner.displayName = summonerData.name;
 							if (summonerData.championStats && summonerData.championStats.length) {
 								// sort all champion stats on the amount of games played first
@@ -88,7 +99,6 @@
 								}
 							}
 
-							
 							summoner.totalStats = summonerData.totalStats;
 							summoner.summonerId(summonerData.id);
 							summoner.status(STATUS.VALID);
@@ -201,7 +211,7 @@
 					break;
 				}
 			}
-		}
+		};
 
 		var _foucsShareUrl = function() {
 			$('.share-url').focus();
@@ -228,7 +238,36 @@
 				.fail(function(error) {
 					self.statusMessages([]);
 				});
-		}
+		};
+
+		var _pollForCurrentGame = function(summonerId) {
+			if (currentGameState.searching === false) {
+				currentGameState.interval = setInterval(function getCurrentGame() {
+					console.log('getting current game for:', summonerId);
+					var keepSearching = (currentGameState.failures < MAX_CURRENT_GAME_FAILURES) && (currentGameState.attempts < MAX_CURRENT_GAME_ATTEMPTS);
+					if (keepSearching) {
+						summonersDataProvider.getCurrentGame(self.selectedRegion(), summonerId)
+							.then(function(currentGameResult) {
+								currentGameState.attempts++;
+
+								var currentGameData = currentGameResult.data;
+								if (currentGameData.gameFound) {
+									currentGameState.searching = false;
+									clearInterval(currentGameState.interval);
+								}
+							})
+							.fail(function(error) {
+								currentGameState.failures++;
+							});
+					} else {
+						clearInterval(currentGameState.interval);
+					}
+					
+					// return named interval function to run immediately
+					return getCurrentGame;
+				}(), 15000);
+			}
+		};
 
 		self.summonerInputs = [];
 		self.selectedRegion = ko.observable(session.get('region'));
