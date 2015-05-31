@@ -1,0 +1,74 @@
+<table class="summoner-table">
+    <thead>
+        <th></th>
+        <th class="name">Name</th>
+        <th class="recently-played" data-bind="tooltip: 'This column contains the 5 champions each summoner has played the most in the last 30 games for each summoner. Ordered by total games played.'">Recently Played</th>
+        <th class="best-performance" data-bind="tooltip: 'This column contains the 5 champions each summoner performs best on. Ordered by performance.'">Best Performance</th>
+        <th class="img-link">LolKing</th>
+        <th class="img-link">op.gg</th>
+    </thead>
+    <tbody class="summoner-info" data-bind="foreach: validSummoners">
+        <td data-bind="css: laneTag.toLowerCase(), foreach: laneTag, tooltip: { text: tooltipText, position: 'left' }">
+            <span data-bind="text: $rawData[0]"/><br>
+        </td>
+        <td class="summoner-profile">
+            <label class="summoner-name" data-bind="text: displayName"></label>
+            <!-- ko if: totalStats -->
+            <div class="profile-stats">
+                <span class="wins" data-bind="text: totalStats.wins"/>/<span class="losses" data-bind="text: totalStats.losses"/> (<span data-bind="text: totalStats.percentage + '%'"/>)
+            </div>
+            <!-- /ko -->
+            <!-- ko if: leagueData -->
+            <div class="ranking">
+                <div data-bind="css: 'division-' + leagueData.tier.toLowerCase()"></div>
+                <label class="division-label" data-bind="text: leagueData.leagueDisplayName + ' (' + leagueData.leaguePoints + 'LP)'"></label>
+                <div class="league-fresh-blood" data-bind="visible: leagueData.isFreshBlood, tooltip: { text: displayName + ' is new to the ' + leagueData.tier + ' league.', position: 'bottom', size: 'small' }"/>
+                <div class="league-hot-streak" data-bind="visible: leagueData.isHotStreak, tooltip: { text: displayName + ' has won 3+ games in a row.', position: 'bottom', size: 'small' }"/>
+                <div class="league-veteran" data-bind="visible: leagueData.isVeteran, tooltip: { text: displayName + ' has played over 100 games in ' + leagueData.tier + ' league.', position: 'bottom', size: 'small' }"/>
+            </div>
+            <!-- ko if: leagueData.miniSeries -->
+            <div class="series">
+                Series: 
+                <span class="series" data-bind="foreach: leagueData.miniSeries.progress">
+                    <span data-bind="text: $data, css: { 'win': $data === 'W', 'loss': $data === 'L', size: 'small' }"/>
+                </span>
+            </div>
+            <!-- /ko -->
+            <!-- /ko -->
+        </td>
+        <td class="recently-played">
+            <div class="no-stats" data-bind="visible: recentHistory.length === 0, text: $parent.noStatsText"></div>
+            <ul class="champion-list" data-bind="foreach: { data: recentHistory.champions, as: 'currentChampion' }">
+                <!-- ko if: $index() < 5 -->
+                <li class="champion-data">
+                    <div data-bind="popover, championStats: { type: 'recent', 
+                                                              summonerName: $parent.displayName, 
+                                                              championData: currentChampion }"/>
+                    <div data-bind="text: 'Games: ' + count"/>
+                    <div><span class="wins" data-bind="text: wins"/> / <span class="losses" data-bind="text: losses"/></div>
+                </li>
+                <!-- /ko -->
+            </ul>
+        </td>
+        <td class="best-performance">
+            <div class="no-stats" data-bind="visible: championStats.length === 0, text: $parent.noStatsText"></div>
+            <ul class="champion-list" data-bind="foreach: { data: bestPerformanceStats, as: 'currentChampion' }">
+                <!-- ko if: $index() < 5 -->
+                <li class="champion-data">
+                    <div data-bind="popover, championStats: { type: 'total', 
+                                                              summonerName: $parent.displayName, 
+                                                              championData: currentChampion }"/>
+                    <div data-bind="text: 'KDA: ' + kda.toFixed(2)"/>
+                    <div><span class="wins" data-bind="text: wins"/> / <span class="losses" data-bind="text: losses"/></div>
+                </li>
+                <!-- /ko -->
+            </ul>
+        </td>
+        <td class="img-link">
+            <a data-bind="attr: { target: '_blank', href: lolKingUrl }"><div class="logo-lolking"/></a>
+        </td>
+        <td class="img-link">
+            <a data-bind="attr: { target: '_blank', href: naOpGgUrl }"><div class="logo-opgg"/></a>
+        </td>
+    </tbody>
+</table>
