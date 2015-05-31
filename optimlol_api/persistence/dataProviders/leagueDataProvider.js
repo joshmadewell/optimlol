@@ -11,6 +11,8 @@ module.exports = function() {
 	var PromiseFactoryConstructor = require('../../common/utilities/promiseFactory');
 	var _promiseFactory = new PromiseFactoryConstructor();
 
+	self.hasCache = true;
+
 	self.getFromApi = function(parameters) {
 		if (_parameterValidator.validate(parameters, REQUIRED_PARAMETERS) === false) {
 			throw new Error("Invalid parameters for League Data Provider");
@@ -18,7 +20,7 @@ module.exports = function() {
 
 		return _promiseFactory.defer(function(deferredObject) {
 			_logger.debug("league data provider, getFromApi");
-			var leaguePath = parameters.region + "/" + _apiVersion + "/league/by-summoner/" + parameters.summonerId;
+			var leaguePath = "api/lol/" + parameters.region + "/" + _apiVersion + "/league/by-summoner/" + parameters.summonerId;
 			_riotApi.makeRequest(parameters.region, leaguePath)
 				.then(function(leagueResult) {
 					if (leagueResult.data) {

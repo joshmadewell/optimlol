@@ -12,6 +12,8 @@ module.exports = function() {
 	var PromiseFactoryConstructor = require('../../common/utilities/promiseFactory');
 	var _promiseFactory = new PromiseFactoryConstructor();
 
+	self.hasCache = true;
+
 	self.getFromApi = function(parameters) {
 		if (_parameterValidator.validate(parameters, REQUIRED_PARAMETERS) === false) {
 			throw new Error("Invalid parameters for Stats Data Provider"); 
@@ -19,7 +21,7 @@ module.exports = function() {
 
 		return _promiseFactory.defer(function(deferredObject) {
 			_logger.debug("static data provider, getFromApi");
-			var staticDataPath = "static-data/" + parameters.region + "/" + _apiVersion + "/" + _config.riot_api.staticTypes[parameters.staticType];
+			var staticDataPath = "api/lol/static-data/" + parameters.region + "/" + _apiVersion + "/" + _config.riot_api.staticTypes[parameters.staticType];
 			_riotApi.makeGlobalRequest(parameters.region, staticDataPath)
 				.then(function(staticDataResult) {
 					_mongoCache.set('staticData', parameters, staticDataResult)

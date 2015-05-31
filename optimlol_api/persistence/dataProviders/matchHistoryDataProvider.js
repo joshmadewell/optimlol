@@ -16,6 +16,8 @@ module.exports = function() {
 	var REQUIRED_PARAMETERS = ['region', 'summonerId', 'type'];
 	var LOOKBACK_GAMES_COUNT = 30;
 
+	self.hasCache = true;
+
 	self.getFromApi = function(parameters) {
 		if (_parameterValidator.validate(parameters, REQUIRED_PARAMETERS) === false) {
 			throw new Error("Invalid parameters for Match History Data Provider");
@@ -25,7 +27,7 @@ module.exports = function() {
 			_logger.debug("match history data provider, getFromApi");
 			var matchHistoryLookBackCount = _config.optimlol_api.matchHistoryLookBackCount
 			var maxMatchHistoryGamesCount = _config.riot_api.maxMatchHistoryGamesCount
-			var matchHistoryPath = parameters.region + "/" + _apiVersion + "/matchhistory/" + parameters.summonerId + "?rankedQueues=" + MATCH_HISTORY_TYPES[parameters.type];
+			var matchHistoryPath = "api/lol/" + parameters.region + "/" + _apiVersion + "/matchhistory/" + parameters.summonerId + "?rankedQueues=" + MATCH_HISTORY_TYPES[parameters.type];
 			var promises = [];
 			for(var x = 0; x < matchHistoryLookBackCount/maxMatchHistoryGamesCount; x++) {
 				var beginIndex = x * maxMatchHistoryGamesCount;

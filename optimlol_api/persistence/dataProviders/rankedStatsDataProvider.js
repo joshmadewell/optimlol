@@ -11,6 +11,8 @@ module.exports = function() {
 	var PromiseFactoryConstructor = require('../../common/utilities/promiseFactory');
 	var _promiseFactory = new PromiseFactoryConstructor();
 
+	self.hasCache = true;
+
 	self.getFromApi = function(parameters) {
 		if (_parameterValidator.validate(parameters, REQUIRED_PARAMETERS) === false) {
 			throw new Error("Invalid parameters for Stats Data Provider");
@@ -18,7 +20,7 @@ module.exports = function() {
 
 		return _promiseFactory.defer(function(deferredObject) {
 			_logger.debug("stats data provider, getFromApi");
-			var statsPath = parameters.region + "/" + _apiVersion + "/stats/by-summoner/" + parameters.summonerId + "/ranked";
+			var statsPath = "api/lol/" + parameters.region + "/" + _apiVersion + "/stats/by-summoner/" + parameters.summonerId + "/ranked";
 			_riotApi.makeRequest(parameters.region, statsPath)
 				.then(function(statsResult) {
 					_mongoCache.set('stats', parameters, statsResult)

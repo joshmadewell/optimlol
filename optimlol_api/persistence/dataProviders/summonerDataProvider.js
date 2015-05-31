@@ -13,6 +13,8 @@ module.exports = function() {
 	var PromiseFactoryConstructor = require('../../common/utilities/promiseFactory');
 	var _promiseFactory = new PromiseFactoryConstructor();
 
+	self.hasCache = true;
+
 	self.getFromApi = function(parameters) {
 		if (_parameterValidator.validate(parameters, REQUIRED_PARAMETERS) === false) {
 			throw new Error("Invalid parameters for Summoner Data Provider");
@@ -20,7 +22,7 @@ module.exports = function() {
 
 		return _promiseFactory.defer(function(deferredObject) {
 			_logger.debug("summoner data provider, getFromApi");
-			var summonerPath = parameters.region + "/" + _apiVersion + "/summoner/by-name/" + parameters.summonerName;
+			var summonerPath = "api/lol/" + parameters.region + "/" + _apiVersion + "/summoner/by-name/" + parameters.summonerName;
 			_riotApi.makeRequest(parameters.region, summonerPath)
 				.then(function(summonerResult) {
 					_mongoCache.set('summoners', parameters, summonerResult)

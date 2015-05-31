@@ -12,7 +12,7 @@ config.optimlol_api.allowedOrigins = [
 // Riot API
 config.riot_api = {};
 config.riot_api.url_prefix = "https://";
-config.riot_api.url_midfix = ".api.pvp.net/api/lol/";
+config.riot_api.url_midfix = ".api.pvp.net/";
 config.riot_api.maxMatchHistoryGamesCount = 15;
 config.riot_api.staticTypes = {
 	champions: "champion?dataById=true&champData=tags&version=5.10.1",
@@ -28,6 +28,19 @@ config.riot_api.versions = {
 	stats: "v1.3",
 	summoners: "v1.4",
 	leagues: "v2.5"
+}
+config.riot_api.currentGameRegion = {
+	'na': 'NA1',
+	'euw': 'EUW1',
+	'eune': 'EUN1',
+	'kr': 'KR',
+	'oce': 'OC1',
+	'br': 'BR1',
+	'lan': 'LA1',
+	'las': 'LA2',
+	'ru': 'RU',
+	'tr': 'TR',
+	'pbe': 'PBE1'
 }
 
 // Logging
