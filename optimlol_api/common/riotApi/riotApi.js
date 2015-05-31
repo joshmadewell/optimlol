@@ -53,7 +53,7 @@ module.exports = function() {
 			var apiKeyPrefix = path.indexOf('?') !== -1 ? "&api_key=" : "?api_key=";
 			var fullUrl = _config.riot_api.url_prefix + region + _config.riot_api.url_midfix + path + apiKeyPrefix + process.env.RIOT_API_KEY;
 			_logger.debug("Hitting Riot: " + path);
-			request.get({url: fullUrl, json: true, timeout: 4000}, function(error, result) {
+			request.get({url: fullUrl, json: true, timeout: 10000}, function(error, result) {
 				if (error) {
 					if (error.code === 'ETIMEDOUT') {
 						_setResponseObject(responseObject, { statusCode: 408 });
