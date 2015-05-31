@@ -6,7 +6,8 @@ var _dataProviders = {
 	static: null,
 	rankedStats: null,
 	summoner: null,
-	league: null
+	league: null,
+	currentGame: null
 };
 
 var QUALITY_TYPES = {
@@ -26,64 +27,86 @@ var _getData = function(dataProvider, parameters) {
 	return _promiseFactory.defer(function(deferredObject) {
 		var dataResponse = new DataProviderResponseObject();
 
-		_logger.debug("Attempting to get " + dataProvider + " data from cache");
-		_dataProviders[dataProvider].getFromCache(parameters)
-			.then(function(cachedData) {
-				if (cachedData.isExpired === true || cachedData.isExpired === null) {
-					_logger.info(dataProvider + " data expired, or unset, attempting to refresh", parameters);
-					_dataProviders[dataProvider].getFromApi(parameters)
+		if (_dataProviders[dataProvider].hasCache === true) {
+			_logger.debug("Attempting to get " + dataProvider + " data from cache");
+			_dataProviders[dataProvider].getFromCache(parameters)
+				.then(function(cachedData) {
+					if (cachedData.isExpired === true || cachedData.isExpired === null) {
+						_logger.info(dataProvider + " data expired, or unset, attempting to refresh", parameters);
+						_dataProviders[dataProvider].getFromApi(parameters)
+							.then(function(apiData) {
+								_logger.riotApi(dataProvider + " RiotApi: ", apiData.statusCode);
+								if (apiData.success) {
+									dataResponse.success = true;
+									dataResponse.quality = QUALITY_TYPES.FRESH;
+									dataResponse.data = apiData.data;
+								} else if (cachedData.data) {
+									dataResponse.success = true;
+									dataResponse.quality = QUALITY_TYPES.STALE;
+									dataResponse.data = cachedData.data;
+								} else {
+									dataResponse.success = false;
+									dataResponse.quality = QUALITY_TYPES.UNKNOWN;
+									dataResponse.message = "Failed retrieving data from Riot";
+								}
+
+								deferredObject.resolve(dataResponse);
+							})
+							.fail(function(error) {
+								if (cachedData.data) {
+									dataResponse.success = true;
+									dataResponse.quality = QUALITY_TYPES.STALE;
+									dataResponse.data = cachedData.data;
+									deferredObject.resolve(dataResponse);
+								} else {
+									deferredObject.reject(error);
+								}
+							});
+					} else {
+						dataResponse.success = true;
+						dataResponse.quality = QUALITY_TYPES.FRESH;
+						dataResponse.data = cachedData.data;
+
+						deferredObject.resolve(dataResponse);
+					}
+				})
+				.fail(function(error) {
+					_dataProviders[dataProvider].getFromApi(dataProvider, parameters)
 						.then(function(apiData) {
-							_logger.riotApi(dataProvider + " RiotApi: ", apiData.statusCode);
 							if (apiData.success) {
 								dataResponse.success = true;
 								dataResponse.quality = QUALITY_TYPES.FRESH;
 								dataResponse.data = apiData.data;
-							} else if (cachedData.data) {
-								dataResponse.success = true;
-								dataResponse.quality = QUALITY_TYPES.STALE;
-								dataResponse.data = cachedData.data;
-							} else {
-								dataResponse.success = false;
-								dataResponse.quality = QUALITY_TYPES.UNKNOWN;
-								dataResponse.message = "Failed retrieving data from Riot";
-							}
-
-							deferredObject.resolve(dataResponse);
-						})
-						.fail(function(error) {
-							if (cachedData.data) {
-								dataResponse.success = true;
-								dataResponse.quality = QUALITY_TYPES.STALE;
-								dataResponse.data = cachedData.data;
 								deferredObject.resolve(dataResponse);
 							} else {
 								deferredObject.reject(error);
 							}
+						})
+						.fail(function(error) {
+							deferredObject.reject(error);
 						});
-				} else {
-					dataResponse.success = true;
-					dataResponse.quality = QUALITY_TYPES.FRESH;
-					dataResponse.data = cachedData.data;
+				});
+		} else {
+			_logger.debug("Attempting to get " + dataProvider + " data from API");
+			_dataProviders[dataProvider].getFromApi(parameters)
+				.then(function(apiData) {
+					_logger.riotApi(dataProvider + " RiotApi: ", apiData.statusCode);
+					if (apiData.success) {
+						dataResponse.success = true;
+						dataResponse.quality = QUALITY_TYPES.FRESH;
+						dataResponse.data = apiData.data;
+					} else {
+						dataResponse.success = false;
+						dataResponse.quality = QUALITY_TYPES.UNKNOWN;
+						dataResponse.message = "Failed retrieving data from Riot";
+					}
 
 					deferredObject.resolve(dataResponse);
-				}
-			})
-			.fail(function(error) {
-				_dataProviders[dataProvider].getFromApi(dataProvider, parameters)
-					.then(function(apiData) {
-						if (apiData.success) {
-							dataResponse.success = true;
-							dataResponse.quality = QUALITY_TYPES.FRESH;
-							dataResponse.data = apiData.data;
-							deferredObject.resolve(dataResponse);
-						} else {
-							deferredObject.reject(error);
-						}
-					})
-					.fail(function(error) {
-						deferredObject.reject(error);
-					});
-			});
+				})
+				.fail(function(error) {
+					deferredObject.reject(error);
+				});
+		}
 	});
 }
 
@@ -107,6 +130,10 @@ var _init = function() {
 	var SummonerDataProvider = require('./dataProviders/summonerDataProvider');
 	_dataProviders.summoner = new SummonerDataProvider();
 	_dataProviders.summoner.init();
+
+	var CurrentGameDataProvider = require('./dataProviders/currentGameDataProvider');
+	_dataProviders.currentGame = new CurrentGameDataProvider();
+	_dataProviders.currentGame.init();
 }
 
 module.exports = function() {
