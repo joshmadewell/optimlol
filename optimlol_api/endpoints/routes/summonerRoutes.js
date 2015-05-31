@@ -16,10 +16,6 @@ module.exports = function(router) {
 	router.get('/:region/summoner/by-name/:summonerName', function(req, res) {
 		var region = req.params.region;
 		var summonerName = req.params.summonerName;
-		var result = {
-			status: 'failed',
-			summonerData: null
-		}
 
 		_summonerController.generateSummonerData(region, summonerName)
 			.then(function(summoner) {
@@ -28,6 +24,19 @@ module.exports = function(router) {
 			.fail(function(error) {
 				_handleResponse(res, 500);
 			})
+	});
+
+	router.get('/:region/currentGame/by-id/:summonerId', function(req, res) {
+		var region = req.params.region;
+		var summonerId = req.params.summonerId;
+		
+		_summonerController.getCurrentGameData(region, summonerId)
+			.then(function(currentGameData) {
+				_handleResponse(res, 200, currentGameData);
+			})
+			.fail(function(error) {
+				_handleResponse(res, 500);
+			});
 	});
 
 	self.init = function(router) {

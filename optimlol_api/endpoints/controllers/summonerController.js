@@ -13,7 +13,13 @@ module.exports = function() {
 		this.quality = null;
 		this.data = null;
 		this.message = null;
-	}
+	};
+
+	var CurrentGameObject = function() {
+		this.quality = null;
+		this.data = null;
+		this.message = null;
+	};
 
 	var _incrementLaneStats = function(laneStats, matchData, recentChamps, championInfo) {
 		var lane = matchData.lane;
@@ -198,6 +204,21 @@ module.exports = function() {
 		});
 	};
 
+	self.getCurrentGameData = function(region, summonerId) {
+		return _promiseFactory.defer(function(deferredObject) {
+			var currentGame = new CurrentGameObject();
+			_currentGameFacade.getCurrentGameData(region, summonerId)
+				.then(function(currentGameData) {
+					currentGame.data = currentGameData.data;
+					currentGame.quality = currentGameData.quality;
+					deferredObject.resolve(currentGame);
+				})
+				.fail(function(error) {
+					deferredObject.reject(error);
+				});
+		});
+	};
+
 	self.init = function() {
 		var SummonerFacadeConstuctor = require('../facades/summonerFacade');
 		_summonerFacade = new SummonerFacadeConstuctor();
@@ -218,5 +239,9 @@ module.exports = function() {
 		var ChampionDataFacadeConstructor = require('../facades/championDataFacade');
 		_championDataFacade = new ChampionDataFacadeConstructor();
 		_championDataFacade.init();
+
+		var CurrentGameFacadeConstructor = require('../facades/currentGameFacade');
+		_currentGameFacade = new CurrentGameFacadeConstructor();
+		_currentGameFacade.init();
 	}
 };
