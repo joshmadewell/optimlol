@@ -316,7 +316,7 @@
 			potentialSummoners.forEach(function(potentialSummoner) {
 				_setNextAvailabeSummonerInput(potentialSummoner);
 			});
-		}
+		};
 
 		self.clearSummonerInputs = function() {
 			self.shareUrl("");
@@ -379,7 +379,7 @@
 
 			session.set('clearedMessages', clearedMessages);
 			self.statusMessages.remove(messageObject);
-		}
+		};
 
 		self.activate = function(shareUrl, queryString) {
 			if (window.__gaTracker && typeof window.__gaTracker === 'function') {
