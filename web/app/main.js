@@ -28,7 +28,7 @@ function (system, app, viewLocator, knockoutConfiguration, routerConfiguration) 
         router:true,
         dialog: true,
         widget: {
-            kinds: ['championStats']
+            kinds: ['championStats', 'summonerTable']
         }
     });
 
