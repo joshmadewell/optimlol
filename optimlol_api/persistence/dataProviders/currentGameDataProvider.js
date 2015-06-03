@@ -21,9 +21,7 @@ module.exports = function() {
 
 		return _promiseFactory.defer(function(deferredObject) {
 			_logger.debug("current game data provider, getFromApi");
-			console.log(parameters, _config.riot_api);
 			var currentGamePath = "observer-mode/rest/consumer/getSpectatorGameInfo/" + _config.riot_api.currentGameRegion[parameters.region] + '/' + parameters.summonerId;
-			console.log(currentGamePath, parameters);
 			_riotApi.makeRequest(parameters.region, currentGamePath)
 				.then(function(currentGameResult) {
 					deferredObject.resolve(currentGameResult);
