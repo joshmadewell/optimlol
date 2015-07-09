@@ -15,7 +15,7 @@ config.riot_api.url_prefix = "https://";
 config.riot_api.url_midfix = ".api.pvp.net/api/lol/";
 config.riot_api.maxMatchHistoryGamesCount = 15;
 config.riot_api.staticTypes = {
-	champions: "champion?dataById=true&champData=tags&version=5.10.1",
+	champions: "champion?dataById=true&champData=tags&version=5.13.1",
 	items: "item",
 	masteries: "mastery",
 	runes: "rune",
