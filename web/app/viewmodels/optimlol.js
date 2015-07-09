@@ -213,16 +213,23 @@
 
 			statusMessagesDataProvider.getStatusMessages()
 				.then(function(messagesResult) {
+					console.log(messagesResult);
+					var activeMessages = messagesResult.messages.filter(function(message) {
+						return message.active;
+					});
+
+					console.log(activeMessages);
+
 					if (clearedMessages) {
 						clearedMessages = clearedMessages.split(',');
 
-						messagesResult.messages.forEach(function(message) {
+						activeMessages.forEach(function(message) {
 							if (clearedMessages.indexOf(message._id) === -1) {
 								self.statusMessages.push(message);
 							}
 						});
 					} else {
-						self.statusMessages(messagesResult.messages);
+						self.statusMessages(activeMessages);
 					}
 				})
 				.fail(function(error) {
