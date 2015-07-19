@@ -223,16 +223,24 @@
 
 			statusMessagesDataProvider.getStatusMessages()
 				.then(function(messagesResult) {
-					if (clearedMessages) {
-						clearedMessages = clearedMessages.split(',');
+					var activeMessages = messagesResult.messages.filter(function(message) {
+						return message.active;
+					});
 
-						messagesResult.messages.forEach(function(message) {
-							if (clearedMessages.indexOf(message._id) === -1) {
-								self.statusMessages.push(message);
-							}
-						});
+					if (activeMessages.length) {
+						if (clearedMessages) {
+							clearedMessages = clearedMessages.split(',');
+
+							activeMessages.forEach(function(message) {
+								if (clearedMessages.indexOf(message._id) === -1) {
+									self.statusMessages.push(message);
+								}
+							});
+						} else {
+							self.statusMessages(activeMessages);
+						}
 					} else {
-						self.statusMessages(messagesResult.messages);
+						session.set('clearedMessages', '');
 					}
 				})
 				.fail(function(error) {
