@@ -85,7 +85,7 @@ var _getData = function(dataProvider, parameters) {
 					});
 			});
 	});
-}
+};
 
 var _init = function() {
 	var MatchHistoryDataProvider = require('./dataProviders/matchHistoryDataProvider');
@@ -107,10 +107,10 @@ var _init = function() {
 	var SummonerDataProvider = require('./dataProviders/summonerDataProvider');
 	_dataProviders.summoner = new SummonerDataProvider();
 	_dataProviders.summoner.init();
-}
+};
 
 module.exports = function() {
 	var self = this;
 	self.init = _init;
 	self.getData  = _getData;
-}
+};

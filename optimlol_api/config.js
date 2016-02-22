@@ -7,7 +7,7 @@ config.optimlol_api.matchHistoryLookBackCount = 30;
 config.optimlol_api.allowedOrigins = [
 	'http://www.optimlol.com',
 	'http://optimlol.com'
-]
+];
 
 // Riot API
 config.riot_api = {};
@@ -20,7 +20,8 @@ config.riot_api.staticTypes = {
 	masteries: "mastery",
 	runes: "rune",
 	summonerSpells: "summoner-spell"
-}
+};
+
 config.riot_api.versions = {
 	champions: "v1.2",
 	staticData: "v1.2",
@@ -28,7 +29,7 @@ config.riot_api.versions = {
 	stats: "v1.3",
 	summoners: "v1.4",
 	leagues: "v2.5"
-}
+};
 
 // Logging
 config.logging = {};
