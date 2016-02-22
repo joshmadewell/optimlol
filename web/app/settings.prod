@@ -1,5 +1,5 @@
 define(function() {
 	return {
-		optimlolApiUrl: "https://optimlol-api.herokuapp.com//"
+		optimlolApiUrl: "https://optimlol-api.herokuapp.com/"
 	}
 });
