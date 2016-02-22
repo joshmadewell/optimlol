@@ -27,6 +27,7 @@ routes.forEach(function(route) {
 });
 
 var crossOriginMiddleware = function(req, res, next) {
+	logger.info(req.headers.origin);
 	if (app.get('env') === 'development') {
 		res.header('Access-Control-Allow-Origin', '*');
 		res.header('Access-Control-Allow-Methods', 'GET');
