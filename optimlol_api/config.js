@@ -6,7 +6,8 @@ config.optimlol_api.expiredCacheMinutes = 20;
 config.optimlol_api.matchHistoryLookBackCount = 30;
 config.optimlol_api.allowedOrigins = [
 	'http://www.optimlol.com',
-	'http://optimlol.com'
+	'http://optimlol.com',
+	'http://optimlol-ui.herokuapp.com'
 ];
 
 // Riot API
