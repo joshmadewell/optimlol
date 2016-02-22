@@ -23,8 +23,8 @@ module.exports = function() {
 
 		return _promiseFactory.defer(function(deferredObject) {
 			_logger.debug("match history data provider, getFromApi");
-			var matchHistoryLookBackCount = _config.optimlol_api.matchHistoryLookBackCount
-			var maxMatchHistoryGamesCount = _config.riot_api.maxMatchHistoryGamesCount
+			var matchHistoryLookBackCount = _config.optimlol_api.matchHistoryLookBackCount;
+			var maxMatchHistoryGamesCount = _config.riot_api.maxMatchHistoryGamesCount;
 			var matchHistoryPath = parameters.region + "/" + _apiVersion + "/matchhistory/" + parameters.summonerId + "?rankedQueues=" + MATCH_HISTORY_TYPES[parameters.type];
 			var promises = [];
 			for(var x = 0; x < matchHistoryLookBackCount/maxMatchHistoryGamesCount; x++) {
@@ -53,8 +53,8 @@ module.exports = function() {
 									if (match.participants[0].timeline) {
 										var lane = match.participants[0].timeline.lane;
 										var role = match.participants[0].timeline.role;
-	
-										match.participants[0].timeline = {}
+
+										match.participants[0].timeline = {};
 										match.participants[0].timeline.lane = lane;
 										match.participants[0].timeline.role = role;
 									}
@@ -116,5 +116,5 @@ module.exports = function() {
 		var RiotApiConstructor = require('../../common/riotApi/riotApi');
 		_riotApi = new RiotApiConstructor();
 		_riotApi.init();
-	}
+	};
 };

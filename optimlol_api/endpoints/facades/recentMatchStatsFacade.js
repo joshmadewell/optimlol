@@ -91,19 +91,13 @@ var _prepareStats = function(matchHistory) {
 
 var _getRecentStats = function(region, summonerId, type) {
 	return _promiseFactory.defer(function(deferredObject) {
-		_dataProvider.getData('matchHistory', {region: region, summonerId: summonerId, type: type})
-			.then(function(matchHistory) {
-				if (matchHistory.data && matchHistory.data.matches) {
-					_pruneStats(matchHistory);
-					_prepareStats(matchHistory);
-					deferredObject.resolve(matchHistory);
-				} else {
-					deferredObject.resolve(matchHistory);
-				}
+		_dataProvider.getData('matchList', {region: region, summonerId: summonerId, type: type})
+			.then(function (matchList) {
+				var matchListPopulated = matchList.slice(0, 30).map(function () {
+
+				});
 			})
-			.fail(function(error) {
-				deferredObject.resolve(error);
-			});
+			.fail(deferredObject.resolve);
 	});
 };
 
@@ -117,4 +111,4 @@ module.exports = function() {
 	var self = this;
 	self.init = _init;
 	self.getRecentStats = _getRecentStats;
-}
+};

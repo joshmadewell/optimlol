@@ -26,7 +26,8 @@ config.riot_api.staticTypes = {
 config.riot_api.versions = {
 	champions: "v1.2",
 	staticData: "v1.2",
-	matchHistory: "v2.2",
+	match: "v2.2",
+	matchList: "v2.2",
 	stats: "v1.3",
 	summoners: "v1.4",
 	leagues: "v2.5"
