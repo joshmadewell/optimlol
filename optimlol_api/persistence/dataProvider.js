@@ -15,25 +15,25 @@ var QUALITY_TYPES = {
 	UNKNOWN: 'unknown'
 };
 
-var DataProviderResponseObject = function() {
+var DataProviderResponseObject = function () {
 	this.success = null;
 	this.quality = null;
 	this.message = null;
 	this.data = null;
 };
 
-var _getData = function(dataProvider, parameters) {
-	return _promiseFactory.defer(function(deferredObject) {
+var _getData = function (dataProvider, parameters) {
+	return _promiseFactory.defer(function (deferredObject) {
 		var dataResponse = new DataProviderResponseObject();
 
-		_logger.debug("Attempting to get " + dataProvider + " data from cache");
+		_logger.debug('Attempting to get ' + dataProvider + ' data from cache');
 		_dataProviders[dataProvider].getFromCache(parameters)
-			.then(function(cachedData) {
+			.then(function (cachedData) {
 				if (cachedData.isExpired === true || cachedData.isExpired === null) {
-					_logger.info(dataProvider + " data expired, or unset, attempting to refresh", parameters);
+					_logger.info(dataProvider + ' data expired, or unset, attempting to refresh', parameters);
 					_dataProviders[dataProvider].getFromApi(parameters)
-						.then(function(apiData) {
-							_logger.riotApi(dataProvider + " RiotApi: ", apiData.statusCode);
+						.then(function (apiData) {
+							_logger.riotApi(dataProvider + ' RiotApi: ', apiData.statusCode);
 							if (apiData.success) {
 								dataResponse.success = true;
 								dataResponse.quality = QUALITY_TYPES.FRESH;
@@ -45,12 +45,12 @@ var _getData = function(dataProvider, parameters) {
 							} else {
 								dataResponse.success = false;
 								dataResponse.quality = QUALITY_TYPES.UNKNOWN;
-								dataResponse.message = "Failed retrieving data from Riot";
+								dataResponse.message = 'Failed retrieving data from Riot';
 							}
 
 							deferredObject.resolve(dataResponse);
 						})
-						.fail(function(error) {
+						.fail(function (error) {
 							if (cachedData.data) {
 								dataResponse.success = true;
 								dataResponse.quality = QUALITY_TYPES.STALE;
@@ -68,9 +68,9 @@ var _getData = function(dataProvider, parameters) {
 					deferredObject.resolve(dataResponse);
 				}
 			})
-			.fail(function(error) {
+			.fail(function (error) {
 				_dataProviders[dataProvider].getFromApi(dataProvider, parameters)
-					.then(function(apiData) {
+					.then(function (apiData) {
 						if (apiData.success) {
 							dataResponse.success = true;
 							dataResponse.quality = QUALITY_TYPES.FRESH;
@@ -80,17 +80,25 @@ var _getData = function(dataProvider, parameters) {
 							deferredObject.reject(error);
 						}
 					})
-					.fail(function(error) {
+					.fail(function (error) {
 						deferredObject.reject(error);
 					});
 			});
 	});
 };
 
-var _init = function() {
+var _init = function () {
 	var MatchHistoryDataProvider = require('./dataProviders/matchHistoryDataProvider');
 	_dataProviders.matchHistory = new MatchHistoryDataProvider();
 	_dataProviders.matchHistory.init();
+
+	var MatchDataProvider = require('./dataProviders/matchDataProvider');
+	_dataProviders.match = new MatchDataProvider();
+	_dataProviders.match.init();
+
+	var MatchListDataProvider = require('./dataProviders/matchListDataProvider');
+	_dataProviders.matchList = new MatchListDataProvider();
+	_dataProviders.matchList.init();
 
 	var StaticDataProvider = require('./dataProviders/staticDataProvider');
 	_dataProviders.static = new StaticDataProvider();
@@ -109,8 +117,8 @@ var _init = function() {
 	_dataProviders.summoner.init();
 };
 
-module.exports = function() {
+module.exports = function () {
 	var self = this;
 	self.init = _init;
-	self.getData  = _getData;
+	self.getData = _getData;
 };

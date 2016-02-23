@@ -1,4 +1,4 @@
-module.exports = function() {
+module.exports = function () {
 	var self = this;
 	var _apiVersion = null;
 	var _riotApi = null;
@@ -11,18 +11,18 @@ module.exports = function() {
 	var PromiseFactoryConstructor = require('../../common/utilities/promiseFactory');
 	var _promiseFactory = new PromiseFactoryConstructor();
 
-	self.getFromApi = function(parameters) {
+	self.getFromApi = function (parameters) {
 		if (_parameterValidator.validate(parameters, REQUIRED_PARAMETERS) === false) {
-			throw new Error("Invalid parameters for League Data Provider");
+			throw new Error('Invalid parameters for League Data Provider');
 		}
 
-		return _promiseFactory.defer(function(deferredObject) {
-			_logger.debug("league data provider, getFromApi");
-			var leaguePath = parameters.region + "/" + _apiVersion + "/league/by-summoner/" + parameters.summonerId;
+		return _promiseFactory.defer(function (deferredObject) {
+			_logger.debug('league data provider, getFromApi');
+			var leaguePath = parameters.region + '/' + _apiVersion + '/league/by-summoner/' + parameters.summonerId;
 			_riotApi.makeRequest(parameters.region, leaguePath)
-				.then(function(leagueResult) {
+				.then(function (leagueResult) {
 					if (leagueResult.data) {
-						var summonerEntry = leagueResult.data[parameters.summonerId][0].entries.filter(function(entry) {
+						var summonerEntry = leagueResult.data[parameters.summonerId][0].entries.filter(function (entry) {
 							return parseInt(entry.playerOrTeamId) === parseInt(parameters.summonerId);
 						});
 						leagueResult.data[parameters.summonerId][0].entries = summonerEntry[0];
@@ -30,38 +30,38 @@ module.exports = function() {
 					}
 
 					_mongoCache.set('league', parameters, leagueResult)
-						.then(function() {
+						.then(function () {
 							deferredObject.resolve(leagueResult);
 						})
-						.fail(function(error) {
-							_logger.warn("Some failure when setting leagues cache", error);
+						.fail(function (error) {
+							_logger.warn('Some failure when setting leagues cache', error);
 							deferredObject.resolve(leagueResult);
-						})
+						});
 				})
-				.fail(function(error) {
+				.fail(function (error) {
 					deferredObject.reject(error);
 				});
 		});
 	};
 
-	self.getFromCache = function(parameters) {
+	self.getFromCache = function (parameters) {
 		if (_parameterValidator.validate(parameters, REQUIRED_PARAMETERS) === false) {
-			throw new Error("Invalid parameters for League Data Provider");
+			throw new Error('Invalid parameters for League Data Provider');
 		}
 
-		return _promiseFactory.defer(function(deferredObject) {
-			_logger.debug("league data provider, getFromCache", parameters);
+		return _promiseFactory.defer(function (deferredObject) {
+			_logger.debug('league data provider, getFromCache', parameters);
 			_mongoCache.get('league', parameters)
-				.then(function(cacheLeagueResult) {
+				.then(function (cacheLeagueResult) {
 					deferredObject.resolve(cacheLeagueResult);
 				})
-				.fail(function(error) {
+				.fail(function (error) {
 					deferredObject.reject(error);
-				})
+				});
 		});
 	};
 
-	self.init = function() {
+	self.init = function () {
 		var _config = require('../../config');
 		_apiVersion = _config.riot_api.versions.leagues;
 
@@ -74,5 +74,5 @@ module.exports = function() {
 		var RiotApiConstructor = require('../../common/riotApi/riotApi');
 		_riotApi = new RiotApiConstructor();
 		_riotApi.init();
-	}
+	};
 };
